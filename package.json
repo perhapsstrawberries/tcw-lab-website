@@ -1,0 +1,10 @@
+{
+  "name": "tcw-lab-static",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-from-wp.mjs",
+    "preview": "python3 -m http.server 8080"
+  }
+}
