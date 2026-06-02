@@ -13,14 +13,13 @@ const PAGE_EXPORT = "/private/tmp/tcw-pages.json";
 const POST_EXPORT = "/private/tmp/tcw-posts.json";
 
 const NAV = [
-  ["TCW Lab", "/"],
-  ["Research Projects", "/research-programs/"],
+  ["Research", "/research-programs/"],
   ["Publications", "/publications/"],
   ["Our Team", "/ourteam/"],
   ["Lab Activity", "/ourteam/activity/"],
-  ["Talent Aquisition", "/talent-aquisition/"],
+  ["Join", "/talent-aquisition/"],
   ["Resources", "/resources/"],
-  ["Data Portal", "/data/"],
+  ["Data", "/data/"],
   ["Contact", "/contact/"],
 ];
 
@@ -153,6 +152,7 @@ async function readJsonExport(tmpPath, repoName, url) {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`);
     raw = await response.text();
+    await writeFile(tmpPath, raw);
   }
   return JSON.parse(raw);
 }
@@ -206,6 +206,7 @@ function cleanWpContent(html, route, assetMap) {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/\s(?:srcset|sizes)=["'][^"']*["']/gi, "")
+    .replace(/\sloading=["'][^"']*["']/gi, "")
     .replace(/<p>(?:&nbsp;|\s)*<\/p>/gi, "")
     .replace(/\sstyle=["'][^"']*["']/gi, "");
 
@@ -353,10 +354,68 @@ function navMarkup(route) {
   }).join("");
 }
 
+function pageClass(route) {
+  if (route === "/") return "page-home";
+  return `page-${route.split("/").filter(Boolean).join("-")}`;
+}
+
+function heroCopy(route, title) {
+  const copy = {
+    "/": [
+      "Pharmacology, Physiology & Biophysics",
+      "Advancing Alzheimer's disease therapeutics through human iPSC models, CRISPR genome editing, and multi-omics computational biology.",
+    ],
+    "/research-programs/": [
+      "Research Programs",
+      "Human stem-cell systems, glial biology, computational genomics, and translational platforms for Alzheimer's disease discovery.",
+    ],
+    "/publications/": [
+      "Publications",
+      "Selected papers, preprints, protocols, and scientific commentaries from the TCW Lab.",
+    ],
+    "/ourteam/": [
+      "People",
+      "Wet lab, dry lab, trainees, and collaborators working across stem cell biology, neurogenetics, and computation.",
+    ],
+    "/ourteam/activity/": [
+      "Lab Activity",
+      "A separate home for TCW Lab celebrations, milestones, events, and team updates.",
+    ],
+    "/talent-aquisition/": [
+      "Join the Lab",
+      "Opportunities for scientists, trainees, and collaborators interested in AD genetics, iPSC systems, and computation.",
+    ],
+    "/resources/": [
+      "Resources",
+      "Protocols, links, databases, and research context collected for the lab community.",
+    ],
+    "/resources/news/": [
+      "Research News",
+      "Coverage and background reading related to APOE, glia, lipids, and Alzheimer's disease mechanisms.",
+    ],
+    "/resources/research-comments/": [
+      "Research Comments",
+      "External commentary and discussion around work relevant to the TCW Lab.",
+    ],
+    "/contact/": [
+      "Contact",
+      "Reach the lab for science questions, collaborations, applications, and lab operations.",
+    ],
+    "/data/": [
+      "Data Portal",
+      "A future member-focused tab for datasets, research tools, and private lab resources.",
+    ],
+  };
+  return copy[route] || ["TCW Lab", title];
+}
+
 function template({ route, title, body, sidebar = "", description = "" }) {
   const base = basePrefix(route);
   const layoutClass = sidebar ? "content-layout has-sidebar" : "content-layout";
-  const index = SEARCH_INDEX.map((item) => ({ title: item.title, text: item.text, url: relHref(route, item.route) }));
+  const [eyebrow, subtitle] = heroCopy(route, title);
+  const home = route === "/";
+  const heroTitle = home ? "TCW Laboratory" : title;
+  const classes = `${pageClass(route)}${home ? " is-home" : ""}`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -365,24 +424,24 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
   <link rel="stylesheet" href="${base}assets/css/styles.css">
-  <script>window.TCW_SEARCH_INDEX = ${JSON.stringify(index)};</script>
   <script src="${base}assets/js/site.js" defer></script>
 </head>
-<body>
-  <header class="masthead">
+<body class="${classes}">
+  <header class="site-header">
     <a class="brand" href="${relHref(route, "/")}" aria-label="TCW Lab home">
       <span class="brand-mark">TCW</span>
       <span class="brand-copy">
-        <strong>Pharmacology, Physiology &amp; Biophysics</strong>
-        <span>TCW Lab</span>
+        <strong>TCW Lab</strong>
+        <span>Pharmacology, Physiology &amp; Biophysics</span>
       </span>
     </a>
-  </header>
-  <nav class="primary-nav" aria-label="Primary navigation">
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
-    <div class="nav-menu" id="nav-menu">${navMarkup(route)}</div>
-    <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
-  </nav>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation">${navMarkup(route)}</nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
+      <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
+    </div>
+  </header>
   <form class="site-search" id="site-search" role="search">
     <label>
       <span>Search site</span>
@@ -390,17 +449,31 @@ function template({ route, title, body, sidebar = "", description = "" }) {
     </label>
     <div class="search-results" id="site-search-results"></div>
   </form>
-  <main class="wrapper">
-    <div class="${layoutClass}">
-      <article class="page-content">
-        <h1>${title}</h1>
-        ${body}
-      </article>
-      ${sidebar}
-    </div>
+  <main>
+    <section class="hero">
+      <canvas class="bio-canvas" aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <p class="hero-eyebrow">${eyebrow}</p>
+        <h1>${heroTitle}</h1>
+        <p class="hero-subtitle">${subtitle}</p>
+        ${home ? `<div class="hero-metrics" aria-label="Research pillars">
+          <span><strong>iPSC</strong> models</span>
+          <span><strong>APOE</strong> genetics</span>
+          <span><strong>Multi-omics</strong> discovery</span>
+        </div>` : ""}
+      </div>
+    </section>
+    <section class="wrapper">
+      <div class="${layoutClass}">
+        <article class="page-content">
+          ${body}
+        </article>
+        ${sidebar}
+      </div>
+    </section>
   </main>
   <footer class="site-footer">
-    <p>TCW Lab</p>
+    <p>TCW Laboratory</p>
     <nav aria-label="Footer navigation">
       <a href="${relHref(route, "/contact/")}">Contact</a>
       <a href="${relHref(route, "/resources/")}">Resources</a>
@@ -515,6 +588,7 @@ async function main() {
     posts: posts.length,
     assets: assetMap.size,
   }, null, 2));
+  await writeFile(path.join(projectRoot, "assets", "search-index.json"), JSON.stringify(SEARCH_INDEX, null, 2));
 }
 
 main().catch((error) => {
