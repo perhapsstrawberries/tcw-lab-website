@@ -9,7 +9,7 @@ const themeToggle = document.querySelector(".theme-toggle");
 let searchIndex = [];
 
 const storedTheme = localStorage.getItem("tcw-theme");
-document.documentElement.dataset.theme = storedTheme || "light";
+document.documentElement.dataset.theme = storedTheme === "dark" || storedTheme === "light" ? storedTheme : "light";
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
@@ -115,8 +115,8 @@ function startBioCanvas(canvas) {
     context.clearRect(0, 0, width, height);
 
     const gradient = context.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, "rgba(69, 229, 223, 0.20)");
-    gradient.addColorStop(1, "rgba(47, 115, 255, 0.12)");
+    gradient.addColorStop(0, "rgba(162, 248, 246, 0.24)");
+    gradient.addColorStop(1, "rgba(162, 248, 246, 0.14)");
     context.fillStyle = gradient;
     context.fillRect(0, 0, width, height);
 
@@ -136,7 +136,7 @@ function startBioCanvas(canvas) {
         const dy = a.y - b.y;
         const distance = Math.hypot(dx, dy);
         if (distance < 150) {
-          context.strokeStyle = `rgba(7, 143, 144, ${0.20 * (1 - distance / 150)})`;
+          context.strokeStyle = `rgba(0, 142, 145, ${0.20 * (1 - distance / 150)})`;
           context.lineWidth = 1;
           context.beginPath();
           context.moveTo(a.x, a.y);
@@ -149,7 +149,7 @@ function startBioCanvas(canvas) {
     particles.forEach((particle) => {
       const pulse = 0.65 + Math.sin(frame * 3 + particle.phase) * 0.18;
       context.beginPath();
-      context.fillStyle = `rgba(69, 229, 223, ${pulse})`;
+      context.fillStyle = `rgba(162, 248, 246, ${pulse})`;
       context.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
       context.fill();
       context.beginPath();

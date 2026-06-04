@@ -417,7 +417,7 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   const heroTitle = home ? "TCW Laboratory" : title;
   const classes = `${pageClass(route)}${home ? " is-home" : ""}`;
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
