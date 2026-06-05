@@ -432,7 +432,6 @@ function template({ route, title, body, sidebar = "", description = "" }) {
       <span class="brand-mark">TCW</span>
       <span class="brand-copy">
         <strong>TCW Lab</strong>
-        <span>Pharmacology, Physiology &amp; Biophysics</span>
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>

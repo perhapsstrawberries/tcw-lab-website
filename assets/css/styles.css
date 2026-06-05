@@ -122,22 +122,9 @@ img {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
-.brand-copy {
-  display: grid;
-  gap: 0;
-  line-height: 1.1;
-}
-
 .brand-copy strong {
   font-size: 16px;
   font-weight: 700;
-}
-
-.brand-copy span {
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
 }
 
 .nav-menu {
@@ -899,10 +886,6 @@ input[type="checkbox"] {
   .site-header {
     width: min(calc(100% - 18px), 1240px);
     margin-top: 9px;
-  }
-
-  .brand-copy span {
-    display: none;
   }
 
   .nav-menu {
