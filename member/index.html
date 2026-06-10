@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Members | TCW Lab</title>
+  <meta name="description" content="Member-only resource hub for the TCW Laboratory: research database, GitHub repositories, protocols, datasets, and lab tools.">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="../assets/js/site.js" defer></script>
+  <style>
+    /* ---------- Member portal ---------- */
+    .portal-shell {
+      width: min(calc(100% - 36px), var(--max));
+      margin: 0 auto;
+    }
+
+    /* hide whichever view is inactive; JS sets body[data-auth] */
+    body[data-auth="out"] [data-view="in"],
+    body[data-auth="in"] [data-view="out"] { display: none !important; }
+
+    /* ===== Sign-in view ===== */
+    .login-hero {
+      position: relative;
+      min-height: clamp(560px, 88vh, 920px);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 120px 24px 80px;
+    }
+    .login-hero::before {
+      content: "";
+      position: absolute;
+      inset: -20% 30% auto -10%;
+      height: 70%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(162, 248, 246, 0.26), transparent 66%);
+      filter: blur(22px);
+      pointer-events: none;
+    }
+    .login-grid {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 980px);
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: clamp(28px, 5vw, 64px);
+      align-items: center;
+    }
+    .login-intro .hero-eyebrow { margin-bottom: 14px; }
+    .login-intro h1 {
+      margin: 0;
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: clamp(40px, 6vw, 76px);
+      font-weight: 700;
+      line-height: 0.96;
+    }
+    .login-intro p.lede {
+      max-width: 440px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 1.7vw, 19px);
+      line-height: 1.6;
+    }
+    .login-intro .intro-list {
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+    .login-intro .intro-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .login-intro .intro-list .dot {
+      flex: none;
+      width: 22px; height: 22px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+      display: grid; place-items: center;
+      color: #061112; font-weight: 900; font-size: 12px;
+    }
+
+    .login-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-strong);
+      box-shadow: var(--shadow);
+      padding: clamp(22px, 3vw, 34px);
+      backdrop-filter: blur(16px);
+    }
+    .login-card h2 {
+      margin: 0 0 4px;
+      font-size: clamp(24px, 2.6vw, 30px);
+    }
+    .login-card .card-sub {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14.5px;
+    }
+
+    /* segmented auth tabs */
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--bg-soft);
+      margin-bottom: 22px;
+    }
+    .auth-tabs button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-family: "Space Mono", monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 9px 6px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease;
+    }
+    .auth-tabs button[aria-selected="true"] {
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    .auth-panel { display: none; }
+    .auth-panel.active { display: grid; gap: 14px; }
+
+    .field { display: grid; gap: 7px; }
+    .field label {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+    .field input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-strong);
+      color: var(--ink);
+      font: inherit;
+      padding: 12px 14px;
+    }
+    .field input:focus-visible {
+      outline: 2px solid var(--teal-deep);
+      outline-offset: 1px;
+    }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 50px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      color: #061112;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      transition: filter 160ms ease, transform 160ms ease;
+    }
+    .submit-btn:hover { filter: saturate(1.15) brightness(1.03); }
+    .submit-btn:active { transform: translateY(1px); }
+
+    .github-btn {
+      background: var(--ink);
+      color: var(--bg);
+    }
+    .github-btn .gh-glyph {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      position: relative;
+    }
+    .github-btn .gh-glyph::after {
+      content: "";
+      position: absolute;
+      left: 50%; bottom: -5px;
+      width: 2px; height: 6px;
+      background: currentColor;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    .auth-note {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .auth-note code {
+      font-family: "Space Mono", monospace;
+      background: var(--teal-soft);
+      color: var(--teal-deep);
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .auth-error {
+      margin: 0;
+      min-height: 18px;
+      color: #c2453f;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    html[data-theme="dark"] .auth-error { color: #ff9a94; }
+
+    .login-foot {
+      margin: 20px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+    .login-foot a { font-weight: 700; }
+
+    /* ===== Member dashboard view ===== */
+    .member-band {
+      position: relative;
+      overflow: hidden;
+      padding: 116px 24px 38px;
+    }
+    .member-band::before {
+      content: "";
+      position: absolute;
+      inset: auto -8% -60% 40%;
+      height: 90%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(162, 248, 246, 0.22), transparent 66%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    .member-band .portal-shell { position: relative; z-index: 1; }
+    .member-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .member-head h1 {
+      margin: 8px 0 0;
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: clamp(34px, 5vw, 60px);
+      line-height: 1.02;
+    }
+    .member-head .sub {
+      margin: 14px 0 0;
+      max-width: 560px;
+      color: var(--muted);
+      font-size: clamp(15px, 1.6vw, 18px);
+    }
+    .session-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      padding: 7px 8px 7px 16px;
+      backdrop-filter: blur(12px);
+    }
+    .session-chip .who {
+      display: grid;
+      line-height: 1.2;
+    }
+    .session-chip .who b { font-size: 13.5px; color: var(--ink); }
+    .session-chip .who span {
+      font-family: "Space Mono", monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .signout-btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-strong);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 9px 15px;
+      cursor: pointer;
+      transition: background 160ms ease;
+    }
+    .signout-btn:hover { background: var(--teal-soft); }
+
+    .res-section { padding: 18px 0 90px; }
+    .res-section .section-label { margin-bottom: 18px; }
+
+    .res-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .res-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: 0 14px 42px rgba(15, 76, 80, 0.08);
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+    a.res-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 26px 60px rgba(15, 76, 80, 0.16);
+      border-color: color-mix(in srgb, var(--teal-deep) 35%, var(--line));
+    }
+    .res-badge {
+      width: 50px; height: 50px;
+      border-radius: 16px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+      color: #061112;
+      font-family: "Space Mono", monospace;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.02em;
+    }
+    .res-card.is-soon .res-badge {
+      background: var(--bg-soft);
+      color: var(--muted);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .res-card h3 {
+      margin: 0;
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: 22px;
+      line-height: 1.12;
+    }
+    .res-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      flex: 1;
+    }
+    .res-foot {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: "Space Mono", monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+      color: var(--teal-deep);
+      font-weight: 700;
+    }
+    .res-card .arrow {
+      transition: transform 200ms ease;
+    }
+    a.res-card:hover .arrow { transform: translateX(4px); }
+    .res-tag {
+      align-self: flex-start;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-family: "Space Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .res-tag.path {
+      background: var(--teal-soft);
+      color: var(--teal-deep);
+    }
+    .res-tag.soon {
+      background: var(--bg-soft);
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    @media (max-width: 980px) {
+      .login-grid { grid-template-columns: 1fr; gap: 36px; }
+      .login-intro { order: 1; }
+      .login-card { order: 2; }
+      .res-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .res-grid { grid-template-columns: 1fr; }
+      .member-head { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body class="page-member" data-auth="out">
+  <header class="site-header">
+    <a class="brand" href="../" aria-label="TCW Lab home">
+      <span class="brand-mark">TCW</span>
+      <span class="brand-copy">
+        <strong>TCW Lab</strong>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="" href="../talent-aquisition/">Join</a><a class="" href="../resources/">Resources</a><a class="" href="../data/">Data</a><a class="active" href="./">Members</a><a class="" href="../contact/">Contact</a></nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
+      <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
+    </div>
+  </header>
+  <form class="site-search" id="site-search" role="search">
+    <label>
+      <span>Search site</span>
+      <input type="search" id="site-search-input" autocomplete="off">
+    </label>
+    <div class="search-results" id="site-search-results"></div>
+  </form>
+
+  <main>
+    <!-- ===================== SIGN-IN VIEW ===================== -->
+    <section class="login-hero" data-view="out">
+      <canvas class="bio-canvas" aria-hidden="true"></canvas>
+      <div class="login-grid">
+        <div class="login-intro">
+          <p class="hero-eyebrow">Members Only</p>
+          <h1>Lab Member Portal</h1>
+          <p class="lede">One door to everything the TCW Lab runs on — code, data, protocols, and the day-to-day tools the team shares.</p>
+          <ul class="intro-list">
+            <li><span class="dot">+</span> Jump straight to the GitHub org, SCC research database, and shared Drive.</li>
+            <li><span class="dot">+</span> Find protocols, datasets, the lab calendar, and Slack in one place.</li>
+            <li><span class="dot">+</span> New to the lab? Start with the onboarding guide.</li>
+          </ul>
+        </div>
+
+        <div class="login-card">
+          <h2>Sign in</h2>
+          <p class="card-sub">Choose how you'd like to get in.</p>
+
+          <div class="auth-tabs" role="tablist" aria-label="Sign-in method">
+            <button type="button" role="tab" aria-selected="true" data-tab="passcode">Lab passcode</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="account">Member account</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="github">GitHub</button>
+          </div>
+
+          <!-- Passcode -->
+          <form class="auth-panel active" data-panel="passcode" autocomplete="off">
+            <div class="field">
+              <label for="pc">Shared lab passcode</label>
+              <input type="password" id="pc" placeholder="Enter the lab passcode" autocomplete="off">
+            </div>
+            <p class="auth-error" data-error="passcode" aria-live="polite"></p>
+            <button type="submit" class="submit-btn">Unlock member area</button>
+            <p class="auth-note">Demo passcode for this preview: <code>tcwlab2026</code>. The PI rotates this and shares it with current members.</p>
+          </form>
+
+          <!-- Member account -->
+          <form class="auth-panel" data-panel="account" autocomplete="off">
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="you@bu.edu">
+            </div>
+            <div class="field">
+              <label for="pw">Password</label>
+              <input type="password" id="pw" placeholder="Your password">
+            </div>
+            <p class="auth-error" data-error="account" aria-live="polite"></p>
+            <button type="submit" class="submit-btn">Sign in</button>
+            <p class="auth-note">Prototype: any email + password signs you in. Real per-person accounts would need an identity provider (e.g. BU login / Netlify Identity).</p>
+          </form>
+
+          <!-- GitHub -->
+          <form class="auth-panel" data-panel="github" autocomplete="off">
+            <p class="auth-note" style="margin-bottom:2px;">Sign in with your GitHub account. Access is granted to members of the <strong>TCW-lab</strong> organization.</p>
+            <button type="submit" class="submit-btn github-btn"><span class="gh-glyph" aria-hidden="true"></span> Continue with GitHub</button>
+            <p class="auth-note">Prototype button. Wiring this to real GitHub OAuth + org-membership checks is the most robust option for a lab.</p>
+          </form>
+
+          <p class="login-foot">Need access or lost the passcode? Email the lab at <a href="../contact/">our contact page</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MEMBER DASHBOARD VIEW ===================== -->
+    <section class="member-band" data-view="in">
+      <canvas class="bio-canvas" aria-hidden="true"></canvas>
+      <div class="portal-shell">
+        <div class="member-head">
+          <div>
+            <p class="hero-eyebrow">Member Dashboard</p>
+            <h1>Welcome back<span data-greet-name></span></h1>
+            <p class="sub">Everything the lab shares, in one place. Pick a destination below.</p>
+          </div>
+          <div class="session-chip">
+            <span class="brand-mark" style="width:38px;height:38px;font-size:13px;" data-avatar>TCW</span>
+            <span class="who"><b data-who-name>Lab member</b><span data-who-method>passcode</span></span>
+            <button type="button" class="signout-btn" data-signout>Sign out</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="res-section" data-view="in">
+      <div class="portal-shell">
+        <p class="section-label">Lab Resources</p>
+        <div class="res-grid">
+
+          <a class="res-card" href="https://scc-ondemand2.bu.edu/pun/sys/dashboard/files/fs/projectnb/tcwlab" target="_blank" rel="noopener">
+            <span class="res-badge">SCC</span>
+            <h3>Research Database</h3>
+            <p>Lab project files on BU's Shared Computing Cluster, browsable through SCC OnDemand.</p>
+            <span class="res-tag path">projectnb/tcwlab</span>
+            <span class="res-foot">Open on SCC <span class="arrow">→</span></span>
+          </a>
+
+          <a class="res-card" href="https://github.com/TCW-lab" target="_blank" rel="noopener">
+            <span class="res-badge">git</span>
+            <h3>GitHub Organization</h3>
+            <p>Analysis pipelines, computational tools, and project repositories for the lab.</p>
+            <span class="res-tag path">github.com/TCW-lab</span>
+            <span class="res-foot">Open organization <span class="arrow">→</span></span>
+          </a>
+
+          <a class="res-card" href="https://drive.google.com/drive/folders/1NbZYVpMvNWvI6jnT5c7QVyxfEEYGNx24?usp=share_link" target="_blank" rel="noopener">
+            <span class="res-badge">drv</span>
+            <h3>Protocols</h3>
+            <p>Differentiation protocols, SOPs, and shared working documents on Google Drive.</p>
+            <span class="res-foot">Open Drive folder <span class="arrow">→</span></span>
+          </a>
+
+          <a class="res-card is-soon" href="#" data-needs-link>
+            <span class="res-badge">dat</span>
+            <h3>Shared Datasets</h3>
+            <p>Processed multi-omics datasets and intermediate files for ongoing projects.</p>
+            <span class="res-tag soon">Add link</span>
+            <span class="res-foot">Set destination <span class="arrow">→</span></span>
+          </a>
+
+          <a class="res-card is-soon" href="#" data-needs-link>
+            <span class="res-badge">cal</span>
+            <h3>Lab Calendar</h3>
+            <p>Group meetings, deadlines, and instrument bookings.</p>
+            <span class="res-tag soon">Add link</span>
+            <span class="res-foot">Set destination <span class="arrow">→</span></span>
+          </a>
+
+          <a class="res-card is-soon" href="#" data-needs-link>
+            <span class="res-badge">slk</span>
+            <h3>Slack Workspace</h3>
+            <p>Day-to-day lab communication and channels.</p>
+            <span class="res-tag soon">Add link</span>
+            <span class="res-foot">Set destination <span class="arrow">→</span></span>
+          </a>
+
+          <a class="res-card is-soon" href="#" data-needs-link>
+            <span class="res-badge">new</span>
+            <h3>New Member Onboarding</h3>
+            <p>Start-here guide, accounts checklist, and training for people joining the lab.</p>
+            <span class="res-tag soon">Add link</span>
+            <span class="res-foot">Set destination <span class="arrow">→</span></span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>TCW Laboratory</p>
+    <nav aria-label="Footer navigation">
+      <a href="../contact/">Contact</a>
+      <a href="../resources/">Resources</a>
+      <a href="../data/">Data Portal</a>
+    </nav>
+  </footer>
+
+  <script>
+    (function () {
+      var SESSION_KEY = "tcw-member-session";
+      var DEMO_PASSCODE = "tcwlab2026";
+
+      function $(sel, root) { return (root || document).querySelector(sel); }
+      function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+      // ---- Tab switching ----
+      var tabs = $all(".auth-tabs button");
+      var panels = $all(".auth-panel");
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          tabs.forEach(function (t) { t.setAttribute("aria-selected", String(t === tab)); });
+          var name = tab.getAttribute("data-tab");
+          panels.forEach(function (p) { p.classList.toggle("active", p.getAttribute("data-panel") === name); });
+          $all(".auth-error").forEach(function (e) { e.textContent = ""; });
+        });
+      });
+
+      // ---- Session helpers ----
+      function readSession() {
+        try { return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }
+        catch (e) { return null; }
+      }
+      function initials(str) {
+        var parts = str.trim().split(/[\s.@_-]+/).filter(Boolean);
+        if (!parts.length) return "TCW";
+        var a = parts[0][0] || "";
+        var b = parts.length > 1 ? (parts[1][0] || "") : "";
+        return (a + b).toUpperCase() || "TCW";
+      }
+      function methodLabel(m) {
+        return m === "github" ? "GitHub" : m === "account" ? "Account" : "Passcode";
+      }
+
+      function applySession(s) {
+        if (s) {
+          document.body.setAttribute("data-auth", "in");
+          var name = s.name && s.name.length ? s.name : "";
+          $("[data-who-name]").textContent = name || "Lab member";
+          $("[data-who-method]").textContent = methodLabel(s.method);
+          var first = (name || "").split(/[\s@._-]+/).filter(Boolean)[0] || "";
+          first = first ? first.charAt(0).toUpperCase() + first.slice(1) : "";
+          $("[data-greet-name]").textContent = first ? ", " + first : "";
+          $("[data-avatar]").textContent = name ? initials(name) : "TCW";
+        } else {
+          document.body.setAttribute("data-auth", "out");
+        }
+      }
+
+      function signIn(method, name) {
+        var s = { method: method, name: name || "", ts: Date.now() };
+        localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+        applySession(s);
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+
+      // ---- Form handlers ----
+      $("[data-panel='passcode']").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var val = $("#pc").value.trim();
+        var err = $("[data-error='passcode']");
+        if (val === DEMO_PASSCODE) { err.textContent = ""; signIn("passcode", ""); }
+        else { err.textContent = "That passcode isn't right. Try again or contact the lab."; }
+      });
+
+      $("[data-panel='account']").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = $("#email").value.trim();
+        var pw = $("#pw").value.trim();
+        var err = $("[data-error='account']");
+        if (!email || !pw) { err.textContent = "Enter your email and password."; return; }
+        err.textContent = "";
+        signIn("account", email);
+      });
+
+      $("[data-panel='github']").addEventListener("submit", function (e) {
+        e.preventDefault();
+        signIn("github", "");
+      });
+
+      // ---- Sign out ----
+      $("[data-signout]").addEventListener("click", function () {
+        localStorage.removeItem(SESSION_KEY);
+        applySession(null);
+        // reset fields
+        $("#pc").value = ""; $("#email").value = ""; $("#pw").value = "";
+        window.scrollTo({ top: 0, behavior: "auto" });
+      });
+
+      // ---- Placeholder cards ----
+      $all("[data-needs-link]").forEach(function (card) {
+        card.addEventListener("click", function (e) {
+          e.preventDefault();
+          alert("This resource isn't linked yet.\n\nTell me the URL (calendar, Slack invite, datasets folder, onboarding doc) and I'll wire it into this card.");
+        });
+      });
+
+      // ---- Restore session on load ----
+      applySession(readSession());
+    })();
+  </script>
+</body>
+</html>
