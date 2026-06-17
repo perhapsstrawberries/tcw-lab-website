@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Talent Acquisition | TCW Lab</title>
+  <title>Careers | TCW Lab</title>
   <meta name="description" content="Career opportunities for scientists, trainees, and collaborators interested in Alzheimer's disease genetics, iPSC systems, and computational biology.">
   <link rel="stylesheet" href="../assets/css/styles.css">
   <script src="../assets/js/site.js" defer></script>
@@ -17,7 +17,7 @@
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
-    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="active" href="../careers/">Talent Acquisition</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="" href="../member/">Members</a></nav>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="active" href="../careers/">Careers</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="" href="../member/">Members</a></nav>
     <div class="nav-actions">
       <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
       <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
@@ -35,7 +35,7 @@
       <canvas class="bio-canvas" aria-hidden="true"></canvas>
       <div class="hero-inner">
         <p class="hero-eyebrow">Join the Lab</p>
-        <h1>Talent Acquisition</h1>
+        <h1>Careers</h1>
         <p class="hero-subtitle">Opportunities for scientists, trainees, and collaborators interested in AD genetics, iPSC systems, and computation.</p>
         
       </div>
@@ -155,7 +155,6 @@
       });
 
       form.addEventListener("submit", function (event) {
-        event.preventDefault();
         var data = new FormData(form);
         var tracks = data.getAll("track");
         var wantsWet = tracks.indexOf("Wet lab") !== -1;

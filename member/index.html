@@ -16,7 +16,9 @@
 
     /* hide whichever view is inactive; JS sets body[data-auth] */
     body[data-auth="out"] [data-view="in"],
-    body[data-auth="in"] [data-view="out"] { display: none !important; }
+    body[data-auth="in"] [data-view="out"],
+    body[data-member-track="wet"] [data-audience="dry"],
+    body[data-member-track="dry"] [data-audience="wet"] { display: none !important; }
 
     /* ===== Sign-in view ===== */
     .login-hero {
@@ -414,7 +416,7 @@
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
-    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="" href="../careers/">Talent Acquisition</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="active" href="../member/">Members</a></nav>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="" href="../careers/">Careers</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="active" href="../member/">Members</a></nav>
     <div class="nav-actions">
       <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
       <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
@@ -438,25 +440,25 @@
           <h1>Lab Member Portal</h1>
           <p class="lede">One door to the member-only resources the TCW Lab runs on: database access, wet-lab protocols, dry-lab code, and shared onboarding materials.</p>
           <ul class="intro-list">
-            <li><span class="dot">+</span> Use the lab passcode shared with current members.</li>
-            <li><span class="dot">+</span> Access the lab database and shared protocols after unlocking.</li>
-            <li><span class="dot">+</span> Dry-lab code links are separated from wet-lab resources.</li>
+            <li><span class="dot">+</span> Use the wet-lab or dry-lab passcode shared with current members.</li>
+            <li><span class="dot">+</span> Access shared lab resources after unlocking.</li>
+            <li><span class="dot">+</span> Wet-lab and dry-lab resource views are separated by passcode.</li>
           </ul>
         </div>
 
         <div class="login-card">
           <h2>Member access</h2>
-          <p class="card-sub">Enter the current lab passcode.</p>
+          <p class="card-sub">Enter the current wet-lab or dry-lab passcode.</p>
 
           <!-- Passcode -->
           <form class="auth-panel active" data-panel="passcode" autocomplete="off">
             <div class="field">
               <label for="pc">Shared lab passcode</label>
-              <input type="password" id="pc" placeholder="Enter the lab passcode" autocomplete="off">
+              <input type="password" id="pc" placeholder="Enter wet or dry lab passcode" autocomplete="off">
             </div>
             <p class="auth-error" data-error="passcode" aria-live="polite"></p>
             <button type="submit" class="submit-btn">Unlock member area</button>
-            <p class="auth-note">The passcode should be rotated monthly and shared only with current lab members.</p>
+            <p class="auth-note">There are separate wet-lab and dry-lab passcodes. Rotate both monthly and share only with current members.</p>
           </form>
 
           <p class="login-foot">Need access or lost the passcode? Email the lab at <a href="../contact/">our contact page</a>.</p>
@@ -472,7 +474,7 @@
           <div>
             <p class="hero-eyebrow">Member Dashboard</p>
             <h1>Welcome back<span data-greet-name></span></h1>
-            <p class="sub">Everything the lab shares, organized by database access, wet-lab resources, and dry-lab code.</p>
+            <p class="sub">Your member resources are filtered by the passcode you used.</p>
           </div>
           <div class="session-chip">
             <span class="brand-mark" style="width:38px;height:38px;font-size:13px;" data-avatar>TCW</span>
@@ -485,8 +487,8 @@
 
     <section class="res-section" data-view="in">
       <div class="portal-shell">
-        <p class="section-label">Lab Database</p>
-        <div class="res-grid">
+        <p class="section-label" data-audience="shared">Shared Lab Resources</p>
+        <div class="res-grid" data-audience="shared">
 
           <a class="res-card" href="https://s3.amazonaws.com/buaws-som-pharmatcw.s3/index.html" target="_blank" rel="noopener">
             <span class="res-badge">DB</span>
@@ -506,8 +508,8 @@
 
         </div>
 
-        <p class="section-label">Wet Lab Resources</p>
-        <div class="res-grid">
+        <p class="section-label" data-audience="wet">Wet Lab Resources</p>
+        <div class="res-grid" data-audience="wet">
 
           <a class="res-card" href="https://drive.google.com/drive/folders/1NbZYVpMvNWvI6jnT5c7QVyxfEEYGNx24?usp=share_link" target="_blank" rel="noopener">
             <span class="res-badge">drv</span>
@@ -525,8 +527,8 @@
 
         </div>
 
-        <p class="section-label">Dry Lab Resources</p>
-        <div class="res-grid">
+        <p class="section-label" data-audience="dry">Dry Lab Resources</p>
+        <div class="res-grid" data-audience="dry">
 
           <a class="res-card" href="https://github.com/TCW-lab" target="_blank" rel="noopener">
             <span class="res-badge">git</span>
@@ -564,10 +566,10 @@
             <span class="res-foot">Set destination <span class="arrow">→</span></span>
           </a>
 
-          <a class="res-card is-soon" href="#" data-needs-link>
+          <a class="res-card is-soon" href="#" data-needs-link data-audience="wet">
             <span class="res-badge">new</span>
             <h3>New Member Onboarding</h3>
-            <p>Start-here guide, accounts checklist, and training for people joining the lab.</p>
+            <p>Start-here guide, accounts checklist, and wet-lab training for people joining the bench team.</p>
             <span class="res-tag soon">Add link</span>
             <span class="res-foot">Set destination <span class="arrow">→</span></span>
           </a>
@@ -589,7 +591,10 @@
   <script>
     (function () {
       var SESSION_KEY = "tcw-member-session";
-      var CURRENT_PASSCODE = "tcwlab2026";
+      var PASSCODES = {
+        wet: "tcw-wet-2026",
+        dry: "tcw-dry-2026"
+      };
 
       function $(sel, root) { return (root || document).querySelector(sel); }
       function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
@@ -606,25 +611,31 @@
         var b = parts.length > 1 ? (parts[1][0] || "") : "";
         return (a + b).toUpperCase() || "TCW";
       }
-      function methodLabel() { return "Passcode"; }
+      function methodLabel(s) {
+        if (s && s.track === "wet") return "Wet lab";
+        if (s && s.track === "dry") return "Dry lab";
+        return "Passcode";
+      }
 
       function applySession(s) {
         if (s) {
           document.body.setAttribute("data-auth", "in");
+          document.body.setAttribute("data-member-track", s.track || "shared");
           var name = s.name && s.name.length ? s.name : "";
           $("[data-who-name]").textContent = name || "Lab member";
-          $("[data-who-method]").textContent = methodLabel(s.method);
+          $("[data-who-method]").textContent = methodLabel(s);
           var first = (name || "").split(/[\s@._-]+/).filter(Boolean)[0] || "";
           first = first ? first.charAt(0).toUpperCase() + first.slice(1) : "";
           $("[data-greet-name]").textContent = first ? ", " + first : "";
           $("[data-avatar]").textContent = name ? initials(name) : "TCW";
         } else {
           document.body.setAttribute("data-auth", "out");
+          document.body.removeAttribute("data-member-track");
         }
       }
 
-      function signIn(method, name) {
-        var s = { method: method, name: name || "", ts: Date.now() };
+      function signIn(method, name, track) {
+        var s = { method: method, name: name || "", track: track || "shared", ts: Date.now() };
         localStorage.setItem(SESSION_KEY, JSON.stringify(s));
         applySession(s);
         window.scrollTo({ top: 0, behavior: "auto" });
@@ -635,7 +646,8 @@
         e.preventDefault();
         var val = $("#pc").value.trim();
         var err = $("[data-error='passcode']");
-        if (val === CURRENT_PASSCODE) { err.textContent = ""; signIn("passcode", ""); }
+        if (val === PASSCODES.wet) { err.textContent = ""; signIn("passcode", "", "wet"); }
+        else if (val === PASSCODES.dry) { err.textContent = ""; signIn("passcode", "", "dry"); }
         else { err.textContent = "That passcode isn't right. Try again or contact the lab."; }
       });
 
