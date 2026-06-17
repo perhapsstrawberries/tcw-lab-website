@@ -50,30 +50,29 @@
       <p>Please complete the required fields and attach your cover letter, CV, and references. Major publication links are welcome but optional.</p>
     </section>
     <div class="form-success" id="application-success" hidden>
-      <h2>Application received</h2>
-      <p>Thank you for applying to the TCW Lab. Your materials have been sent to the lab team.</p>
+      <h2>Application submitted</h2>
+      <p>Thank you for applying to the TCW Lab. Your materials have been received and will be reviewed in due time.</p>
     </div>
     <form class="form-shell application-form" id="career-application" aria-labelledby="apply-fields" action="https://formsubmit.co/doctortcw@gmail.com" method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="_cc" value="wendybui@bu.edu">
       <input type="hidden" name="_subject" value="TCW Lab Application">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_next" value="https://tcwlab.org/careers/?submitted=1">
       <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true">
       <h2 id="apply-fields">Application Information</h2>
       <div class="field-grid">
-        <label>Name<input type="text" name="name" autocomplete="name" required></label>
-        <label>Email<input type="email" name="email" autocomplete="email" required></label>
-        <label>Current affiliation<input type="text" name="affiliation" required></label>
-        <label>Position of interest<select name="position" required><option value="">Select a position</option><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
+        <label>Name <span class="required-marker">*</span><input type="text" name="name" autocomplete="name" required></label>
+        <label>Email <span class="required-marker">*</span><input type="email" name="email" autocomplete="email" required></label>
+        <label>Current affiliation <span class="required-marker">*</span><input type="text" name="affiliation" required></label>
+        <label>Position of interest <span class="required-marker">*</span><select name="position" required><option value="">Select a position</option><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
       </div>
       <fieldset>
-        <legend>Research track</legend>
+        <legend>Research track <span class="required-marker">*</span></legend>
         <label><input type="checkbox" name="track" value="Wet lab" data-track="wet"> Wet lab</label>
         <label><input type="checkbox" name="track" value="Dry lab" data-track="dry"> Dry lab</label>
         <label><input type="checkbox" data-track-both> Both</label>
       </fieldset>
-      <fieldset>
-        <legend>Wet lab skill set</legend>
+      <fieldset data-skill-section="wet" hidden>
+        <legend>Wet lab skill set <span class="required-marker">*</span></legend>
         <div class="checkbox-grid skill-grid" data-skill-group="wet">
           <label><input type="checkbox" name="wet_skills" value="Human iPSC maintenance"> Human iPSC maintenance</label>
           <label><input type="checkbox" name="wet_skills" value="CRISPR genome editing"> CRISPR genome editing</label>
@@ -92,8 +91,8 @@
           <label><input type="checkbox" name="wet_skills" value="Other wet lab skills"> Other</label>
         </div>
       </fieldset>
-      <fieldset>
-        <legend>Dry lab skill set</legend>
+      <fieldset data-skill-section="dry" hidden>
+        <legend>Dry lab skill set <span class="required-marker">*</span></legend>
         <div class="checkbox-grid skill-grid" data-skill-group="dry">
           <label><input type="checkbox" name="dry_skills" value="R programming"> R programming</label>
           <label><input type="checkbox" name="dry_skills" value="Python programming"> Python programming</label>
@@ -110,16 +109,16 @@
           <label><input type="checkbox" name="dry_skills" value="Other dry lab skills"> Other</label>
         </div>
       </fieldset>
-      <label>Other skills or details<textarea name="other_skills" rows="4" required></textarea></label>
+      <label>Other skills or details<textarea name="other_skills" rows="4" placeholder="If you selected Other, please describe it here."></textarea></label>
       <label>Publication links <span class="optional">(optional)</span><textarea name="publication_links" rows="4" placeholder="Links to major publications, Google Scholar, ORCID, portfolio, or GitHub"></textarea></label>
-      <label>Comments<textarea name="comments" rows="6" required></textarea></label>
+      <label>Comments <span class="required-marker">*</span><textarea name="comments" rows="6" required></textarea></label>
       <div class="field-grid">
-        <label>Cover letter<input type="file" name="cover_letter" accept=".pdf,.doc,.docx" required></label>
-        <label>CV<input type="file" name="cv" accept=".pdf,.doc,.docx" required></label>
-        <label>References<input type="file" name="references" accept=".pdf,.doc,.docx" required></label>
+        <label>Cover letter <span class="required-marker">*</span><input type="file" name="cover_letter" accept=".pdf,.doc,.docx" required></label>
+        <label>CV <span class="required-marker">*</span><input type="file" name="cv" accept=".pdf,.doc,.docx" required></label>
+        <label>References <span class="required-marker">*</span><input type="file" name="references" accept=".pdf,.doc,.docx" required></label>
       </div>
       <button type="submit">Submit application</button>
-      <p class="form-note">Applications are sent to doctortcw@gmail.com with a copy to wendybui@bu.edu. Attachments are limited by the form service, so PDF files are best.</p>
+      <p class="form-note"><span class="required-marker">*</span> Required field. Applications are sent to doctortcw@gmail.com. Attachments are limited by the form service, so PDF files are best.</p>
     </form>
         </article>
         
@@ -142,15 +141,33 @@
       var both = form.querySelector("[data-track-both]");
       var wet = form.querySelector("[data-track='wet']");
       var dry = form.querySelector("[data-track='dry']");
+      var wetSection = form.querySelector("[data-skill-section='wet']");
+      var drySection = form.querySelector("[data-skill-section='dry']");
+
+      function setSection(section, visible) {
+        section.hidden = !visible;
+        if (!visible) {
+          section.querySelectorAll("input[type='checkbox']").forEach(function (box) {
+            box.checked = false;
+          });
+        }
+      }
+
+      function updateSkillSections() {
+        setSection(wetSection, wet.checked);
+        setSection(drySection, dry.checked);
+      }
 
       both.addEventListener("change", function () {
         wet.checked = both.checked;
         dry.checked = both.checked;
+        updateSkillSections();
       });
 
       [wet, dry].forEach(function (box) {
         box.addEventListener("change", function () {
           both.checked = wet.checked && dry.checked;
+          updateSkillSections();
         });
       });
 
@@ -161,6 +178,9 @@
         var wantsDry = tracks.indexOf("Dry lab") !== -1;
         var hasWetSkill = data.getAll("wet_skills").length > 0;
         var hasDrySkill = data.getAll("dry_skills").length > 0;
+        var selectedOther = data.getAll("wet_skills").concat(data.getAll("dry_skills")).some(function (value) {
+          return value.toLowerCase().indexOf("other") !== -1;
+        });
 
         if (!tracks.length) {
           event.preventDefault();
@@ -179,7 +199,14 @@
           alert("Please select at least one dry lab skill, or choose Other.");
           return;
         }
+
+        if (selectedOther && !(data.get("other_skills") || "").trim()) {
+          event.preventDefault();
+          alert("Please describe your Other skill in the Other skills or details field.");
+        }
       });
+
+      updateSkillSections();
 
       var success = document.querySelector("#application-success");
       var params = new URLSearchParams(window.location.search);

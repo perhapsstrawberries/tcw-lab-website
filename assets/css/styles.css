@@ -693,6 +693,11 @@ input[type="checkbox"] {
   font-weight: 500;
 }
 
+.required-marker {
+  color: #c2453f;
+  font-weight: 900;
+}
+
 .form-success {
   border: 1px solid var(--line);
   border-radius: 24px;
