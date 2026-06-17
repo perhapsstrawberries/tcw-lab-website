@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Careers | TCW Lab</title>
+  <meta name="description" content="Career opportunities for scientists, trainees, and collaborators interested in Alzheimer's disease genetics, iPSC systems, and computational biology.">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="../assets/js/site.js" defer></script>
+</head>
+<body class="page-careers">
+  <header class="site-header">
+    <a class="brand" href="../" aria-label="TCW Lab home">
+      <span class="brand-mark">TCW</span>
+      <span class="brand-copy">
+        <strong>TCW Lab</strong>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="active" href="../careers/">Careers</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="" href="../member/">Members</a></nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
+      <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
+    </div>
+  </header>
+  <form class="site-search" id="site-search" role="search">
+    <label>
+      <span>Search site</span>
+      <input type="search" id="site-search-input" autocomplete="off">
+    </label>
+    <div class="search-results" id="site-search-results"></div>
+  </form>
+  <main>
+    <section class="hero">
+      <canvas class="bio-canvas" aria-hidden="true"></canvas>
+      <div class="hero-inner">
+        <p class="hero-eyebrow">Join the Lab</p>
+        <h1>Careers</h1>
+        <p class="hero-subtitle">Opportunities for scientists, trainees, and collaborators interested in AD genetics, iPSC systems, and computation.</p>
+        
+      </div>
+    </section>
+    <section class="wrapper">
+      <div class="content-layout">
+        <article class="page-content">
+          
+    <section class="notice-panel">
+      <h2>Career Opportunities</h2>
+      <p>We welcome scientists, trainees, and collaborators who want to work at the interface of Alzheimer's disease genetics, human iPSC models, CRISPR genome editing, and multi-omics computational biology.</p>
+      <p>Because GitHub Pages is static, this form opens an email draft addressed to the lab rather than uploading files through a server.</p>
+    </section>
+    <form class="form-shell application-form" id="career-application" aria-labelledby="apply-fields">
+      <h2 id="apply-fields">Application Information</h2>
+      <div class="field-grid">
+        <label>Name<input type="text" name="name" autocomplete="name" required></label>
+        <label>Email<input type="email" name="email" autocomplete="email" required></label>
+        <label>Current affiliation<input type="text" name="affiliation"></label>
+        <label>Position of interest<select name="position"><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
+      </div>
+      <fieldset>
+        <legend>Research track</legend>
+        <label><input type="checkbox" name="track" value="Wet lab" data-track="wet"> Wet lab</label>
+        <label><input type="checkbox" name="track" value="Dry lab" data-track="dry"> Dry lab</label>
+        <label><input type="checkbox" data-track-both> Both</label>
+      </fieldset>
+      <div class="field-grid">
+        <label>Wet lab skill set<select name="wet_skill"><option>Human iPSC maintenance</option><option>CRISPR genome editing</option><option>CNS cell differentiation from iPSCs</option><option>Human iPSC reprogramming</option><option>Western blotting</option><option>Confocal microscopy</option><option>Molecular cloning</option><option>DNA/RNA purification</option><option>Flow cytometry / FACS</option><option>Human brain cell type preparation</option><option>PCR / qRT-PCR</option><option>Next-generation sequencing library preparation</option><option>Animal handling</option><option>Electrophysiology</option></select></label>
+        <label>Dry lab skill set<select name="dry_skill"><option>R programming</option><option>Python programming</option><option>Single-cell / single-nucleus RNA-seq analysis</option><option>Transcriptomics and differential expression</option><option>GWAS, QTL, and xQTL analysis</option><option>Multi-omics integration</option><option>Epigenomics / DNA methylation analysis</option><option>Proteomics or metabolomics analysis</option><option>Machine learning for genomics</option><option>Reproducible pipelines and Git/GitHub</option><option>High-performance computing</option><option>Data visualization and scientific reporting</option></select></label>
+      </div>
+      <label>Other skills<textarea name="other_skills" rows="4"></textarea></label>
+      <label>Comments<textarea name="comments" rows="6"></textarea></label>
+      <button type="submit">Prepare email application</button>
+      <p class="form-note">Attach your cover letter, CV, references, and major publications before sending the email.</p>
+    </form>
+        </article>
+        
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <p>TCW Laboratory</p>
+    <nav aria-label="Footer navigation">
+      <a href="../contact/">Contact</a>
+      <a href="../resources/">Resources</a>
+      <a href="../member/">Member Portal</a>
+    </nav>
+  </footer>
+  <script>
+    (function () {
+      var form = document.querySelector("#career-application");
+      if (!form) return;
+
+      var both = form.querySelector("[data-track-both]");
+      var wet = form.querySelector("[data-track='wet']");
+      var dry = form.querySelector("[data-track='dry']");
+
+      both.addEventListener("change", function () {
+        wet.checked = both.checked;
+        dry.checked = both.checked;
+      });
+
+      [wet, dry].forEach(function (box) {
+        box.addEventListener("change", function () {
+          both.checked = wet.checked && dry.checked;
+        });
+      });
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var data = new FormData(form);
+        var tracks = data.getAll("track").join(", ") || "Not specified";
+        var lines = [
+          "Name: " + (data.get("name") || ""),
+          "Email: " + (data.get("email") || ""),
+          "Current affiliation: " + (data.get("affiliation") || ""),
+          "Position of interest: " + (data.get("position") || ""),
+          "Research track: " + tracks,
+          "Wet lab skill set: " + (data.get("wet_skill") || ""),
+          "Dry lab skill set: " + (data.get("dry_skill") || ""),
+          "",
+          "Other skills:",
+          data.get("other_skills") || "",
+          "",
+          "Comments:",
+          data.get("comments") || "",
+          "",
+          "Attachments to include: cover letter, CV, references, and major publications."
+        ];
+        var subject = encodeURIComponent("TCW Lab Application - " + (data.get("name") || "Applicant"));
+        var body = encodeURIComponent(lines.join("\n"));
+        window.location.href = "mailto:doctortcw@gmail.com?subject=" + subject + "&body=" + body;
+      });
+    })();
+  </script>
+</body>
+</html>

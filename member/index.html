@@ -414,7 +414,7 @@
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
-    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="" href="../talent-aquisition/">Join</a><a class="" href="../resources/">Resources</a><a class="" href="../data/">Data</a><a class="active" href="./">Members</a><a class="" href="../contact/">Contact</a></nav>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="" href="../careers/">Careers</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="active" href="../member/">Members</a></nav>
     <div class="nav-actions">
       <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
       <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
@@ -436,23 +436,17 @@
         <div class="login-intro">
           <p class="hero-eyebrow">Members Only</p>
           <h1>Lab Member Portal</h1>
-          <p class="lede">One door to everything the TCW Lab runs on — code, data, protocols, and the day-to-day tools the team shares.</p>
+          <p class="lede">One door to the member-only resources the TCW Lab runs on: database access, wet-lab protocols, dry-lab code, and shared onboarding materials.</p>
           <ul class="intro-list">
-            <li><span class="dot">+</span> Jump straight to the GitHub org, SCC research database, and shared Drive.</li>
-            <li><span class="dot">+</span> Find protocols, datasets, the lab calendar, and Slack in one place.</li>
-            <li><span class="dot">+</span> New to the lab? Start with the onboarding guide.</li>
+            <li><span class="dot">+</span> Use the lab passcode shared with current members.</li>
+            <li><span class="dot">+</span> Access the lab database and shared protocols after unlocking.</li>
+            <li><span class="dot">+</span> Dry-lab code links are separated from wet-lab resources.</li>
           </ul>
         </div>
 
         <div class="login-card">
-          <h2>Sign in</h2>
-          <p class="card-sub">Choose how you'd like to get in.</p>
-
-          <div class="auth-tabs" role="tablist" aria-label="Sign-in method">
-            <button type="button" role="tab" aria-selected="true" data-tab="passcode">Lab passcode</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="account">Member account</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="github">GitHub</button>
-          </div>
+          <h2>Member access</h2>
+          <p class="card-sub">Enter the current lab passcode.</p>
 
           <!-- Passcode -->
           <form class="auth-panel active" data-panel="passcode" autocomplete="off">
@@ -462,29 +456,7 @@
             </div>
             <p class="auth-error" data-error="passcode" aria-live="polite"></p>
             <button type="submit" class="submit-btn">Unlock member area</button>
-            <p class="auth-note">Demo passcode for this preview: <code>tcwlab2026</code>. The PI rotates this and shares it with current members.</p>
-          </form>
-
-          <!-- Member account -->
-          <form class="auth-panel" data-panel="account" autocomplete="off">
-            <div class="field">
-              <label for="email">Email</label>
-              <input type="email" id="email" placeholder="you@bu.edu">
-            </div>
-            <div class="field">
-              <label for="pw">Password</label>
-              <input type="password" id="pw" placeholder="Your password">
-            </div>
-            <p class="auth-error" data-error="account" aria-live="polite"></p>
-            <button type="submit" class="submit-btn">Sign in</button>
-            <p class="auth-note">Prototype: any email + password signs you in. Real per-person accounts would need an identity provider (e.g. BU login / Netlify Identity).</p>
-          </form>
-
-          <!-- GitHub -->
-          <form class="auth-panel" data-panel="github" autocomplete="off">
-            <p class="auth-note" style="margin-bottom:2px;">Sign in with your GitHub account. Access is granted to members of the <strong>TCW-lab</strong> organization.</p>
-            <button type="submit" class="submit-btn github-btn"><span class="gh-glyph" aria-hidden="true"></span> Continue with GitHub</button>
-            <p class="auth-note">Prototype button. Wiring this to real GitHub OAuth + org-membership checks is the most robust option for a lab.</p>
+            <p class="auth-note">The passcode should be rotated monthly and shared only with current lab members.</p>
           </form>
 
           <p class="login-foot">Need access or lost the passcode? Email the lab at <a href="../contact/">our contact page</a>.</p>
@@ -500,7 +472,7 @@
           <div>
             <p class="hero-eyebrow">Member Dashboard</p>
             <h1>Welcome back<span data-greet-name></span></h1>
-            <p class="sub">Everything the lab shares, in one place. Pick a destination below.</p>
+            <p class="sub">Everything the lab shares, organized by database access, wet-lab resources, and dry-lab code.</p>
           </div>
           <div class="session-chip">
             <span class="brand-mark" style="width:38px;height:38px;font-size:13px;" data-avatar>TCW</span>
@@ -513,24 +485,29 @@
 
     <section class="res-section" data-view="in">
       <div class="portal-shell">
-        <p class="section-label">Lab Resources</p>
+        <p class="section-label">Lab Database</p>
         <div class="res-grid">
+
+          <a class="res-card" href="https://s3.amazonaws.com/buaws-som-pharmatcw.s3/index.html" target="_blank" rel="noopener">
+            <span class="res-badge">DB</span>
+            <h3>Research Database</h3>
+            <p>Member-only database view for lab resources and research materials.</p>
+            <span class="res-tag path">members only</span>
+            <span class="res-foot">Open database <span class="arrow">→</span></span>
+          </a>
 
           <a class="res-card" href="https://scc-ondemand2.bu.edu/pun/sys/dashboard/files/fs/projectnb/tcwlab" target="_blank" rel="noopener">
             <span class="res-badge">SCC</span>
-            <h3>Research Database</h3>
+            <h3>SCC Project Space</h3>
             <p>Lab project files on BU's Shared Computing Cluster, browsable through SCC OnDemand.</p>
             <span class="res-tag path">projectnb/tcwlab</span>
             <span class="res-foot">Open on SCC <span class="arrow">→</span></span>
           </a>
 
-          <a class="res-card" href="https://github.com/TCW-lab" target="_blank" rel="noopener">
-            <span class="res-badge">git</span>
-            <h3>GitHub Organization</h3>
-            <p>Analysis pipelines, computational tools, and project repositories for the lab.</p>
-            <span class="res-tag path">github.com/TCW-lab</span>
-            <span class="res-foot">Open organization <span class="arrow">→</span></span>
-          </a>
+        </div>
+
+        <p class="section-label">Wet Lab Resources</p>
+        <div class="res-grid">
 
           <a class="res-card" href="https://drive.google.com/drive/folders/1NbZYVpMvNWvI6jnT5c7QVyxfEEYGNx24?usp=share_link" target="_blank" rel="noopener">
             <span class="res-badge">drv</span>
@@ -539,13 +516,37 @@
             <span class="res-foot">Open Drive folder <span class="arrow">→</span></span>
           </a>
 
-          <a class="res-card is-soon" href="#" data-needs-link>
-            <span class="res-badge">dat</span>
-            <h3>Shared Datasets</h3>
-            <p>Processed multi-omics datasets and intermediate files for ongoing projects.</p>
-            <span class="res-tag soon">Add link</span>
-            <span class="res-foot">Set destination <span class="arrow">→</span></span>
+          <a class="res-card" href="../resources/">
+            <span class="res-badge">SOP</span>
+            <h3>Protocol Links</h3>
+            <p>Public protocol links for iPSC-derived microglia, astrocytes, and related CNS models.</p>
+            <span class="res-foot">Open resources <span class="arrow">→</span></span>
           </a>
+
+        </div>
+
+        <p class="section-label">Dry Lab Resources</p>
+        <div class="res-grid">
+
+          <a class="res-card" href="https://github.com/TCW-lab" target="_blank" rel="noopener">
+            <span class="res-badge">git</span>
+            <h3>GitHub Organization</h3>
+            <p>Analysis pipelines, computational tools, and project repositories for dry-lab work.</p>
+            <span class="res-tag path">dry lab only</span>
+            <span class="res-foot">Open organization <span class="arrow">→</span></span>
+          </a>
+
+          <a class="res-card" href="https://scc-ondemand2.bu.edu/pun/sys/dashboard/files/fs/projectnb/tcwlab" target="_blank" rel="noopener">
+            <span class="res-badge">HPC</span>
+            <h3>Computing Workspace</h3>
+            <p>Shared computing access for omics analyses, pipelines, and intermediate project files.</p>
+            <span class="res-foot">Open workspace <span class="arrow">→</span></span>
+          </a>
+
+        </div>
+
+        <p class="section-label">Lab Operations</p>
+        <div class="res-grid">
 
           <a class="res-card is-soon" href="#" data-needs-link>
             <span class="res-badge">cal</span>
@@ -581,7 +582,7 @@
     <nav aria-label="Footer navigation">
       <a href="../contact/">Contact</a>
       <a href="../resources/">Resources</a>
-      <a href="../data/">Data Portal</a>
+      <a href="../member/">Member Portal</a>
     </nav>
   </footer>
 
@@ -592,18 +593,6 @@
 
       function $(sel, root) { return (root || document).querySelector(sel); }
       function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
-
-      // ---- Tab switching ----
-      var tabs = $all(".auth-tabs button");
-      var panels = $all(".auth-panel");
-      tabs.forEach(function (tab) {
-        tab.addEventListener("click", function () {
-          tabs.forEach(function (t) { t.setAttribute("aria-selected", String(t === tab)); });
-          var name = tab.getAttribute("data-tab");
-          panels.forEach(function (p) { p.classList.toggle("active", p.getAttribute("data-panel") === name); });
-          $all(".auth-error").forEach(function (e) { e.textContent = ""; });
-        });
-      });
 
       // ---- Session helpers ----
       function readSession() {
@@ -617,9 +606,7 @@
         var b = parts.length > 1 ? (parts[1][0] || "") : "";
         return (a + b).toUpperCase() || "TCW";
       }
-      function methodLabel(m) {
-        return m === "github" ? "GitHub" : m === "account" ? "Account" : "Passcode";
-      }
+      function methodLabel() { return "Passcode"; }
 
       function applySession(s) {
         if (s) {
@@ -652,27 +639,11 @@
         else { err.textContent = "That passcode isn't right. Try again or contact the lab."; }
       });
 
-      $("[data-panel='account']").addEventListener("submit", function (e) {
-        e.preventDefault();
-        var email = $("#email").value.trim();
-        var pw = $("#pw").value.trim();
-        var err = $("[data-error='account']");
-        if (!email || !pw) { err.textContent = "Enter your email and password."; return; }
-        err.textContent = "";
-        signIn("account", email);
-      });
-
-      $("[data-panel='github']").addEventListener("submit", function (e) {
-        e.preventDefault();
-        signIn("github", "");
-      });
-
       // ---- Sign out ----
       $("[data-signout]").addEventListener("click", function () {
         localStorage.removeItem(SESSION_KEY);
         applySession(null);
-        // reset fields
-        $("#pc").value = ""; $("#email").value = ""; $("#pw").value = "";
+        $("#pc").value = "";
         window.scrollTo({ top: 0, behavior: "auto" });
       });
 

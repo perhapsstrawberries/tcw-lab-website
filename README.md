@@ -29,5 +29,5 @@ The generator reads the current WordPress REST exports, localizes image assets i
 ## Notes
 
 - The old BU WordPress Gravity Forms cannot run on GitHub Pages. Talent and Contact pages now use email-based static forms.
-- The Data Portal page is a placeholder for a future authenticated database tab.
-- Member-only access requires a real auth layer; plain public GitHub Pages cannot restrict pages by lab membership.
+- The old Data Portal route redirects into the Members page, where the lab database link now lives.
+- Member-only access is a lightweight static passcode gate. For stronger security, use a real auth layer outside plain public GitHub Pages.

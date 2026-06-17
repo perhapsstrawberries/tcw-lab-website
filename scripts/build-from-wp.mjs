@@ -17,10 +17,10 @@ const NAV = [
   ["Publications", "/publications/"],
   ["Our Team", "/ourteam/"],
   ["Lab Activity", "/ourteam/activity/"],
-  ["Join", "/talent-aquisition/"],
+  ["Careers", "/careers/"],
   ["Resources", "/resources/"],
-  ["Data", "/data/"],
   ["Contact", "/contact/"],
+  ["Members", "/member/"],
 ];
 
 const PAGE_ROUTES = [
@@ -29,7 +29,7 @@ const PAGE_ROUTES = [
   { wpSlug: "publications", route: "/publications/", nav: "Publications" },
   { wpSlug: "ourteam", route: "/ourteam/", nav: "Our Team", title: "Lab Members" },
   { wpSlug: "activity", route: "/ourteam/activity/", nav: "Lab Activity" },
-  { wpSlug: "talent-aquisition", route: "/talent-aquisition/", nav: "Talent Aquisition", custom: "talent" },
+  { wpSlug: "talent-aquisition", route: "/careers/", nav: "Careers", custom: "talent" },
   { wpSlug: "resources", route: "/resources/", nav: "Resources" },
   { wpSlug: "news", route: "/resources/news/", nav: "Research News" },
   { wpSlug: "research-comments", route: "/resources/research-comments/", nav: "Research Comments" },
@@ -232,10 +232,10 @@ function cleanWpContent(html, route, assetMap) {
 function customTalent() {
   return `
     <section class="notice-panel">
-      <h2>Talent Aquisition</h2>
-      <p>Please contact us if you wish to join our team for your and others promising future.</p>
+      <h2>Career Opportunities</h2>
+      <p>We welcome scientists, trainees, and collaborators who want to work at the interface of Alzheimer's disease genetics, human iPSC models, CRISPR genome editing, and multi-omics computational biology.</p>
       <p>Because GitHub Pages is static, this version routes applications by email instead of the old WordPress upload form.</p>
-      <p><a class="button-link" href="mailto:tcwlaboratory@gmail.com?subject=TCW%20Lab%20Application">Email application materials</a></p>
+      <p><a class="button-link" href="mailto:doctortcw@gmail.com?subject=TCW%20Lab%20Application">Email application materials</a></p>
     </section>
     <section class="form-shell" aria-labelledby="apply-fields">
       <h2 id="apply-fields">Application Information</h2>
@@ -254,7 +254,7 @@ function customTalent() {
       <fieldset>
         <legend>Wet lab skill sets</legend>
         <div class="checkbox-grid">
-          ${["Human iPSC maintenance", "CRISPR genome editing", "Any cell type differentiation from iPSC", "Human iPSC reprogramming", "Western Blotting", "Confocal Microscopy", "Molecular Clonning", "DNA/RNA purification", "Flow Cytometry, FACS", "Human brain cell type preparation", "PCR, qRT-PCR", "Next generation sequencing", "Animal handling", "Electrophysiology"].map((item) => `<label><input type="checkbox"> ${item}</label>`).join("")}
+          ${["Human iPSC maintenance", "CRISPR genome editing", "CNS cell differentiation from iPSCs", "Human iPSC reprogramming", "Western blotting", "Confocal microscopy", "Molecular cloning", "DNA/RNA purification", "Flow cytometry / FACS", "Human brain cell type preparation", "PCR / qRT-PCR", "Next-generation sequencing library preparation", "Animal handling", "Electrophysiology"].map((item) => `<label><input type="checkbox"> ${item}</label>`).join("")}
         </div>
       </fieldset>
       <label>Other skills<textarea rows="4"></textarea></label>
@@ -362,8 +362,8 @@ function pageClass(route) {
 function heroCopy(route, title) {
   const copy = {
     "/": [
-      "Pharmacology, Physiology & Biophysics",
-      "Advancing Alzheimer's disease therapeutics through human iPSC models, CRISPR genome editing, and multi-omics computational biology.",
+      "Alzheimer's Disease Genomics",
+      "Advancing Alzheimer's disease therapeutics through human genomics, iPSC models, CRISPR genome-editing, and multi-omics integrations.",
     ],
     "/research-programs/": [
       "Research Programs",
@@ -381,7 +381,7 @@ function heroCopy(route, title) {
       "Lab Activity",
       "A separate home for TCW Lab celebrations, milestones, events, and team updates.",
     ],
-    "/talent-aquisition/": [
+    "/careers/": [
       "Join the Lab",
       "Opportunities for scientists, trainees, and collaborators interested in AD genetics, iPSC systems, and computation.",
     ],
@@ -476,7 +476,7 @@ function template({ route, title, body, sidebar = "", description = "" }) {
     <nav aria-label="Footer navigation">
       <a href="${relHref(route, "/contact/")}">Contact</a>
       <a href="${relHref(route, "/resources/")}">Resources</a>
-      <a href="${relHref(route, "/data/")}">Data Portal</a>
+      <a href="${relHref(route, "/member/")}">Member Portal</a>
     </nav>
   </footer>
 </body>
@@ -513,7 +513,7 @@ async function main() {
       const page = pageBySlug.get(config.wpSlug);
       const title = config.title || decodeEntities(page?.title?.rendered || config.nav);
       const customSearchText = config.custom === "talent"
-        ? "Talent acquisition join the TCW Lab postdoctoral fellow research associate internship wet lab dry lab application"
+        ? "Careers join the TCW Lab postdoctoral fellow research associate internship wet lab dry lab application"
         : config.custom === "contact"
           ? "Contact TCW Lab email lab science lab business location inquiry"
           : "";
@@ -523,7 +523,7 @@ async function main() {
         text: customSearchText || compactText(page?.content?.rendered || ""),
       };
     }),
-    { title: "Data Portal", route: "/data/", text: "Research data portal member access database APOE AD" },
+    { title: "Members", route: "/member/", text: "Member portal lab passcode research database wet lab dry lab GitHub code protocols" },
     ...posts.map((post) => ({
       title: decodeEntities(post.title.rendered),
       route: `/posts/${post.slug}/`,

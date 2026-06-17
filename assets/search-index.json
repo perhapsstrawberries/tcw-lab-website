@@ -22,17 +22,17 @@
   {
     "title": "Lab Activity",
     "route": "/ourteam/activity/",
-    "text": "loading slideshow... Thanksgiving Lunch 2022 Summer 2023 Lab Retreat Lab Gathering 2022 Cell Press Celebration! 1 2 3 4 5 6 7 8 9 10 11 12 13"
+    "text": "Lab Life Science is better as a team. Celebrations, retreats, graduations, paper parties, and everyday lab wins from the TCW community."
   },
   {
-    "title": "Talent Aquisition",
-    "route": "/talent-aquisition/",
-    "text": "Talent acquisition join the TCW Lab postdoctoral fellow research associate internship wet lab dry lab application"
+    "title": "Careers",
+    "route": "/careers/",
+    "text": "Career opportunities join the TCW Lab postdoctoral fellow research associate internship wet lab dry lab application Alzheimer's disease iPSC CRISPR multi-omics"
   },
   {
     "title": "Resources",
     "route": "/resources/",
-    "text": "Video Coming soon! Database Coming soon! Links https://www.epaad.org/blog/ Drug screening human iPSC model protocol Coming soon! Human iPSC brain astrocytes, microglia, oligodendrocytes, pericytes, endothelial cells, and assembloids protocols Differentiation of iPSCs to Microglia Differentiation of iPSCs to Astrocytes"
+    "text": "Videos database learning links Alzforum EPAD iPSC protocols microglia astrocytes Video Journal of Dementia"
   },
   {
     "title": "Research News",
@@ -50,9 +50,9 @@
     "text": "Contact TCW Lab email lab science lab business location inquiry"
   },
   {
-    "title": "Data Portal",
-    "route": "/data/",
-    "text": "Research data portal member access database APOE AD"
+    "title": "Members",
+    "route": "/member/",
+    "text": "Member portal lab passcode research database wet lab resources dry lab GitHub code protocols"
   },
   {
     "title": "Emmanuel’s Graduation",

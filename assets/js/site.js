@@ -78,8 +78,8 @@ function startBioCanvas(canvas) {
   if (reduceMotion) return;
 
   const context = canvas.getContext("2d");
-  const particles = [];
-  const count = 44;
+  const cells = [];
+  const count = 34;
   let width = 0;
   let height = 0;
   let frame = 0;
@@ -94,20 +94,21 @@ function startBioCanvas(canvas) {
     context.setTransform(scale, 0, 0, scale, 0, 0);
   }
 
-  function resetParticle(particle, index) {
-    particle.x = Math.random() * width;
-    particle.y = Math.random() * height;
-    particle.r = 2 + Math.random() * 3.8;
-    particle.vx = (Math.random() - 0.5) * 0.34;
-    particle.vy = (Math.random() - 0.5) * 0.34;
-    particle.phase = index * 0.7 + Math.random() * 2;
+  function resetCell(cell, index) {
+    cell.x = Math.random() * width;
+    cell.y = Math.random() * height;
+    cell.r = 2.6 + Math.random() * 4.2;
+    cell.vx = (Math.random() - 0.5) * 0.24;
+    cell.vy = (Math.random() - 0.5) * 0.24;
+    cell.phase = index * 0.77 + Math.random() * 2;
+    cell.arms = 5 + Math.floor(Math.random() * 3);
   }
 
   resize();
   for (let index = 0; index < count; index += 1) {
-    const particle = {};
-    resetParticle(particle, index);
-    particles.push(particle);
+    const cell = {};
+    resetCell(cell, index);
+    cells.push(cell);
   }
 
   function draw() {
@@ -120,23 +121,23 @@ function startBioCanvas(canvas) {
     context.fillStyle = gradient;
     context.fillRect(0, 0, width, height);
 
-    particles.forEach((particle, index) => {
-      particle.x += particle.vx + Math.sin(frame + particle.phase) * 0.05;
-      particle.y += particle.vy + Math.cos(frame + particle.phase) * 0.05;
-      if (particle.x < -30 || particle.x > width + 30 || particle.y < -30 || particle.y > height + 30) {
-        resetParticle(particle, index);
+    cells.forEach((cell, index) => {
+      cell.x += cell.vx + Math.sin(frame + cell.phase) * 0.035;
+      cell.y += cell.vy + Math.cos(frame + cell.phase) * 0.035;
+      if (cell.x < -40 || cell.x > width + 40 || cell.y < -40 || cell.y > height + 40) {
+        resetCell(cell, index);
       }
     });
 
-    for (let i = 0; i < particles.length; i += 1) {
-      for (let j = i + 1; j < particles.length; j += 1) {
-        const a = particles[i];
-        const b = particles[j];
+    for (let i = 0; i < cells.length; i += 1) {
+      for (let j = i + 1; j < cells.length; j += 1) {
+        const a = cells[i];
+        const b = cells[j];
         const dx = a.x - b.x;
         const dy = a.y - b.y;
         const distance = Math.hypot(dx, dy);
-        if (distance < 150) {
-          context.strokeStyle = `rgba(0, 142, 145, ${0.20 * (1 - distance / 150)})`;
+        if (distance < 118) {
+          context.strokeStyle = `rgba(0, 142, 145, ${0.11 * (1 - distance / 118)})`;
           context.lineWidth = 1;
           context.beginPath();
           context.moveTo(a.x, a.y);
@@ -146,15 +147,25 @@ function startBioCanvas(canvas) {
       }
     }
 
-    particles.forEach((particle) => {
-      const pulse = 0.65 + Math.sin(frame * 3 + particle.phase) * 0.18;
+    cells.forEach((cell) => {
+      const pulse = 0.58 + Math.sin(frame * 3 + cell.phase) * 0.16;
+      for (let arm = 0; arm < cell.arms; arm += 1) {
+        const angle = (Math.PI * 2 * arm) / cell.arms + Math.sin(frame + cell.phase) * 0.18;
+        const length = cell.r * (4.2 + Math.sin(frame * 2 + arm + cell.phase) * 0.65);
+        context.strokeStyle = `rgba(0, 142, 145, ${0.17 + pulse * 0.1})`;
+        context.lineWidth = 1.15;
+        context.beginPath();
+        context.moveTo(cell.x, cell.y);
+        context.lineTo(cell.x + Math.cos(angle) * length, cell.y + Math.sin(angle) * length);
+        context.stroke();
+      }
       context.beginPath();
       context.fillStyle = `rgba(162, 248, 246, ${pulse})`;
-      context.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
+      context.arc(cell.x, cell.y, cell.r, 0, Math.PI * 2);
       context.fill();
       context.beginPath();
-      context.strokeStyle = "rgba(255, 255, 255, 0.42)";
-      context.arc(particle.x, particle.y, particle.r + 5, 0, Math.PI * 2);
+      context.strokeStyle = "rgba(255, 255, 255, 0.48)";
+      context.arc(cell.x, cell.y, cell.r + 4, 0, Math.PI * 2);
       context.stroke();
     });
 
