@@ -266,6 +266,17 @@ img {
   padding: 12px 14px;
 }
 
+.form-shell input[type="file"] {
+  padding: 11px 14px;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .search-results {
   display: grid;
   gap: 8px;
@@ -524,6 +535,25 @@ li {
   width: 100%;
 }
 
+.home-logo-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: 0 14px 42px rgba(15, 76, 80, 0.08);
+  padding: 18px;
+}
+
+.home-logo-strip img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  border-radius: 16px;
+  background: #fff;
+}
+
 .slideshow-loader,
 .bu-slideshow-navigation-container {
   display: none;
@@ -650,6 +680,28 @@ input[type="checkbox"] {
   font-size: 14px;
 }
 
+.optional {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.form-success {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  padding: 24px;
+  box-shadow: 0 14px 42px rgba(15, 76, 80, 0.08);
+}
+
+.form-success h2 {
+  margin-top: 0;
+}
+
+.skill-grid label {
+  align-items: flex-start;
+  line-height: 1.35;
+}
+
 .research-image-gallery {
   clear: both;
   margin-top: 54px;
@@ -669,6 +721,44 @@ input[type="checkbox"] {
 
 .research-spotlight h2 {
   margin-top: 0;
+}
+
+.research-project-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.42fr) minmax(0, 0.58fr);
+  gap: clamp(20px, 3vw, 34px);
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: 0 14px 42px rgba(15, 76, 80, 0.08);
+  padding: clamp(20px, 3vw, 30px);
+  margin-bottom: 24px;
+}
+
+.research-project-card figure {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  min-width: 0;
+}
+
+.research-project-card img {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: var(--surface-strong);
+}
+
+.research-project-card h2 {
+  margin-top: 0;
+  font-size: clamp(28px, 3.3vw, 46px);
+}
+
+.research-project-card p:last-child {
+  margin-bottom: 0;
 }
 
 .research-image-gallery > p {
@@ -759,7 +849,7 @@ input[type="checkbox"] {
 }
 
 .page-ourteam .page-content > p {
-  display: flow-root;
+  display: block;
   margin: 0;
   border: 1px solid var(--line);
   border-radius: 24px;
@@ -789,12 +879,13 @@ input[type="checkbox"] {
 }
 
 .page-ourteam .page-content > p img.alignleft {
-  width: 98px;
-  height: 128px;
-  float: left;
+  display: block;
+  width: 118px;
+  height: 150px;
+  float: none;
   object-fit: cover;
   border-radius: 18px;
-  margin: 0 15px 8px 0;
+  margin: 0 0 14px;
   box-shadow: 0 10px 26px rgba(15, 76, 80, 0.14);
 }
 
@@ -874,14 +965,89 @@ input[type="checkbox"] {
   margin: 0 0 34px;
 }
 
-.activity-gallery img {
+.activity-photo {
+  appearance: none;
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  cursor: zoom-in;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(15, 76, 80, 0.09);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.activity-photo:hover,
+.activity-photo:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px rgba(15, 76, 80, 0.14);
+}
+
+.activity-photo img {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 30px rgba(15, 76, 80, 0.09);
+}
+
+.activity-photo span {
+  display: block;
+  padding: 0 14px 14px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.photo-lightbox[hidden] {
+  display: none;
+}
+
+.photo-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(5, 18, 19, 0.82);
+}
+
+.photo-lightbox figure {
+  width: min(100%, 1040px);
+  margin: 0;
+}
+
+.photo-lightbox img {
+  display: block;
+  width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.photo-lightbox figcaption {
+  color: #fff;
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  padding: 9px 14px;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .resource-list {
@@ -968,6 +1134,8 @@ input[type="checkbox"] {
   .field-grid,
   .contact-grid,
   .portal-grid,
+  .home-logo-strip,
+  .research-project-card,
   .activity-spotlight {
     grid-template-columns: 1fr;
   }

@@ -177,3 +177,79 @@ function startBioCanvas(canvas) {
 }
 
 document.querySelectorAll(".bio-canvas").forEach(startBioCanvas);
+
+function initImageLightbox() {
+  const explicitTriggers = Array.from(document.querySelectorAll("[data-lightbox-src]"));
+  const zoomableImages = Array.from(document.querySelectorAll(
+    ".research-project-card img, .image-grid img, .activity-spotlight img, .is-home .page-content img"
+  )).filter((image) => !image.closest("[data-lightbox-src]"));
+
+  if (!explicitTriggers.length && !zoomableImages.length) return;
+
+  let lightbox = document.querySelector("#photo-lightbox");
+  if (!lightbox) {
+    lightbox = document.createElement("div");
+    lightbox.className = "photo-lightbox";
+    lightbox.id = "photo-lightbox";
+    lightbox.hidden = true;
+    lightbox.innerHTML = '<button class="lightbox-close" type="button" aria-label="Close photo viewer">Close</button><figure><img alt=""><figcaption></figcaption></figure>';
+    document.body.appendChild(lightbox);
+  }
+
+  const lightboxImage = lightbox.querySelector("img");
+  const lightboxCaption = lightbox.querySelector("figcaption");
+  const closeButton = lightbox.querySelector(".lightbox-close");
+
+  function captionForImage(image) {
+    const figure = image.closest("figure");
+    const figureCaption = figure ? figure.querySelector("figcaption") : null;
+    const projectTitle = image.closest(".research-project-card")?.querySelector("h2");
+    return figureCaption?.textContent?.trim() || projectTitle?.textContent?.trim() || image.alt || "TCW Lab image";
+  }
+
+  function openLightbox(src, caption) {
+    lightboxImage.src = src;
+    lightboxImage.alt = caption;
+    lightboxCaption.textContent = caption;
+    lightbox.hidden = false;
+    closeButton.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImage.removeAttribute("src");
+  }
+
+  explicitTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      openLightbox(trigger.dataset.lightboxSrc, trigger.dataset.lightboxCaption || "TCW Lab image");
+    });
+  });
+
+  zoomableImages.forEach((image) => {
+    image.classList.add("zoomable-image");
+    image.tabIndex = 0;
+    image.setAttribute("role", "button");
+    image.setAttribute("aria-label", "Open larger image");
+    function open() {
+      openLightbox(image.currentSrc || image.src, captionForImage(image));
+    }
+    image.addEventListener("click", open);
+    image.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        open();
+      }
+    });
+  });
+
+  closeButton.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) closeLightbox();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
+  });
+}
+
+initImageLightbox();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Careers | TCW Lab</title>
+  <title>Talent Acquisition | TCW Lab</title>
   <meta name="description" content="Career opportunities for scientists, trainees, and collaborators interested in Alzheimer's disease genetics, iPSC systems, and computational biology.">
   <link rel="stylesheet" href="../assets/css/styles.css">
   <script src="../assets/js/site.js" defer></script>
@@ -17,7 +17,7 @@
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
-    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="active" href="../careers/">Careers</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="" href="../member/">Members</a></nav>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="active" href="../careers/">Talent Acquisition</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="" href="../member/">Members</a></nav>
     <div class="nav-actions">
       <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
       <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
@@ -35,7 +35,7 @@
       <canvas class="bio-canvas" aria-hidden="true"></canvas>
       <div class="hero-inner">
         <p class="hero-eyebrow">Join the Lab</p>
-        <h1>Careers</h1>
+        <h1>Talent Acquisition</h1>
         <p class="hero-subtitle">Opportunities for scientists, trainees, and collaborators interested in AD genetics, iPSC systems, and computation.</p>
         
       </div>
@@ -45,17 +45,26 @@
         <article class="page-content">
           
     <section class="notice-panel">
-      <h2>Career Opportunities</h2>
+      <h2>Talent Acquisition</h2>
       <p>We welcome scientists, trainees, and collaborators who want to work at the interface of Alzheimer's disease genetics, human iPSC models, CRISPR genome editing, and multi-omics computational biology.</p>
-      <p>Because GitHub Pages is static, this form opens an email draft addressed to the lab rather than uploading files through a server.</p>
+      <p>Please complete the required fields and attach your cover letter, CV, and references. Major publication links are welcome but optional.</p>
     </section>
-    <form class="form-shell application-form" id="career-application" aria-labelledby="apply-fields">
+    <div class="form-success" id="application-success" hidden>
+      <h2>Application received</h2>
+      <p>Thank you for applying to the TCW Lab. Your materials have been sent to the lab team.</p>
+    </div>
+    <form class="form-shell application-form" id="career-application" aria-labelledby="apply-fields" action="https://formsubmit.co/doctortcw@gmail.com" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_cc" value="wendybui@bu.edu">
+      <input type="hidden" name="_subject" value="TCW Lab Application">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://tcwlab.org/careers/?submitted=1">
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true">
       <h2 id="apply-fields">Application Information</h2>
       <div class="field-grid">
         <label>Name<input type="text" name="name" autocomplete="name" required></label>
         <label>Email<input type="email" name="email" autocomplete="email" required></label>
-        <label>Current affiliation<input type="text" name="affiliation"></label>
-        <label>Position of interest<select name="position"><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
+        <label>Current affiliation<input type="text" name="affiliation" required></label>
+        <label>Position of interest<select name="position" required><option value="">Select a position</option><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
       </div>
       <fieldset>
         <legend>Research track</legend>
@@ -63,14 +72,54 @@
         <label><input type="checkbox" name="track" value="Dry lab" data-track="dry"> Dry lab</label>
         <label><input type="checkbox" data-track-both> Both</label>
       </fieldset>
+      <fieldset>
+        <legend>Wet lab skill set</legend>
+        <div class="checkbox-grid skill-grid" data-skill-group="wet">
+          <label><input type="checkbox" name="wet_skills" value="Human iPSC maintenance"> Human iPSC maintenance</label>
+          <label><input type="checkbox" name="wet_skills" value="CRISPR genome editing"> CRISPR genome editing</label>
+          <label><input type="checkbox" name="wet_skills" value="CNS cell differentiation from iPSCs"> CNS cell differentiation from iPSCs</label>
+          <label><input type="checkbox" name="wet_skills" value="Human iPSC reprogramming"> Human iPSC reprogramming</label>
+          <label><input type="checkbox" name="wet_skills" value="Western blotting"> Western blotting</label>
+          <label><input type="checkbox" name="wet_skills" value="Confocal microscopy"> Confocal microscopy</label>
+          <label><input type="checkbox" name="wet_skills" value="Molecular cloning"> Molecular cloning</label>
+          <label><input type="checkbox" name="wet_skills" value="DNA/RNA purification"> DNA/RNA purification</label>
+          <label><input type="checkbox" name="wet_skills" value="Flow cytometry / FACS"> Flow cytometry / FACS</label>
+          <label><input type="checkbox" name="wet_skills" value="Human brain cell type preparation"> Human brain cell type preparation</label>
+          <label><input type="checkbox" name="wet_skills" value="PCR / qRT-PCR"> PCR / qRT-PCR</label>
+          <label><input type="checkbox" name="wet_skills" value="Next-generation sequencing library preparation"> Next-generation sequencing library preparation</label>
+          <label><input type="checkbox" name="wet_skills" value="Animal handling"> Animal handling</label>
+          <label><input type="checkbox" name="wet_skills" value="Electrophysiology"> Electrophysiology</label>
+          <label><input type="checkbox" name="wet_skills" value="Other wet lab skills"> Other</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Dry lab skill set</legend>
+        <div class="checkbox-grid skill-grid" data-skill-group="dry">
+          <label><input type="checkbox" name="dry_skills" value="R programming"> R programming</label>
+          <label><input type="checkbox" name="dry_skills" value="Python programming"> Python programming</label>
+          <label><input type="checkbox" name="dry_skills" value="Single-cell / single-nucleus RNA-seq analysis"> Single-cell / single-nucleus RNA-seq analysis</label>
+          <label><input type="checkbox" name="dry_skills" value="Transcriptomics and differential expression"> Transcriptomics and differential expression</label>
+          <label><input type="checkbox" name="dry_skills" value="GWAS, QTL, and xQTL analysis"> GWAS, QTL, and xQTL analysis</label>
+          <label><input type="checkbox" name="dry_skills" value="Multi-omics integration"> Multi-omics integration</label>
+          <label><input type="checkbox" name="dry_skills" value="Epigenomics / DNA methylation analysis"> Epigenomics / DNA methylation analysis</label>
+          <label><input type="checkbox" name="dry_skills" value="Proteomics or metabolomics analysis"> Proteomics or metabolomics analysis</label>
+          <label><input type="checkbox" name="dry_skills" value="Machine learning for genomics"> Machine learning for genomics</label>
+          <label><input type="checkbox" name="dry_skills" value="Reproducible pipelines and Git/GitHub"> Reproducible pipelines and Git/GitHub</label>
+          <label><input type="checkbox" name="dry_skills" value="High-performance computing"> High-performance computing</label>
+          <label><input type="checkbox" name="dry_skills" value="Data visualization and scientific reporting"> Data visualization and scientific reporting</label>
+          <label><input type="checkbox" name="dry_skills" value="Other dry lab skills"> Other</label>
+        </div>
+      </fieldset>
+      <label>Other skills or details<textarea name="other_skills" rows="4" required></textarea></label>
+      <label>Publication links <span class="optional">(optional)</span><textarea name="publication_links" rows="4" placeholder="Links to major publications, Google Scholar, ORCID, portfolio, or GitHub"></textarea></label>
+      <label>Comments<textarea name="comments" rows="6" required></textarea></label>
       <div class="field-grid">
-        <label>Wet lab skill set<select name="wet_skill"><option>Human iPSC maintenance</option><option>CRISPR genome editing</option><option>CNS cell differentiation from iPSCs</option><option>Human iPSC reprogramming</option><option>Western blotting</option><option>Confocal microscopy</option><option>Molecular cloning</option><option>DNA/RNA purification</option><option>Flow cytometry / FACS</option><option>Human brain cell type preparation</option><option>PCR / qRT-PCR</option><option>Next-generation sequencing library preparation</option><option>Animal handling</option><option>Electrophysiology</option></select></label>
-        <label>Dry lab skill set<select name="dry_skill"><option>R programming</option><option>Python programming</option><option>Single-cell / single-nucleus RNA-seq analysis</option><option>Transcriptomics and differential expression</option><option>GWAS, QTL, and xQTL analysis</option><option>Multi-omics integration</option><option>Epigenomics / DNA methylation analysis</option><option>Proteomics or metabolomics analysis</option><option>Machine learning for genomics</option><option>Reproducible pipelines and Git/GitHub</option><option>High-performance computing</option><option>Data visualization and scientific reporting</option></select></label>
+        <label>Cover letter<input type="file" name="cover_letter" accept=".pdf,.doc,.docx" required></label>
+        <label>CV<input type="file" name="cv" accept=".pdf,.doc,.docx" required></label>
+        <label>References<input type="file" name="references" accept=".pdf,.doc,.docx" required></label>
       </div>
-      <label>Other skills<textarea name="other_skills" rows="4"></textarea></label>
-      <label>Comments<textarea name="comments" rows="6"></textarea></label>
-      <button type="submit">Prepare email application</button>
-      <p class="form-note">Attach your cover letter, CV, references, and major publications before sending the email.</p>
+      <button type="submit">Submit application</button>
+      <p class="form-note">Applications are sent to doctortcw@gmail.com with a copy to wendybui@bu.edu. Attachments are limited by the form service, so PDF files are best.</p>
     </form>
         </article>
         
@@ -108,28 +157,38 @@
       form.addEventListener("submit", function (event) {
         event.preventDefault();
         var data = new FormData(form);
-        var tracks = data.getAll("track").join(", ") || "Not specified";
-        var lines = [
-          "Name: " + (data.get("name") || ""),
-          "Email: " + (data.get("email") || ""),
-          "Current affiliation: " + (data.get("affiliation") || ""),
-          "Position of interest: " + (data.get("position") || ""),
-          "Research track: " + tracks,
-          "Wet lab skill set: " + (data.get("wet_skill") || ""),
-          "Dry lab skill set: " + (data.get("dry_skill") || ""),
-          "",
-          "Other skills:",
-          data.get("other_skills") || "",
-          "",
-          "Comments:",
-          data.get("comments") || "",
-          "",
-          "Attachments to include: cover letter, CV, references, and major publications."
-        ];
-        var subject = encodeURIComponent("TCW Lab Application - " + (data.get("name") || "Applicant"));
-        var body = encodeURIComponent(lines.join("\n"));
-        window.location.href = "mailto:doctortcw@gmail.com?subject=" + subject + "&body=" + body;
+        var tracks = data.getAll("track");
+        var wantsWet = tracks.indexOf("Wet lab") !== -1;
+        var wantsDry = tracks.indexOf("Dry lab") !== -1;
+        var hasWetSkill = data.getAll("wet_skills").length > 0;
+        var hasDrySkill = data.getAll("dry_skills").length > 0;
+
+        if (!tracks.length) {
+          event.preventDefault();
+          alert("Please select a research track.");
+          return;
+        }
+
+        if (wantsWet && !hasWetSkill) {
+          event.preventDefault();
+          alert("Please select at least one wet lab skill, or choose Other.");
+          return;
+        }
+
+        if (wantsDry && !hasDrySkill) {
+          event.preventDefault();
+          alert("Please select at least one dry lab skill, or choose Other.");
+          return;
+        }
       });
+
+      var success = document.querySelector("#application-success");
+      var params = new URLSearchParams(window.location.search);
+      if (success && params.get("submitted") === "1") {
+        success.hidden = false;
+        form.hidden = true;
+        success.scrollIntoView({ block: "start" });
+      }
     })();
   </script>
 </body>
