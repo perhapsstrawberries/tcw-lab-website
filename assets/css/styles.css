@@ -2,8 +2,8 @@
 
 :root {
   color-scheme: light;
-  --bg: #f8ffff;
-  --bg-soft: #eaffff;
+  --bg: #efffff;
+  --bg-soft: #d9ffff;
   --surface: rgba(255, 255, 255, 0.82);
   --surface-strong: #ffffff;
   --ink: #0b2020;
@@ -51,8 +51,8 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    linear-gradient(130deg, rgba(162, 248, 246, 0.24), transparent 34%),
-    linear-gradient(210deg, rgba(162, 248, 246, 0.16), transparent 42%),
+    linear-gradient(130deg, rgba(111, 239, 236, 0.34), transparent 34%),
+    linear-gradient(210deg, rgba(162, 248, 246, 0.26), transparent 42%),
     var(--bg);
   color: var(--ink);
   font-family: "DM Sans", Arial, Helvetica, sans-serif;
@@ -317,15 +317,15 @@ img {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.82;
+  opacity: 0.9;
 }
 
 .is-home .bio-canvas {
-  opacity: 0.48;
+  opacity: 0.64;
 }
 
 .page-member .bio-canvas {
-  opacity: 0.26;
+  opacity: 0.36;
 }
 
 .hero-inner {
@@ -759,6 +759,9 @@ input[type="checkbox"] {
   place-items: center;
   margin: 0;
   min-width: 0;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface-strong) 88%, var(--teal) 12%);
+  padding: 12px;
 }
 
 .research-project-card img {
@@ -767,7 +770,17 @@ input[type="checkbox"] {
   max-height: 360px;
   object-fit: contain;
   border-radius: 18px;
-  background: var(--surface-strong);
+  background: #f8ffff;
+}
+
+html[data-theme="dark"] .research-project-card figure,
+html[data-theme="dark"] .research-spotlight figure {
+  background: #f4ffff;
+  box-shadow: inset 0 0 0 1px rgba(162, 248, 246, 0.46);
+}
+
+html[data-theme="dark"] .research-project-card img {
+  background: #f8ffff;
 }
 
 .research-project-card h2 {

@@ -19,6 +19,24 @@ if (themeToggle) {
   });
 }
 
+function initExternalLinks() {
+  document.querySelectorAll("a[href]").forEach((link) => {
+    let url;
+    try {
+      url = new URL(link.getAttribute("href"), window.location.href);
+    } catch {
+      return;
+    }
+
+    if ((url.protocol === "http:" || url.protocol === "https:") && url.origin !== window.location.origin) {
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    }
+  });
+}
+
+initExternalLinks();
+
 if (navToggle && navMenu) {
   navToggle.addEventListener("click", () => {
     const open = navMenu.classList.toggle("open");
@@ -83,7 +101,7 @@ function startBioCanvas(canvas) {
   const isHomePage = document.body.classList.contains("is-home");
   const speed = isMemberPage ? 0.22 : isHomePage ? 0.42 : 0.65;
   const count = isMemberPage ? 10 : isHomePage ? 18 : 24;
-  const glow = isMemberPage ? 0.42 : isHomePage ? 0.58 : 0.78;
+  const glow = isMemberPage ? 0.58 : isHomePage ? 0.82 : 0.92;
   let width = 0;
   let height = 0;
   let frame = 0;
@@ -101,11 +119,17 @@ function startBioCanvas(canvas) {
   function resetCell(cell, index) {
     cell.x = Math.random() * width;
     cell.y = Math.random() * height;
-    cell.r = 2.6 + Math.random() * 4.2;
+    cell.r = 3.2 + Math.random() * 4.1;
     cell.vx = (Math.random() - 0.5) * 0.18 * speed;
     cell.vy = (Math.random() - 0.5) * 0.18 * speed;
     cell.phase = index * 0.77 + Math.random() * 2;
-    cell.arms = 5 + Math.floor(Math.random() * 3);
+    cell.arms = 6 + Math.floor(Math.random() * 3);
+    cell.branches = Array.from({ length: cell.arms }, (_, arm) => ({
+      angle: (Math.PI * 2 * arm) / cell.arms + (Math.random() - 0.5) * 0.62,
+      length: 3.65 + Math.random() * 1.65,
+      forkAt: 0.48 + Math.random() * 0.22,
+      fork: 0.44 + Math.random() * 0.34
+    }));
   }
 
   resize();
@@ -118,10 +142,14 @@ function startBioCanvas(canvas) {
   function draw() {
     frame += 0.004 * speed;
     context.clearRect(0, 0, width, height);
+    const darkMode = document.documentElement.dataset.theme === "dark";
+    const stroke = darkMode ? "126, 248, 242" : "0, 142, 145";
+    const fill = darkMode ? "162, 248, 246" : "74, 214, 210";
+    const core = darkMode ? "232, 255, 253" : "6, 90, 92";
 
     const gradient = context.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, `rgba(162, 248, 246, ${0.18 * glow})`);
-    gradient.addColorStop(1, `rgba(162, 248, 246, ${0.10 * glow})`);
+    gradient.addColorStop(0, `rgba(${fill}, ${0.16 * glow})`);
+    gradient.addColorStop(1, `rgba(${fill}, ${0.08 * glow})`);
     context.fillStyle = gradient;
     context.fillRect(0, 0, width, height);
 
@@ -141,8 +169,9 @@ function startBioCanvas(canvas) {
         const dy = a.y - b.y;
         const distance = Math.hypot(dx, dy);
         if (distance < 118) {
-          context.strokeStyle = `rgba(0, 142, 145, ${0.07 * glow * (1 - distance / 118)})`;
+          context.strokeStyle = `rgba(${stroke}, ${0.08 * glow * (1 - distance / 118)})`;
           context.lineWidth = 1;
+          context.lineCap = "round";
           context.beginPath();
           context.moveTo(a.x, a.y);
           context.lineTo(b.x, b.y);
@@ -153,22 +182,55 @@ function startBioCanvas(canvas) {
 
     cells.forEach((cell) => {
       const pulse = 0.42 + Math.sin(frame * 2 + cell.phase) * 0.06;
-      for (let arm = 0; arm < cell.arms; arm += 1) {
-        const angle = (Math.PI * 2 * arm) / cell.arms + Math.sin(frame + cell.phase) * 0.18;
-        const length = cell.r * (3.6 + Math.sin(frame * 2 + arm + cell.phase) * 0.35);
-        context.strokeStyle = `rgba(0, 142, 145, ${(0.12 + pulse * 0.06) * glow})`;
-        context.lineWidth = 1.15;
+      cell.branches.forEach((branch, arm) => {
+        const wobble = Math.sin(frame + cell.phase + arm) * 0.16;
+        const angle = branch.angle + wobble;
+        const length = cell.r * (branch.length + Math.sin(frame * 2 + arm + cell.phase) * 0.42);
+        const midX = cell.x + Math.cos(angle + wobble * 0.55) * length * 0.55;
+        const midY = cell.y + Math.sin(angle + wobble * 0.55) * length * 0.55;
+        const tipX = cell.x + Math.cos(angle) * length;
+        const tipY = cell.y + Math.sin(angle) * length;
+        context.strokeStyle = `rgba(${stroke}, ${(0.19 + pulse * 0.08) * glow})`;
+        context.lineWidth = 1.28;
+        context.lineCap = "round";
+        context.lineJoin = "round";
         context.beginPath();
         context.moveTo(cell.x, cell.y);
-        context.lineTo(cell.x + Math.cos(angle) * length, cell.y + Math.sin(angle) * length);
+        context.quadraticCurveTo(midX, midY, tipX, tipY);
         context.stroke();
-      }
+
+        if (arm % 2 === 0 || branch.length > 4.5) {
+          [-1, 1].forEach((side) => {
+            const branchAngle = angle + side * (branch.fork + Math.sin(frame + cell.phase) * 0.08);
+            const branchLength = length * (0.2 + (arm % 3) * 0.045);
+            const branchStartX = cell.x + Math.cos(angle) * length * branch.forkAt;
+            const branchStartY = cell.y + Math.sin(angle) * length * branch.forkAt;
+            const branchTipX = branchStartX + Math.cos(branchAngle) * branchLength;
+            const branchTipY = branchStartY + Math.sin(branchAngle) * branchLength;
+            context.strokeStyle = `rgba(${stroke}, ${0.13 * glow})`;
+            context.lineWidth = 0.95;
+            context.beginPath();
+            context.moveTo(branchStartX, branchStartY);
+            context.quadraticCurveTo(
+              branchStartX + Math.cos(branchAngle + side * 0.16) * branchLength * 0.55,
+              branchStartY + Math.sin(branchAngle + side * 0.16) * branchLength * 0.55,
+              branchTipX,
+              branchTipY
+            );
+            context.stroke();
+          });
+        }
+      });
       context.beginPath();
-      context.fillStyle = `rgba(162, 248, 246, ${pulse * glow})`;
+      context.fillStyle = `rgba(${fill}, ${pulse * glow})`;
       context.arc(cell.x, cell.y, cell.r, 0, Math.PI * 2);
       context.fill();
       context.beginPath();
-      context.strokeStyle = `rgba(255, 255, 255, ${0.24 * glow})`;
+      context.fillStyle = `rgba(${core}, ${0.18 * glow})`;
+      context.arc(cell.x - cell.r * 0.25, cell.y - cell.r * 0.18, Math.max(1.2, cell.r * 0.34), 0, Math.PI * 2);
+      context.fill();
+      context.beginPath();
+      context.strokeStyle = `rgba(255, 255, 255, ${0.34 * glow})`;
       context.arc(cell.x, cell.y, cell.r + 4, 0, Math.PI * 2);
       context.stroke();
     });
