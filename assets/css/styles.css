@@ -698,6 +698,11 @@ input[type="checkbox"] {
   font-weight: 900;
 }
 
+.page-publications .page-content p,
+.page-publications .page-content li {
+  color: var(--ink);
+}
+
 .form-success {
   border: 1px solid var(--line);
   border-radius: 24px;
