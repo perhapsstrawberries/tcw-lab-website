@@ -619,9 +619,9 @@
   <script>
     (function () {
       var SESSION_KEY = "tcw-member-session";
-      var PASSCODES = {
-        wet: "tcw-wet-2026",
-        dry: "tcw-dry-2026"
+      var PASSCODE_HASHES = {
+        wet: "72cbd1cecbaa9050613c204fda22d988d121f483f3730c38d09d1d35b37b96cf",
+        dry: "18827d327ec1aae84b465682d8dd2c4bb2d675ce1da5d25f320783350245e521"
       };
 
       function $(sel, root) { return (root || document).querySelector(sel); }
@@ -669,13 +669,22 @@
         window.scrollTo({ top: 0, behavior: "auto" });
       }
 
+      function sha256(value) {
+        return crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)).then(function (buffer) {
+          return Array.prototype.map.call(new Uint8Array(buffer), function (byte) {
+            return byte.toString(16).padStart(2, "0");
+          }).join("");
+        });
+      }
+
       // ---- Form handlers ----
-      $("[data-panel='passcode']").addEventListener("submit", function (e) {
+      $("[data-panel='passcode']").addEventListener("submit", async function (e) {
         e.preventDefault();
         var val = $("#pc").value.trim();
         var err = $("[data-error='passcode']");
-        if (val === PASSCODES.wet) { err.textContent = ""; signIn("passcode", "", "wet"); }
-        else if (val === PASSCODES.dry) { err.textContent = ""; signIn("passcode", "", "dry"); }
+        var hash = await sha256(val);
+        if (hash === PASSCODE_HASHES.wet) { err.textContent = ""; signIn("passcode", "", "wet"); }
+        else if (hash === PASSCODE_HASHES.dry) { err.textContent = ""; signIn("passcode", "", "dry"); }
         else { err.textContent = "That passcode isn't right. Try again or contact the lab."; }
       });
 

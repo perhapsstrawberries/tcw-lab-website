@@ -268,7 +268,7 @@ function customContact() {
     <section class="contact-grid">
       <div class="notice-panel">
         <h2>Contact Details</h2>
-        <p><strong>Lab science:</strong> <a href="mailto:juliatcw@bu.edu">juliatcw@bu.edu</a></p>
+        <p><strong>Lab science:</strong> <a href="mailto:doctortcw@gmail.com">doctortcw@gmail.com</a></p>
         <p><strong>Lab business:</strong> <a href="mailto:tcwlaboratory@gmail.com">tcwlaboratory@gmail.com</a></p>
         <p><strong>Location:</strong> 700 Albany St. W533, Boston, MA 02118</p>
       </div>
