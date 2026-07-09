@@ -362,19 +362,37 @@ function sidebarFor(route) {
   }
   if (route !== "/") return "";
   return `
-    <aside class="sidebar" aria-label="Related links">
-      <h2>Related Links</h2>
-      <ul>
-        <li><a href="https://www.cell.com/cell/fulltext/S0092-8674(22)00648-1">Cell Publication</a></li>
-        <li><a href="${relHref(route, "/resources/news/")}">Research News</a></li>
-        <li><a href="https://www.bumc.bu.edu/busm-pm/">Department of Pharmacology and Experimental Therapeutics</a></li>
-        <li><a href="https://www.bumc.bu.edu/gsi/">Alzheimer's Disease Center</a></li>
-        <li><a href="https://www.bumc.bu.edu/gsi/">Genome Science Institute</a></li>
-        <li><a href="https://www.bumc.bu.edu/gsi/">Center for Systems Neuroscience</a></li>
-        <li><a href="https://www.bu.edu/neuro/">BU Neuroscience</a></li>
-        <li><a href="https://www.bu.edu/bioinformatics/">Bioinformatics</a></li>
-        <li><a href="https://www.alzforum.org/news/research-news/cholesterol-dysregulation-early-step-tau-pathology">Cholesterol Dysregulation</a></li>
-      </ul>
+    <aside class="sidebar-stack" aria-label="Explore more">
+      <section class="sidebar-card" aria-labelledby="related-links-title">
+        <h2 id="related-links-title">Explore AD Research</h2>
+        <ul>
+          <li><a href="https://www.cell.com/cell/fulltext/S0092-8674(22)00648-1">Cell Publication</a></li>
+          <li><a href="https://www.alzforum.org/">Alzforum</a></li>
+          <li><a href="https://www.alzforum.org/news/research-news/cholesterol-dysregulation-early-step-tau-pathology">Cholesterol Dysregulation</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-card" aria-labelledby="home-news-title">
+        <div class="section-kicker">News</div>
+        <h2 id="home-news-title">News</h2>
+        <ul class="sidebar-news-list">
+          <li>
+            <time>2022</time>
+            <a href="https://www.nature.com/articles/s43587-022-00256-2.epdf?sharing_token=GrUQ68XperuvW8iguf1MMdRgN0jAjWel9jnR3ZoTv0Pnvp0rwzcstVsDzMecyAHcFbe-FD23JvAay-bQAYgo06TgH6niiUEuX54lyopUMKMM7nhMa8x1OG311rOZaKUXClm1imnT-lPUwXIr7tibKD42dQ9bdgnknlqXozRS3X0%3D">Nature Aging interview highlights APOE4 work</a>
+            <p>Nature Aging featured the lab's APOE4 cholesterol homeostasis work.</p>
+          </li>
+          <li>
+            <time>June 8, 2026</time>
+            <a href="${relHref(route, "/posts/selina-received-newbury-center-fellowship/")}">Selina received Newbury Center fellowship!</a>
+            <p>Congratulations to Selina Chen on receiving the fellowship.</p>
+          </li>
+          <li>
+            <time>June 23, 2022</time>
+            <a href="${relHref(route, "/posts/analysis-of-cholesterol-and-matrisome-pathways-in-glia-is-published-in-molecular-cell/")}">Our newest publication is in Cell!</a>
+            <p>Read about cholesterol and matrisome pathways in human APOE4 glia.</p>
+          </li>
+        </ul>
+        <a class="text-link" href="${relHref(route, "/ourteam/activity/")}">View all updates</a>
+      </section>
     </aside>`;
 }
 
@@ -401,7 +419,7 @@ function pageClass(route) {
 function heroCopy(route, title) {
   const copy = {
     "/": [
-      "Alzheimer's Disease Genomics",
+      "Alzheimer's disease functional genomics",
       "Advancing Alzheimer's disease therapeutics through human genomics, iPSC models, CRISPRi screens, and multi-omics integrations.",
     ],
     "/research-programs/": [
@@ -460,8 +478,9 @@ function template({ route, title, body, sidebar = "", description = "" }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-favicon.png">
-  <link rel="apple-touch-icon" href="${base}assets/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260709.png">
+  <link rel="shortcut icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260709.png">
+  <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260709.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
   <link rel="stylesheet" href="${base}assets/css/styles.css">
@@ -478,7 +497,7 @@ function template({ route, title, body, sidebar = "", description = "" }) {
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
     <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation">${navMarkup(route)}</nav>
     <div class="nav-actions">
-      <button class="theme-toggle" type="button" aria-label="Toggle dark mode"><span></span></button>
+      <button class="music-toggle" type="button" data-music-toggle aria-pressed="false" aria-label="Toggle soft background music"><span></span></button>
       <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
     </div>
   </header>
