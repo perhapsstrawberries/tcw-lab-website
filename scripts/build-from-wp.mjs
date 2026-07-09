@@ -24,7 +24,7 @@ const NAV = [
 ];
 
 const PAGE_ROUTES = [
-  { wpSlug: "tcw-lab", route: "/", nav: "TCW Lab", title: "Welcome to TCW laboratory!" },
+  { wpSlug: "tcw-lab", route: "/", nav: "TCW Lab", title: "Science is a Team Sport" },
   { wpSlug: "research-programs", route: "/research-programs/", nav: "Research Projects" },
   { wpSlug: "publications", route: "/publications/", nav: "Publications" },
   { wpSlug: "ourteam", route: "/ourteam/", nav: "Our Team", title: "Lab Members" },
@@ -472,7 +472,7 @@ function template({ route, title, body, sidebar = "", description = "" }) {
     <a class="brand" href="${relHref(route, "/")}" aria-label="TCW Lab home">
       <span class="brand-mark">TCW</span>
       <span class="brand-copy">
-        <strong>TCW Lab</strong>
+        <strong>Science is a team sport</strong>
       </span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>

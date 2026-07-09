@@ -61,6 +61,126 @@ body {
   overflow-x: hidden;
 }
 
+body.intro-lock {
+  overflow: hidden;
+}
+
+.site-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(162, 248, 246, 0.42), transparent 28%),
+    radial-gradient(circle at 20% 18%, rgba(255, 217, 102, 0.16), transparent 24%),
+    radial-gradient(circle at 78% 28%, rgba(216, 144, 255, 0.15), transparent 26%),
+    linear-gradient(145deg, #f7ffff, #d9ffff 58%, #ecfffd);
+  color: #061112;
+  text-align: center;
+  transition: opacity 720ms ease, visibility 720ms ease;
+}
+
+.site-intro::before,
+.site-intro::after {
+  content: "";
+  position: absolute;
+  width: min(72vw, 720px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(0, 142, 145, 0.12);
+  border-radius: 50%;
+  animation: intro-orbit 6s ease-in-out infinite;
+}
+
+.site-intro::after {
+  width: min(58vw, 520px);
+  animation-delay: -2.5s;
+}
+
+.site-intro.leaving {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.site-intro > * {
+  position: relative;
+  z-index: 1;
+}
+
+.intro-mark {
+  display: grid;
+  place-items: center;
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: url("../icons/tcw-compact-logo.png") center / cover no-repeat;
+  color: transparent;
+  box-shadow: 0 22px 58px rgba(0, 142, 145, 0.22);
+  text-indent: -999px;
+  overflow: hidden;
+  animation: intro-heartbeat 1.45s ease-in-out infinite;
+}
+
+.intro-kicker {
+  margin: 0 0 14px;
+  color: var(--teal-deep);
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.site-intro h2 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(42px, 8vw, 88px);
+  line-height: 0.95;
+}
+
+.intro-pulse {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.intro-pulse span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--teal-deep);
+  animation: intro-dot 1.2s ease-in-out infinite;
+}
+
+.intro-pulse span:nth-child(2) {
+  animation-delay: 0.18s;
+  background: #61c648;
+}
+
+.intro-pulse span:nth-child(3) {
+  animation-delay: 0.36s;
+  background: #dc3a5f;
+}
+
+@keyframes intro-heartbeat {
+  0%, 34%, 100% { transform: scale(1); }
+  12% { transform: scale(1.08); }
+  22% { transform: scale(0.985); }
+}
+
+@keyframes intro-orbit {
+  0%, 100% { transform: scale(0.92) rotate(0deg); opacity: 0.38; }
+  50% { transform: scale(1.04) rotate(8deg); opacity: 0.7; }
+}
+
+@keyframes intro-dot {
+  0%, 100% { transform: translateY(0); opacity: 0.42; }
+  45% { transform: translateY(-8px); opacity: 1; }
+}
+
 a {
   color: var(--teal-deep);
   text-decoration-thickness: 1px;
@@ -131,8 +251,12 @@ img {
 }
 
 .brand-copy strong {
-  font-size: 16px;
+  display: block;
+  max-width: 190px;
+  font-size: 14px;
   font-weight: 700;
+  line-height: 1.12;
+  text-transform: uppercase;
 }
 
 .nav-menu {
@@ -1229,6 +1353,10 @@ html[data-theme="dark"] .research-project-card img {
 
   .brand-mark {
     animation: none;
+  }
+
+  .site-intro {
+    display: none;
   }
 }
 

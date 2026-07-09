@@ -8,8 +8,122 @@ const themeToggle = document.querySelector(".theme-toggle");
 
 let searchIndex = [];
 
+function playIntroSound() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+
+  let context;
+  try {
+    context = new AudioContext();
+  } catch {
+    return;
+  }
+
+  const now = context.currentTime;
+  const master = context.createGain();
+  master.gain.setValueAtTime(0.0001, now);
+  master.gain.exponentialRampToValueAtTime(0.035, now + 0.35);
+  master.gain.exponentialRampToValueAtTime(0.0001, now + 4.2);
+  master.connect(context.destination);
+
+  const noiseBuffer = context.createBuffer(1, context.sampleRate * 4.2, context.sampleRate);
+  const noise = noiseBuffer.getChannelData(0);
+  for (let index = 0; index < noise.length; index += 1) {
+    noise[index] = (Math.random() * 2 - 1) * (1 - index / noise.length);
+  }
+  const noiseSource = context.createBufferSource();
+  const noiseFilter = context.createBiquadFilter();
+  const noiseGain = context.createGain();
+  noiseSource.buffer = noiseBuffer;
+  noiseFilter.type = "bandpass";
+  noiseFilter.frequency.setValueAtTime(1250, now);
+  noiseFilter.Q.setValueAtTime(0.45, now);
+  noiseGain.gain.setValueAtTime(0.018, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 4.1);
+  noiseSource.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(master);
+  noiseSource.start(now);
+  noiseSource.stop(now + 4.2);
+
+  const notes = [261.63, 329.63, 392.0, 523.25];
+  notes.forEach((freq, index) => {
+    const osc = context.createOscillator();
+    const gain = context.createGain();
+    osc.type = index % 2 ? "triangle" : "sine";
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.18 / (index + 2), now + 0.25 + index * 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.5 + index * 0.12);
+    osc.connect(gain);
+    gain.connect(master);
+    osc.start(now + index * 0.08);
+    osc.stop(now + 4.35);
+  });
+
+  [659.25, 783.99, 587.33].forEach((freq, index) => {
+    const osc = context.createOscillator();
+    const gain = context.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, now + 1 + index * 0.62);
+    gain.gain.setValueAtTime(0.0001, now + 0.95 + index * 0.62);
+    gain.gain.exponentialRampToValueAtTime(0.09, now + 1.05 + index * 0.62);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.75 + index * 0.62);
+    osc.connect(gain);
+    gain.connect(master);
+    osc.start(now + 0.95 + index * 0.62);
+    osc.stop(now + 1.85 + index * 0.62);
+  });
+
+  if (context.state === "suspended") {
+    const resume = () => context.resume().catch(() => {});
+    document.addEventListener("pointerdown", resume, { once: true });
+    document.addEventListener("keydown", resume, { once: true });
+  }
+}
+
+function initIntroExperience() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const key = "tcw-intro-seen-v1";
+  let seen = false;
+  try {
+    seen = sessionStorage.getItem(key) === "1";
+  } catch {
+    seen = false;
+  }
+  if (reduceMotion || seen) return;
+
+  const intro = document.createElement("div");
+  intro.className = "site-intro";
+  intro.setAttribute("role", "status");
+  intro.setAttribute("aria-live", "polite");
+  intro.innerHTML = `
+    <div class="intro-mark" aria-hidden="true">TCW</div>
+    <p class="intro-kicker">TCW Laboratory</p>
+    <h2>Science is a team sport</h2>
+    <div class="intro-pulse" aria-hidden="true"><span></span><span></span><span></span></div>
+  `;
+  document.body.prepend(intro);
+  document.body.classList.add("intro-lock");
+  try {
+    sessionStorage.setItem(key, "1");
+  } catch {
+    // Storage can be disabled in strict browser modes; the intro still works.
+  }
+  playIntroSound();
+
+  window.setTimeout(() => {
+    intro.classList.add("leaving");
+    document.body.classList.remove("intro-lock");
+  }, 3900);
+
+  window.setTimeout(() => intro.remove(), 4750);
+}
+
 const storedTheme = localStorage.getItem("tcw-theme");
 document.documentElement.dataset.theme = storedTheme === "dark" || storedTheme === "light" ? storedTheme : "light";
+
+initIntroExperience();
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
