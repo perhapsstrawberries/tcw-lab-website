@@ -111,15 +111,23 @@ img {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.94) 0 8%, transparent 25%),
-    linear-gradient(135deg, var(--teal), var(--blue));
-  color: #061112;
+  background: url("../icons/tcw-compact-logo.png") center / cover no-repeat;
+  color: transparent;
   font-family: "DM Serif Display", Georgia, serif;
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 10px 28px rgba(0, 142, 145, 0.16);
+  overflow: hidden;
+  text-indent: -999px;
+  animation: logo-heartbeat 4.8s ease-in-out infinite;
+}
+
+@keyframes logo-heartbeat {
+  0%, 12%, 28%, 100% { transform: scale(1); }
+  15% { transform: scale(1.07); }
+  20% { transform: scale(0.985); }
+  24% { transform: scale(1.045); }
 }
 
 .brand-copy strong {
@@ -179,21 +187,28 @@ img {
 .nav-toggle {
   display: none;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
   min-height: 42px;
-  padding: 0 14px;
+  padding: 0;
 }
 
 .nav-toggle span {
   display: block;
-  width: 18px;
-  height: 2px;
-  margin: 4px 0;
+  width: 5px;
+  height: 5px;
+  margin: 0;
   background: currentColor;
+  border-radius: 50%;
 }
 
 .nav-toggle b {
-  font-size: 13px;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
 }
 
 .theme-toggle,
@@ -610,6 +625,29 @@ li {
 }
 
 .sidebar ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.sidebar + .sidebar,
+.sidebar-card + .sidebar-card {
+  margin-top: 16px;
+}
+
+.sidebar-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.sidebar-card h2 {
+  margin: 0 0 12px;
+  font-size: 26px;
+}
+
+.sidebar-card ul {
   padding-left: 20px;
   margin-bottom: 0;
 }
@@ -1187,6 +1225,10 @@ html[data-theme="dark"] .research-project-card img {
 
   .bio-canvas {
     display: none;
+  }
+
+  .brand-mark {
+    animation: none;
   }
 }
 

@@ -30,7 +30,7 @@ const PAGE_ROUTES = [
   { wpSlug: "ourteam", route: "/ourteam/", nav: "Our Team", title: "Lab Members" },
   { wpSlug: "activity", route: "/ourteam/activity/", nav: "Lab Activity" },
   { wpSlug: "talent-aquisition", route: "/careers/", nav: "Careers", custom: "talent" },
-  { wpSlug: "resources", route: "/resources/", nav: "Resources" },
+  { wpSlug: "resources", route: "/resources/", nav: "Resources", custom: "resources" },
   { wpSlug: "news", route: "/resources/news/", nav: "Research News" },
   { wpSlug: "research-comments", route: "/resources/research-comments/", nav: "Research Comments" },
   { wpSlug: "contact", route: "/contact/", nav: "Contact", title: "Contact Us", custom: "contact" },
@@ -232,8 +232,8 @@ function cleanWpContent(html, route, assetMap) {
 function customTalent() {
   return `
     <section class="notice-panel">
-      <h2>Career Opportunities</h2>
-      <p>We welcome scientists, trainees, and collaborators who want to work at the interface of Alzheimer's disease genetics, human iPSC models, CRISPR genome editing, and multi-omics computational biology.</p>
+      <h2>Talent Acquisition</h2>
+      <p>We welcome scientists, trainees, and collaborators who want to work at the interface of Alzheimer's disease genetics, human iPSC models, CRISPRi screens, and multi-omics computational biology.</p>
       <p>Because GitHub Pages is static, this version routes applications by email instead of the old WordPress upload form.</p>
       <p><a class="button-link" href="mailto:doctortcw@gmail.com?subject=TCW%20Lab%20Application">Email application materials</a></p>
     </section>
@@ -254,7 +254,7 @@ function customTalent() {
       <fieldset>
         <legend>Wet lab skill sets</legend>
         <div class="checkbox-grid">
-          ${["Human iPSC maintenance", "CRISPR genome editing", "CNS cell differentiation from iPSCs", "Human iPSC reprogramming", "Western blotting", "Confocal microscopy", "Molecular cloning", "DNA/RNA purification", "Flow cytometry / FACS", "Human brain cell type preparation", "PCR / qRT-PCR", "Next-generation sequencing library preparation", "Animal handling", "Electrophysiology"].map((item) => `<label><input type="checkbox"> ${item}</label>`).join("")}
+          ${["Human iPSC maintenance", "CRISPRi screen", "Any CNS cell type differentiation from iPSC", "Human iPSC reprogramming", "Western blotting", "Confocal microscopy", "Molecular cloning", "DNA/RNA purification", "Flow cytometry / FACS", "Human brain cell type preparation", "PCR / qRT-PCR", "Single cell/single nucleus library preparation", "Animal handling", "Electrophysiology"].map((item) => `<label><input type="checkbox"> ${item}</label>`).join("")}
         </div>
       </fieldset>
       <label>Other skills<textarea rows="4"></textarea></label>
@@ -282,6 +282,25 @@ function customContact() {
     </section>`;
 }
 
+function customResources() {
+  return `
+<h3>Videos</h3>
+<ul class="resource-list">
+  <li><a href="https://vjdementia.com/video/i9n1p55i4_w-overcoming-the-limitations-of-ipsc-models/">Overcoming the limitations of iPSC models</a></li>
+  <li><a href="https://vjdementia.com/video/tmvdgtxzbjc-impact-of-apoe4-on-cellular-function-in-astrocytes-and-microglia/">Alzheimer's disease functional genomics with iPSCs</a></li>
+  <li><a href="https://vjdementia.com/video/iqqluwmmock-alzheimers-disease-functional-genomics-with-ipscs/">Impact of APOE4 on cellular function in astrocytes and microglia</a></li>
+  <li><a href="https://vjdementia.com/video/jr36vzg-ja8-unveiling-the-role-of-astrocytes-in-alzheimers-disease-for-novel-therapeutic-strategies/">Unveiling the role of astrocytes in Alzheimer's disease for novel therapeutic strategies</a></li>
+</ul>
+<h3>Mutation Resources</h3>
+<ul class="resource-list">
+  <li><a href="https://www.alzforum.org/mutations">Alzforum Mutations Database</a></li>
+</ul>
+<h3><strong>Protocol for morphogen-guided differentiation of brain cell types using human induced pluripotent stem cells</strong></h3>
+<p><a href="https://www.cell.com/star-protocols/fulltext/S2666-1667(25)00745-2">STAR Protocols publication</a></p>
+<p><a href="https://drive.google.com/file/d/1dNUte8q5X5toklKFnMare8KD11taTGbK/view?usp=sharing">Differentiation of iPSCs to Microglia</a></p>
+<p><a href="https://drive.google.com/file/d/1aO_vIdrQXCbdo2ZdJ3SMGzJyOS_KMTUt/view?usp=sharing">Differentiation of iPSCs to Astrocytes</a></p>`;
+}
+
 function dataPortalContent() {
   return `
     <section class="notice-panel">
@@ -291,8 +310,8 @@ function dataPortalContent() {
     </section>
     <div class="portal-grid">
       <article>
-        <h3>Public Database</h3>
-        <p>Share public datasets, protocols, and project summaries when approved for release.</p>
+        <h3>Lab Database</h3>
+        <p>Keep member-only datasets, project notes, and internal tools behind the Members portal.</p>
       </article>
       <article>
         <h3>Member Access</h3>
@@ -322,12 +341,32 @@ function researchImageGallery(route) {
 }
 
 function sidebarFor(route) {
+  if (route.startsWith("/resources/")) {
+    const base = basePrefix(route);
+    return `
+    <aside class="sidebar-stack" aria-label="Resources navigation">
+      <section class="sidebar-card">
+        <h2>Resources</h2>
+        <ul>
+          <li><a href="${base}resources/">Resources Home</a></li>
+          <li><a href="${base}resources/news/">Research News</a></li>
+          <li><a href="${base}resources/research-comments/">Research Comments</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-card">
+        <h2>News</h2>
+        <p>Research coverage and lab highlights are collected under the Research News tab.</p>
+        <p><a class="text-link" href="${base}resources/news/">Open Research News</a></p>
+      </section>
+    </aside>`;
+  }
   if (route !== "/") return "";
   return `
     <aside class="sidebar" aria-label="Related links">
       <h2>Related Links</h2>
       <ul>
         <li><a href="https://www.cell.com/cell/fulltext/S0092-8674(22)00648-1">Cell Publication</a></li>
+        <li><a href="${relHref(route, "/resources/news/")}">Research News</a></li>
         <li><a href="https://www.bumc.bu.edu/busm-pm/">Department of Pharmacology and Experimental Therapeutics</a></li>
         <li><a href="https://www.bumc.bu.edu/gsi/">Alzheimer's Disease Center</a></li>
         <li><a href="https://www.bumc.bu.edu/gsi/">Genome Science Institute</a></li>
@@ -363,7 +402,7 @@ function heroCopy(route, title) {
   const copy = {
     "/": [
       "Alzheimer's Disease Genomics",
-      "Advancing Alzheimer's disease therapeutics through human genomics, iPSC models, CRISPR genome-editing, and multi-omics integrations.",
+      "Advancing Alzheimer's disease therapeutics through human genomics, iPSC models, CRISPRi screens, and multi-omics integrations.",
     ],
     "/research-programs/": [
       "Research Programs",
@@ -387,7 +426,7 @@ function heroCopy(route, title) {
     ],
     "/resources/": [
       "Resources",
-      "Protocols, links, databases, and research context collected for the lab community.",
+      "Protocols, mutation resources, videos, and research context collected for the lab community.",
     ],
     "/resources/news/": [
       "Research News",
@@ -421,6 +460,8 @@ function template({ route, title, body, sidebar = "", description = "" }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-favicon.png">
+  <link rel="apple-touch-icon" href="${base}assets/icons/apple-touch-icon.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
   <link rel="stylesheet" href="${base}assets/css/styles.css">
@@ -538,6 +579,7 @@ async function main() {
     let body;
     if (config.custom === "talent") body = customTalent();
     else if (config.custom === "contact") body = customContact();
+    else if (config.custom === "resources") body = customResources();
     else body = cleanWpContent(page.content.rendered, config.route, assetMap);
 
     if (config.wpSlug === "activity") {
