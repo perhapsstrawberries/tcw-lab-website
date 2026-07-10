@@ -423,7 +423,7 @@
       border: 1px solid var(--line);
     }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1080px) {
       .login-grid { grid-template-columns: 1fr; gap: 36px; }
       .login-intro { order: 1; }
       .login-card { order: 2; }
@@ -446,7 +446,7 @@
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
     <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation"><a class="" href="../research-programs/">Research</a><a class="" href="../publications/">Publications</a><a class="" href="../ourteam/">Our Team</a><a class="" href="../ourteam/activity/">Lab Activity</a><a class="" href="../careers/">Careers</a><a class="" href="../resources/">Resources</a><a class="" href="../contact/">Contact</a><a class="active" href="../member/">Members</a></nav>
     <div class="nav-actions">
-      <button class="music-toggle" type="button" data-music-toggle aria-pressed="false" aria-label="Toggle soft background music"><span></span></button>
+      <button class="music-toggle" type="button" data-music-toggle aria-pressed="false" aria-label="Allow soft background music" title="Allow music"><span></span></button>
       <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
     </div>
   </header>
@@ -466,27 +466,27 @@
         <div class="login-intro">
           <p class="hero-eyebrow">Members Only</p>
           <h1>Lab Member Portal</h1>
-          <p class="lede">One door to the member-only resources the TCW Lab runs on: database access, wet-lab protocols, dry-lab code, and shared onboarding materials.</p>
+          <p class="lede">One door to the member-only resources the TCW Lab runs on: database access, protocols, code, and shared onboarding materials.</p>
           <ul class="intro-list">
-            <li><span class="dot">+</span> Use the wet-lab or dry-lab passcode shared with current members.</li>
+            <li><span class="dot">+</span> Use the current passcode shared with lab members.</li>
             <li><span class="dot">+</span> Access shared lab resources after unlocking.</li>
-            <li><span class="dot">+</span> Wet-lab and dry-lab resource views are separated by passcode.</li>
+            <li><span class="dot">+</span> Keep member materials private and current.</li>
           </ul>
         </div>
 
         <div class="login-card">
           <h2>Member access</h2>
-          <p class="card-sub">Enter the current wet-lab or dry-lab passcode.</p>
+          <p class="card-sub">Enter the current lab member passcode.</p>
 
           <!-- Passcode -->
           <form class="auth-panel active" data-panel="passcode" autocomplete="off">
             <div class="field">
               <label for="pc">Shared lab passcode</label>
-              <input type="password" id="pc" placeholder="Enter wet or dry lab passcode" autocomplete="off">
+              <input type="password" id="pc" placeholder="Enter member passcode" autocomplete="off">
             </div>
             <p class="auth-error" data-error="passcode" aria-live="polite"></p>
             <button type="submit" class="submit-btn">Unlock member area</button>
-            <p class="auth-note">There are separate wet-lab and dry-lab passcodes. Rotate both monthly and share only with current members.</p>
+            <p class="auth-note">Rotate the passcode regularly and share only with current members.</p>
           </form>
 
           <p class="login-foot">Need access or lost the passcode? Email the lab at <a href="../contact/">our contact page</a>.</p>
@@ -502,11 +502,11 @@
           <div>
             <p class="hero-eyebrow">Member Dashboard</p>
             <h1>Welcome back<span data-greet-name></span></h1>
-            <p class="sub">Your member resources are filtered by the passcode you used.</p>
+            <p class="sub">Member resources are available after sign-in.</p>
           </div>
           <div class="session-chip">
             <span class="brand-mark" style="width:38px;height:38px;font-size:13px;" data-avatar>TCW</span>
-            <span class="who"><b data-who-name>Lab member</b><span data-who-method>passcode</span></span>
+            <span class="who"><b data-who-name>Lab member</b><span data-who-method>member access</span></span>
             <button type="button" class="signout-btn" data-signout>Sign out</button>
           </div>
         </div>
@@ -641,9 +641,7 @@
         return (a + b).toUpperCase() || "TCW";
       }
       function methodLabel(s) {
-        if (s && s.track === "wet") return "Wet lab";
-        if (s && s.track === "dry") return "Dry lab";
-        return "Passcode";
+        return s ? "Member access" : "Passcode";
       }
 
       function applySession(s) {

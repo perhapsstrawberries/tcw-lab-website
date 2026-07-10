@@ -143,16 +143,17 @@ body.intro-lock {
 .intro-music {
   appearance: none;
   margin-top: 18px;
-  border: 1px solid rgba(0, 142, 145, 0.28);
+  border: 1px solid rgba(0, 142, 145, 0.34);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.84);
   color: #061112;
   cursor: pointer;
   font: inherit;
   font-size: 14px;
   font-weight: 800;
   min-height: 38px;
-  padding: 7px 16px;
+  padding: 8px 18px;
+  box-shadow: 0 10px 28px rgba(0, 142, 145, 0.16);
 }
 
 .intro-music[aria-pressed="true"] {
@@ -506,15 +507,15 @@ img {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.7;
+  opacity: 0.92;
 }
 
 .is-home .bio-canvas {
-  opacity: 0.5;
+  opacity: 0.86;
 }
 
 .page-member .bio-canvas {
-  opacity: 0.26;
+  opacity: 0.74;
 }
 
 .hero-inner {

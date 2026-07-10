@@ -497,7 +497,7 @@ function template({ route, title, body, sidebar = "", description = "" }) {
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
     <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation">${navMarkup(route)}</nav>
     <div class="nav-actions">
-      <button class="music-toggle" type="button" data-music-toggle aria-pressed="false" aria-label="Toggle soft background music"><span></span></button>
+      <button class="music-toggle" type="button" data-music-toggle aria-pressed="false" aria-label="Allow soft background music" title="Allow music"><span></span></button>
       <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
     </div>
   </header>
