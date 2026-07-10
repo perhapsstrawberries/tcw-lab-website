@@ -164,6 +164,33 @@
       outline: 2px solid var(--teal-deep);
       outline-offset: 1px;
     }
+    .password-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-field input {
+      padding-right: 74px;
+    }
+    .password-toggle {
+      appearance: none;
+      position: absolute;
+      right: 9px;
+      min-width: 52px;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--teal-soft);
+      color: var(--teal-deep);
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .password-toggle:focus-visible {
+      outline: 2px solid var(--teal-deep);
+      outline-offset: 2px;
+    }
 
     .submit-btn {
       display: inline-flex;
@@ -482,7 +509,10 @@
           <form class="auth-panel active" data-panel="passcode" autocomplete="off">
             <div class="field">
               <label for="pc">Shared lab passcode</label>
-              <input type="password" id="pc" placeholder="Enter member passcode" autocomplete="off">
+              <div class="password-field">
+                <input type="password" id="pc" placeholder="Enter member passcode" autocomplete="off">
+                <button type="button" class="password-toggle" data-password-toggle aria-controls="pc" aria-pressed="false" aria-label="Show passcode">Show</button>
+              </div>
             </div>
             <p class="auth-error" data-error="passcode" aria-live="polite"></p>
             <button type="submit" class="submit-btn">Unlock member area</button>
@@ -677,6 +707,16 @@
       }
 
       // ---- Form handlers ----
+      $("[data-password-toggle]").addEventListener("click", function () {
+        var input = $("#pc");
+        var show = input.type === "password";
+        input.type = show ? "text" : "password";
+        this.textContent = show ? "Hide" : "Show";
+        this.setAttribute("aria-pressed", String(show));
+        this.setAttribute("aria-label", show ? "Hide passcode" : "Show passcode");
+        input.focus();
+      });
+
       $("[data-panel='passcode']").addEventListener("submit", async function (e) {
         e.preventDefault();
         var val = $("#pc").value.trim();
