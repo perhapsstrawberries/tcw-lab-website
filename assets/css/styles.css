@@ -115,7 +115,7 @@ body.intro-lock {
   height: 116px;
   margin: 0 auto 24px;
   border-radius: 50%;
-  background: url("../icons/tcw-compact-logo.png") center / cover no-repeat;
+  background: url("../icons/tcw-circle-favicon-20260713.png") center / cover no-repeat;
   color: transparent;
   box-shadow: 0 22px 58px rgba(0, 142, 145, 0.22);
   text-indent: -999px;
@@ -252,7 +252,7 @@ img {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: url("../icons/tcw-compact-logo.png") center / cover no-repeat;
+  background: url("../icons/tcw-circle-favicon-20260713.png") center / cover no-repeat;
   color: transparent;
   font-family: "DM Serif Display", Georgia, serif;
   font-size: 17px;
@@ -487,7 +487,7 @@ img {
   min-height: clamp(420px, 66vh, 720px);
   display: grid;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
   padding: 120px 24px 80px;
 }
 
@@ -504,18 +504,21 @@ img {
 
 .bio-canvas {
   position: absolute;
-  inset: 0;
+  inset: 0 0 -140px;
   width: 100%;
-  height: 100%;
+  height: calc(100% + 140px);
   opacity: 0.92;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0.68) 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0.68) 86%, transparent 100%);
+  pointer-events: none;
 }
 
 .is-home .bio-canvas {
-  opacity: 0.86;
+  opacity: 0.95;
 }
 
 .page-member .bio-canvas {
-  opacity: 0.74;
+  opacity: 0.86;
 }
 
 .hero-inner {
@@ -996,6 +999,23 @@ input[type="checkbox"] {
 
 .form-success h2 {
   margin-top: 0;
+}
+
+.form-success label {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.form-success textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.45;
+  padding: 12px 14px;
 }
 
 .skill-grid label {

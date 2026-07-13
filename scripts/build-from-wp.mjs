@@ -478,9 +478,9 @@ function template({ route, title, body, sidebar = "", description = "" }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260709.png">
-  <link rel="shortcut icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260709.png">
-  <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260709.png">
+  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260713.png">
+  <link rel="shortcut icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260713.png">
+  <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260713.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
   <link rel="stylesheet" href="${base}assets/css/styles.css">
