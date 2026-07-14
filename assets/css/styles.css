@@ -488,6 +488,7 @@ img {
   display: grid;
   align-items: center;
   overflow: visible;
+  isolation: isolate;
   padding: 120px 24px 80px;
 }
 
@@ -504,12 +505,13 @@ img {
 
 .bio-canvas {
   position: absolute;
-  inset: 0 0 -140px;
+  inset: 0 0 -260px;
+  z-index: 0;
   width: 100%;
-  height: calc(100% + 140px);
+  height: calc(100% + 260px);
   opacity: 0.92;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0.68) 86%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0.68) 86%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 9%, #000 58%, rgba(0, 0, 0, 0.62) 76%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 9%, #000 58%, rgba(0, 0, 0, 0.62) 76%, transparent 100%);
   pointer-events: none;
 }
 
@@ -523,7 +525,7 @@ img {
 
 .hero-inner {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: min(100%, var(--max));
   margin: 0 auto;
 }

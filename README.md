@@ -31,3 +31,4 @@ The generator reads the current WordPress REST exports, localizes image assets i
 - The old BU WordPress Gravity Forms cannot run on GitHub Pages. Talent and Contact pages now use email-based static forms.
 - The old Data Portal route redirects into the Members page, where the lab database link now lives.
 - Member-only access is gated by the Cloudflare Worker route `tcwlab.org/member*`; passcodes live only in Worker secrets.
+- The Worker source is tracked at `workers/tcw-member-gate.js`. Deploy it to the existing `tcw-member-gate` Worker after changing the Cloudflare member gate UI or auth flow.
