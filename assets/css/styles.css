@@ -489,6 +489,10 @@ img {
   align-items: center;
   overflow: visible;
   isolation: isolate;
+  background:
+    radial-gradient(circle at 8% 22%, rgba(117, 244, 240, 0.28), transparent 30%),
+    radial-gradient(circle at 78% 20%, rgba(162, 248, 246, 0.2), transparent 32%),
+    linear-gradient(112deg, rgba(162, 248, 246, 0.34), rgba(239, 255, 255, 0.66) 56%, rgba(217, 255, 255, 0.42));
   padding: 120px 24px 80px;
 }
 

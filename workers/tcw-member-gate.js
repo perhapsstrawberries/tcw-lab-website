@@ -160,7 +160,7 @@ function loginPage(url, error = "") {
     }
     .gate-hero {
       position: relative;
-      min-height: 100vh;
+      min-height: calc(100vh - 96px);
       display: grid;
       place-items: center;
       overflow: hidden;
@@ -319,6 +319,36 @@ function loginPage(url, error = "") {
   </style>
 </head>
 <body class="page-member page-member-gate">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="TCW Lab home">
+      <span class="brand-mark">TCW</span>
+      <span class="brand-copy">
+        <strong>Science is a team sport</strong>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span></span><span></span><span></span><b>Menu</b></button>
+    <nav class="nav-menu" id="nav-menu" aria-label="Primary navigation">
+      <a href="/research-programs/">Research</a>
+      <a href="/publications/">Publications</a>
+      <a href="/ourteam/">Our Team</a>
+      <a href="/ourteam/activity/">Lab Activity</a>
+      <a href="/careers/">Careers</a>
+      <a href="/resources/">Resources</a>
+      <a href="/contact/">Contact</a>
+      <a class="active" href="/member/">Members</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="music-toggle" type="button" data-music-toggle aria-pressed="false" aria-label="Allow soft background music" title="Allow music"><span></span></button>
+      <button class="search-toggle" type="button" aria-expanded="false" aria-controls="site-search" aria-label="Search site"></button>
+    </div>
+  </header>
+  <form class="site-search" id="site-search" role="search">
+    <label>
+      <span>Search site</span>
+      <input type="search" id="site-search-input" autocomplete="off">
+    </label>
+    <div class="search-results" id="site-search-results"></div>
+  </form>
   <main class="gate-hero">
     <canvas class="bio-canvas" aria-hidden="true"></canvas>
     <div class="gate-grid">
