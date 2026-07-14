@@ -115,7 +115,7 @@ body.intro-lock {
   height: 116px;
   margin: 0 auto 24px;
   border-radius: 50%;
-  background: url("../icons/tcw-circle-favicon-20260713.png") center / cover no-repeat;
+  background: url("../icons/tcw-circle-favicon-20260714.png") center / cover no-repeat;
   color: transparent;
   box-shadow: 0 22px 58px rgba(0, 142, 145, 0.22);
   text-indent: -999px;
@@ -225,8 +225,8 @@ img {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 18px;
-  width: min(calc(100% - 28px), 1240px);
+  gap: clamp(10px, 1.3vw, 18px);
+  width: min(calc(100% - 28px), 1320px);
   margin: 14px auto 0;
   padding: 10px 12px;
   border: 1px solid var(--line);
@@ -252,7 +252,7 @@ img {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: url("../icons/tcw-circle-favicon-20260713.png") center / cover no-repeat;
+  background: url("../icons/tcw-circle-favicon-20260714.png") center / cover no-repeat;
   color: transparent;
   font-family: "DM Serif Display", Georgia, serif;
   font-size: 17px;
@@ -283,7 +283,7 @@ img {
 .nav-menu {
   display: flex;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -296,7 +296,7 @@ img {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 0 13px;
+  padding: 0 clamp(9px, 0.9vw, 13px);
   text-decoration: none;
   white-space: nowrap;
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
@@ -1474,7 +1474,7 @@ html[data-theme="dark"] .research-project-card img {
   }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1180px) {
   .site-header {
     grid-template-columns: auto auto 1fr;
     border-radius: 28px;

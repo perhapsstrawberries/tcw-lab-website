@@ -283,9 +283,21 @@ function startBioCanvas(canvas) {
   ];
   const isMemberPage = document.body.classList.contains("page-member");
   const isHomePage = document.body.classList.contains("is-home");
-  const speed = isMemberPage ? 0.22 : isHomePage ? 0.28 : 0.4;
+  const speed = isMemberPage ? 0.28 : isHomePage ? 0.38 : 0.48;
   const count = isMemberPage ? 12 : isHomePage ? 20 : 20;
-  const glow = isMemberPage ? 1.02 : isHomePage ? 1.14 : 1.12;
+  const glow = isMemberPage ? 1.08 : isHomePage ? 1.2 : 1.18;
+  const field = canvas.closest(".hero, .login-hero, .gate-hero") || canvas.parentElement;
+  const avoidSelectors = [
+    ".hero-eyebrow",
+    ".hero h1",
+    ".hero-subtitle",
+    ".hero-metrics",
+    ".login-intro",
+    ".login-card",
+    ".gate-copy",
+    ".gate-card"
+  ];
+  let avoidZones = [];
   let width = 0;
   let height = 0;
   let frame = 0;
@@ -298,14 +310,34 @@ function startBioCanvas(canvas) {
     canvas.width = Math.floor(width * scale);
     canvas.height = Math.floor(height * scale);
     context.setTransform(scale, 0, 0, scale, 0, 0);
+    updateAvoidZones();
+  }
+
+  function updateAvoidZones() {
+    const canvasRect = canvas.getBoundingClientRect();
+    avoidZones = avoidSelectors.flatMap((selector) => {
+      if (!field) return [];
+      return Array.from(field.querySelectorAll(selector)).map((element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return null;
+        const padX = Math.min(80, Math.max(36, rect.width * 0.08));
+        const padY = Math.min(56, Math.max(28, rect.height * 0.18));
+        return {
+          left: rect.left - canvasRect.left - padX,
+          right: rect.right - canvasRect.left + padX,
+          top: rect.top - canvasRect.top - padY,
+          bottom: rect.bottom - canvasRect.top + padY
+        };
+      }).filter(Boolean);
+    });
   }
 
   function resetCell(cell, index) {
     cell.x = Math.random() * width;
     cell.y = Math.random() * height;
     cell.r = 6.6 + Math.random() * 3.1;
-    cell.vx = (Math.random() - 0.5) * 0.055 * speed;
-    cell.vy = (Math.random() - 0.5) * 0.055 * speed;
+    cell.vx = (Math.random() - 0.5) * 0.075 * speed;
+    cell.vy = (Math.random() - 0.5) * 0.075 * speed;
     cell.phase = index * 0.77 + Math.random() * 2;
     cell.float = 0.6 + Math.random() * 0.7;
     cell.color = palette[index % palette.length];
@@ -333,8 +365,38 @@ function startBioCanvas(canvas) {
     cells.push(cell);
   }
 
+  function distanceFadeFromZone(cell, zone) {
+    const nearestX = Math.max(zone.left, Math.min(cell.x, zone.right));
+    const nearestY = Math.max(zone.top, Math.min(cell.y, zone.bottom));
+    const distance = Math.hypot(cell.x - nearestX, cell.y - nearestY);
+    const margin = 120;
+    return Math.min(1, Math.max(0.05, distance / margin));
+  }
+
+  function textFade(cell) {
+    if (!avoidZones.length) return 1;
+    return avoidZones.reduce((alpha, zone) => Math.min(alpha, distanceFadeFromZone(cell, zone)), 1);
+  }
+
+  function nudgeAwayFromText(cell) {
+    avoidZones.forEach((zone) => {
+      if (cell.x < zone.left || cell.x > zone.right || cell.y < zone.top || cell.y > zone.bottom) return;
+      const centerX = (zone.left + zone.right) / 2;
+      const centerY = (zone.top + zone.bottom) / 2;
+      const dx = cell.x - centerX || 1;
+      const dy = cell.y - centerY || 1;
+      const length = Math.hypot(dx, dy) || 1;
+      cell.x += (dx / length) * 0.48;
+      cell.y += (dy / length) * 0.48;
+      cell.vx += (dx / length) * 0.0024;
+      cell.vy += (dy / length) * 0.0024;
+    });
+    cell.vx *= 0.998;
+    cell.vy *= 0.998;
+  }
+
   function draw() {
-    frame += 0.006 * speed;
+    frame += 0.012 * speed;
     context.clearRect(0, 0, width, height);
     const darkMode = document.documentElement.dataset.theme === "dark";
 
@@ -346,8 +408,9 @@ function startBioCanvas(canvas) {
     context.fillRect(0, 0, width, height);
 
     cells.forEach((cell, index) => {
-      cell.x += cell.vx + Math.sin(frame * cell.float + cell.phase) * 0.026 * speed;
-      cell.y += cell.vy + Math.cos(frame * 0.86 * cell.float + cell.phase) * 0.034 * speed;
+      cell.x += cell.vx + Math.sin(frame * cell.float + cell.phase) * 0.04 * speed;
+      cell.y += cell.vy + Math.cos(frame * 0.86 * cell.float + cell.phase) * 0.05 * speed;
+      nudgeAwayFromText(cell);
       if (cell.x < -70 || cell.x > width + 70 || cell.y < -70 || cell.y > height + 70) {
         resetCell(cell, index);
       }
@@ -378,13 +441,14 @@ function startBioCanvas(canvas) {
       const stroke = darkMode ? cell.color.fill : cell.color.stroke;
       const fill = cell.color.fill;
       const core = darkMode ? "235, 255, 253" : cell.color.core;
+      const contentFade = textFade(cell);
       const edgeFade = Math.min(
         1,
         Math.max(0, cell.x / 92),
         Math.max(0, (width - cell.x) / 92),
         Math.max(0, cell.y / 92),
         Math.max(0, (height - cell.y) / 190)
-      );
+      ) * contentFade;
 
       context.save();
       context.shadowColor = `rgba(${cell.color.halo}, ${0.42 * glow})`;
