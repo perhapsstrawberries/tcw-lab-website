@@ -287,6 +287,12 @@ function startBioCanvas(canvas) {
   const count = isMemberPage ? 12 : isHomePage ? 20 : 20;
   const glow = isMemberPage ? 0.88 : isHomePage ? 0.96 : 0.94;
   const field = canvas.closest(".hero, .login-hero, .gate-hero") || canvas.parentElement;
+  const scatterSlots = [
+    [0.08, 0.2], [0.22, 0.18], [0.38, 0.2], [0.57, 0.18], [0.76, 0.2], [0.92, 0.24],
+    [0.12, 0.42], [0.32, 0.42], [0.52, 0.38], [0.72, 0.42], [0.9, 0.48],
+    [0.1, 0.64], [0.28, 0.62], [0.46, 0.64], [0.64, 0.62], [0.84, 0.66],
+    [0.16, 0.84], [0.36, 0.82], [0.58, 0.84], [0.78, 0.82], [0.94, 0.86]
+  ];
   let seed = Array.from(`${window.location.pathname}:${canvas.className}`).reduce((hash, char) => {
     return ((hash << 5) - hash + char.charCodeAt(0)) >>> 0;
   }, 2166136261);
@@ -295,6 +301,10 @@ function startBioCanvas(canvas) {
     ".hero h1",
     ".hero-subtitle",
     ".hero-metrics",
+    ".page-content",
+    ".notice-panel",
+    ".research-spotlight",
+    ".research-project-card",
     ".login-intro",
     ".login-card",
     ".gate-copy",
@@ -324,12 +334,11 @@ function startBioCanvas(canvas) {
   function updateAvoidZones() {
     const canvasRect = canvas.getBoundingClientRect();
     avoidZones = avoidSelectors.flatMap((selector) => {
-      if (!field) return [];
-      return Array.from(field.querySelectorAll(selector)).map((element) => {
+      return Array.from(document.querySelectorAll(selector)).map((element) => {
         const rect = element.getBoundingClientRect();
         if (rect.width <= 0 || rect.height <= 0) return null;
-        const padX = Math.min(240, Math.max(96, rect.width * 0.16));
-        const padY = Math.min(130, Math.max(68, rect.height * 0.32));
+        const padX = Math.min(185, Math.max(72, rect.width * 0.12));
+        const padY = Math.min(98, Math.max(48, rect.height * 0.24));
         return {
           left: rect.left - canvasRect.left - padX,
           right: rect.right - canvasRect.left + padX,
@@ -350,13 +359,19 @@ function startBioCanvas(canvas) {
   }
 
   function placeCell(cell, index) {
-    const buffer = Math.max(150, cell.r * 10);
-    for (let attempt = 0; attempt < 90; attempt += 1) {
-      const candidateX = random() * width;
-      const candidateY = random() * height;
+    const buffer = Math.max(72, cell.r * 5.4);
+    const slot = scatterSlots[(index + Math.floor(random() * scatterSlots.length)) % scatterSlots.length];
+    const spreadX = width * (isMemberPage ? 0.16 : 0.12);
+    const spreadY = height * (isMemberPage ? 0.14 : 0.13);
+    for (let attempt = 0; attempt < 120; attempt += 1) {
+      const useSlot = attempt < 82;
+      const baseX = useSlot ? slot[0] * width : random() * width;
+      const baseY = useSlot ? slot[1] * height : random() * height;
+      const candidateX = baseX + (random() - 0.5) * spreadX * (1 + attempt / 72);
+      const candidateY = baseY + (random() - 0.5) * spreadY * (1 + attempt / 72);
       if (!isInsideAvoidZone(candidateX, candidateY, buffer)) {
-        cell.x = candidateX;
-        cell.y = candidateY;
+        cell.x = Math.min(width + 28, Math.max(-28, candidateX));
+        cell.y = Math.min(height + 28, Math.max(-28, candidateY));
         return;
       }
     }
@@ -413,7 +428,7 @@ function startBioCanvas(canvas) {
     const nearestX = Math.max(zone.left, Math.min(cell.x, zone.right));
     const nearestY = Math.max(zone.top, Math.min(cell.y, zone.bottom));
     const distance = Math.hypot(cell.x - nearestX, cell.y - nearestY);
-    const margin = 220;
+    const margin = 170;
     return Math.min(1, Math.max(0, distance / margin));
   }
 
