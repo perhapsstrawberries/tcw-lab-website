@@ -51,8 +51,9 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    linear-gradient(130deg, rgba(111, 239, 236, 0.34), transparent 34%),
-    linear-gradient(210deg, rgba(162, 248, 246, 0.26), transparent 42%),
+    radial-gradient(circle at 8% 20%, rgba(117, 244, 240, 0.24), transparent 34%),
+    radial-gradient(circle at 78% 18%, rgba(162, 248, 246, 0.16), transparent 34%),
+    linear-gradient(112deg, rgba(162, 248, 246, 0.3), rgba(239, 255, 255, 0.7) 56%, rgba(217, 255, 255, 0.38)),
     var(--bg);
   color: var(--ink);
   font-family: "DM Sans", Arial, Helvetica, sans-serif;
@@ -489,11 +490,13 @@ img {
   align-items: center;
   overflow: visible;
   isolation: isolate;
+  margin-top: -96px;
   background:
-    radial-gradient(circle at 8% 22%, rgba(117, 244, 240, 0.28), transparent 30%),
-    radial-gradient(circle at 78% 20%, rgba(162, 248, 246, 0.2), transparent 32%),
-    linear-gradient(112deg, rgba(162, 248, 246, 0.34), rgba(239, 255, 255, 0.66) 56%, rgba(217, 255, 255, 0.42));
-  padding: 120px 24px 80px;
+    linear-gradient(to bottom, rgba(239, 255, 255, 0.12), rgba(217, 255, 255, 0.34) 18%, rgba(239, 255, 255, 0.56) 72%, rgba(217, 255, 255, 0.32)),
+    radial-gradient(circle at 8% 22%, rgba(117, 244, 240, 0.24), transparent 34%),
+    radial-gradient(circle at 78% 20%, rgba(162, 248, 246, 0.18), transparent 36%),
+    linear-gradient(112deg, rgba(162, 248, 246, 0.3), rgba(239, 255, 255, 0.68) 56%, rgba(217, 255, 255, 0.38));
+  padding: 216px 24px 80px;
 }
 
 .hero::before {
@@ -1524,7 +1527,8 @@ html[data-theme="dark"] .research-project-card img {
 
   .hero {
     min-height: 430px;
-    padding-top: 110px;
+    margin-top: -78px;
+    padding-top: 188px;
   }
 
   .alignleft,

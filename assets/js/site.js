@@ -284,14 +284,15 @@ function startBioCanvas(canvas) {
   const isMemberPage = document.body.classList.contains("page-member");
   const isHomePage = document.body.classList.contains("is-home");
   const speed = isMemberPage ? 0.22 : isHomePage ? 0.28 : 0.34;
-  const count = isMemberPage ? 12 : isHomePage ? 20 : 20;
+  const count = isMemberPage ? 16 : isHomePage ? 30 : 26;
   const glow = isMemberPage ? 0.88 : isHomePage ? 0.96 : 0.94;
   const field = canvas.closest(".hero, .login-hero, .gate-hero") || canvas.parentElement;
   const scatterSlots = [
-    [0.08, 0.2], [0.22, 0.18], [0.38, 0.2], [0.57, 0.18], [0.76, 0.2], [0.92, 0.24],
-    [0.12, 0.42], [0.32, 0.42], [0.52, 0.38], [0.72, 0.42], [0.9, 0.48],
-    [0.1, 0.64], [0.28, 0.62], [0.46, 0.64], [0.64, 0.62], [0.84, 0.66],
-    [0.16, 0.84], [0.36, 0.82], [0.58, 0.84], [0.78, 0.82], [0.94, 0.86]
+    [0.04, 0.18], [0.16, 0.16], [0.28, 0.18], [0.42, 0.16], [0.58, 0.18], [0.74, 0.16], [0.9, 0.18],
+    [0.08, 0.32], [0.22, 0.34], [0.36, 0.32], [0.52, 0.34], [0.68, 0.32], [0.84, 0.34], [0.96, 0.36],
+    [0.05, 0.5], [0.18, 0.52], [0.34, 0.5], [0.5, 0.52], [0.66, 0.5], [0.82, 0.52], [0.95, 0.5],
+    [0.1, 0.68], [0.26, 0.66], [0.42, 0.68], [0.58, 0.66], [0.74, 0.68], [0.9, 0.66],
+    [0.06, 0.84], [0.22, 0.82], [0.38, 0.84], [0.54, 0.82], [0.7, 0.84], [0.86, 0.82], [0.98, 0.86]
   ];
   let seed = Array.from(`${window.location.pathname}:${canvas.className}`).reduce((hash, char) => {
     return ((hash << 5) - hash + char.charCodeAt(0)) >>> 0;
@@ -337,8 +338,8 @@ function startBioCanvas(canvas) {
       return Array.from(document.querySelectorAll(selector)).map((element) => {
         const rect = element.getBoundingClientRect();
         if (rect.width <= 0 || rect.height <= 0) return null;
-        const padX = Math.min(185, Math.max(72, rect.width * 0.12));
-        const padY = Math.min(98, Math.max(48, rect.height * 0.24));
+        const padX = Math.min(132, Math.max(46, rect.width * 0.08));
+        const padY = Math.min(74, Math.max(32, rect.height * 0.18));
         return {
           left: rect.left - canvasRect.left - padX,
           right: rect.right - canvasRect.left + padX,
@@ -359,17 +360,21 @@ function startBioCanvas(canvas) {
   }
 
   function placeCell(cell, index) {
-    const buffer = Math.max(72, cell.r * 5.4);
-    const slot = scatterSlots[(index + Math.floor(random() * scatterSlots.length)) % scatterSlots.length];
-    const spreadX = width * (isMemberPage ? 0.16 : 0.12);
-    const spreadY = height * (isMemberPage ? 0.14 : 0.13);
-    for (let attempt = 0; attempt < 120; attempt += 1) {
-      const useSlot = attempt < 82;
-      const baseX = useSlot ? slot[0] * width : random() * width;
-      const baseY = useSlot ? slot[1] * height : random() * height;
-      const candidateX = baseX + (random() - 0.5) * spreadX * (1 + attempt / 72);
-      const candidateY = baseY + (random() - 0.5) * spreadY * (1 + attempt / 72);
-      if (!isInsideAvoidZone(candidateX, candidateY, buffer)) {
+    const buffer = Math.max(42, cell.r * 3.6);
+    const minDistance = Math.max(72, cell.r * 6.2);
+    const startSlot = (index * 7) % scatterSlots.length;
+    const spreadX = width * (isMemberPage ? 0.12 : 0.08);
+    const spreadY = height * (isMemberPage ? 0.11 : 0.085);
+    for (let attempt = 0; attempt < 132; attempt += 1) {
+      const slot = scatterSlots[(startSlot + Math.floor(attempt / 6)) % scatterSlots.length];
+      const baseX = slot[0] * width;
+      const baseY = slot[1] * height;
+      const candidateX = baseX + (random() - 0.5) * spreadX * (1 + Math.min(attempt, 54) / 90);
+      const candidateY = baseY + (random() - 0.5) * spreadY * (1 + Math.min(attempt, 54) / 90);
+      const hasBreathingRoom = cells.every((other) => (
+        Math.hypot(candidateX - other.x, candidateY - other.y) > minDistance
+      ));
+      if (!isInsideAvoidZone(candidateX, candidateY, buffer) && (hasBreathingRoom || attempt > 82)) {
         cell.x = Math.min(width + 28, Math.max(-28, candidateX));
         cell.y = Math.min(height + 28, Math.max(-28, candidateY));
         return;
