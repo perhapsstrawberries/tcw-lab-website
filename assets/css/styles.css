@@ -1265,6 +1265,108 @@ html[data-theme="dark"] .research-project-card img {
   box-shadow: 0 10px 26px rgba(15, 76, 80, 0.14);
 }
 
+.alumni-section {
+  grid-column: 1 / -1;
+  margin-top: clamp(42px, 6vw, 78px);
+}
+
+.alumni-intro {
+  max-width: 720px;
+  margin-bottom: 22px;
+}
+
+.alumni-intro h2 {
+  margin: 8px 0 12px;
+}
+
+.alumni-intro p:last-child {
+  margin-bottom: 0;
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.55;
+}
+
+.alumni-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.alumni-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 92%, white);
+  box-shadow: 0 14px 42px rgba(15, 76, 80, 0.08);
+}
+
+.alumni-photo,
+.alumni-placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.alumni-photo {
+  object-fit: cover;
+  background: var(--bg-soft);
+}
+
+.alumni-photo-deepti {
+  object-position: 58% 38%;
+}
+
+.alumni-photo-rufuto {
+  object-position: 48% 45%;
+}
+
+.alumni-photo-emmanuel {
+  object-position: 50% 28%;
+}
+
+.alumni-photo-swastika {
+  object-position: 24% 50%;
+}
+
+.alumni-placeholder {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.78) 0 16%, transparent 17%),
+    radial-gradient(circle at 24% 24%, rgba(216, 144, 255, 0.24), transparent 28%),
+    radial-gradient(circle at 78% 26%, rgba(255, 217, 102, 0.24), transparent 30%),
+    radial-gradient(circle at 38% 78%, rgba(110, 232, 229, 0.32), transparent 34%),
+    linear-gradient(135deg, rgba(162, 248, 246, 0.46), rgba(255, 255, 255, 0.86));
+  color: var(--teal-deep);
+  font-family: "Space Mono", monospace;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.alumni-card-body {
+  padding: 16px;
+}
+
+.alumni-card h3 {
+  margin: 0 0 6px;
+  font-size: clamp(23px, 2.6vw, 30px);
+}
+
+.alumni-card p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.alumni-card .alumni-meta {
+  margin-bottom: 10px;
+  color: var(--teal-deep);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .activity-feed {
   clear: both;
   margin-top: 44px;
