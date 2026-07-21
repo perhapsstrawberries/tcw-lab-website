@@ -283,10 +283,12 @@ function startBioCanvas(canvas) {
   ];
   const isMemberPage = document.body.classList.contains("page-member");
   const isHomePage = document.body.classList.contains("is-home");
-  const speed = isMemberPage ? 0.22 : isHomePage ? 0.28 : 0.34;
+  const speed = isMemberPage ? 0.7 : isHomePage ? 0.92 : 0.86;
   const count = isMemberPage ? 16 : isHomePage ? 30 : 26;
-  const glow = isMemberPage ? 0.88 : isHomePage ? 0.96 : 0.94;
+  const glow = isMemberPage ? 0.82 : isHomePage ? 0.9 : 0.88;
   const field = canvas.closest(".hero, .login-hero, .gate-hero") || canvas.parentElement;
+  const staticNeurons = [];
+  const staticPuncta = [];
   const scatterSlots = [
     [0.04, 0.18], [0.16, 0.16], [0.28, 0.18], [0.42, 0.16], [0.58, 0.18], [0.74, 0.16], [0.9, 0.18],
     [0.08, 0.32], [0.22, 0.34], [0.36, 0.32], [0.52, 0.34], [0.68, 0.32], [0.84, 0.34], [0.96, 0.36],
@@ -315,10 +317,16 @@ function startBioCanvas(canvas) {
   let width = 0;
   let height = 0;
   let frame = 0;
+  let staticSeed = seed ^ 0x9e3779b9;
 
   function random() {
     seed = (seed * 1664525 + 1013904223) >>> 0;
     return seed / 4294967296;
+  }
+
+  function staticRandom() {
+    staticSeed = (staticSeed * 1664525 + 1013904223) >>> 0;
+    return staticSeed / 4294967296;
   }
 
   function resize() {
@@ -330,6 +338,7 @@ function startBioCanvas(canvas) {
     canvas.height = Math.floor(height * scale);
     context.setTransform(scale, 0, 0, scale, 0, 0);
     updateAvoidZones();
+    buildStaticNeuronField();
   }
 
   function updateAvoidZones() {
@@ -357,6 +366,58 @@ function startBioCanvas(canvas) {
       y > zone.top - buffer &&
       y < zone.bottom + buffer
     ));
+  }
+
+  function buildStaticNeuronField() {
+    staticSeed = (Array.from(`${window.location.pathname}:static-neuron-field`).reduce((hash, char) => {
+      return ((hash << 5) - hash + char.charCodeAt(0)) >>> 0;
+    }, 2166136261) ^ Math.floor(width * 31 + height * 17)) >>> 0;
+    staticNeurons.length = 0;
+    staticPuncta.length = 0;
+
+    const neuronCount = isMemberPage ? 5 : isHomePage ? 9 : 8;
+    for (let index = 0; index < neuronCount; index += 1) {
+      let x = 0;
+      let y = 0;
+      for (let attempt = 0; attempt < 80; attempt += 1) {
+        const sideBias = staticRandom();
+        x = sideBias < 0.28 ? staticRandom() * width * 0.28 :
+          sideBias > 0.72 ? width * (0.72 + staticRandom() * 0.28) :
+          staticRandom() * width;
+        y = staticRandom() * height;
+        if (!isInsideAvoidZone(x, y, 120) || attempt > 52) break;
+      }
+      const tint = palette[(index + 1) % palette.length];
+      const strandCount = 6 + Math.floor(staticRandom() * 5);
+      staticNeurons.push({
+        x,
+        y,
+        r: 18 + staticRandom() * 28,
+        angle: staticRandom() * Math.PI * 2,
+        color: tint,
+        alpha: 0.15 + staticRandom() * 0.08,
+        strands: Array.from({ length: strandCount }, (_, strand) => ({
+          angle: (Math.PI * 2 * strand) / strandCount + (staticRandom() - 0.5) * 0.8,
+          length: 2.6 + staticRandom() * 2.8,
+          bend: (staticRandom() - 0.5) * 0.72,
+          width: 0.8 + staticRandom() * 1.6
+        }))
+      });
+    }
+
+    const punctaCount = Math.floor((width * height) / (isHomePage ? 9800 : 12500));
+    for (let index = 0; index < punctaCount; index += 1) {
+      const x = staticRandom() * width;
+      const y = staticRandom() * height;
+      const nearText = isInsideAvoidZone(x, y, 60);
+      staticPuncta.push({
+        x,
+        y,
+        r: 0.55 + staticRandom() * 1.65,
+        alpha: (nearText ? 0.026 : 0.09) + staticRandom() * (nearText ? 0.02 : 0.09),
+        hue: staticRandom() < 0.82 ? "88, 255, 70" : staticRandom() < 0.5 ? "255, 69, 148" : "91, 98, 238"
+      });
+    }
   }
 
   function placeCell(cell, index) {
@@ -400,8 +461,8 @@ function startBioCanvas(canvas) {
   function resetCell(cell, index) {
     cell.r = 6.4 + random() * 6.2;
     placeCell(cell, index);
-    cell.vx = (random() - 0.5) * 0.085 * speed;
-    cell.vy = (random() - 0.5) * 0.085 * speed;
+    cell.vx = (random() - 0.5) * 0.34 * speed;
+    cell.vy = (random() - 0.5) * 0.28 * speed;
     cell.phase = index * 0.77 + random() * 2;
     cell.float = 0.6 + random() * 0.7;
     cell.color = palette[index % palette.length];
@@ -450,13 +511,72 @@ function startBioCanvas(canvas) {
       const dx = cell.x - centerX || 1;
       const dy = cell.y - centerY || 1;
       const length = Math.hypot(dx, dy) || 1;
-      cell.x += (dx / length) * 0.82;
-      cell.y += (dy / length) * 0.82;
-      cell.vx += (dx / length) * 0.0032;
-      cell.vy += (dy / length) * 0.0032;
+      cell.x += (dx / length) * 1.05;
+      cell.y += (dy / length) * 1.05;
+      cell.vx += (dx / length) * 0.007;
+      cell.vy += (dy / length) * 0.007;
     });
-    cell.vx *= 0.998;
-    cell.vy *= 0.998;
+    cell.vx *= 0.996;
+    cell.vy *= 0.996;
+    const maxDrift = 0.34 * speed;
+    const drift = Math.hypot(cell.vx, cell.vy);
+    if (drift > maxDrift) {
+      cell.vx = (cell.vx / drift) * maxDrift;
+      cell.vy = (cell.vy / drift) * maxDrift;
+    }
+  }
+
+  function drawStaticNeuronField(darkMode) {
+    context.save();
+    context.globalCompositeOperation = darkMode ? "screen" : "multiply";
+    staticNeurons.forEach((neuron) => {
+      const fade = Math.min(1, Math.max(0.18, textFade(neuron)));
+      const alpha = neuron.alpha * glow * fade;
+      context.save();
+      context.translate(neuron.x, neuron.y);
+      context.rotate(neuron.angle);
+      context.shadowColor = `rgba(${neuron.color.halo}, ${alpha * 1.2})`;
+      context.shadowBlur = 18;
+
+      neuron.strands.forEach((strand, strandIndex) => {
+        const angle = strand.angle;
+        const length = neuron.r * strand.length;
+        const startX = Math.cos(angle) * neuron.r * 0.55;
+        const startY = Math.sin(angle) * neuron.r * 0.55;
+        const midX = Math.cos(angle + strand.bend) * length * 0.52;
+        const midY = Math.sin(angle + strand.bend) * length * 0.52;
+        const tipX = Math.cos(angle + strand.bend * 0.44) * length;
+        const tipY = Math.sin(angle + strand.bend * 0.44) * length;
+        const color = strandIndex % 3 === 0 ? neuron.color.fill : strandIndex % 3 === 1 ? "255, 62, 179" : "82, 255, 72";
+        context.strokeStyle = `rgba(${color}, ${alpha * 0.54})`;
+        context.lineWidth = strand.width;
+        context.lineCap = "round";
+        context.beginPath();
+        context.moveTo(startX, startY);
+        context.bezierCurveTo(midX * 0.5, midY * 0.5, midX, midY, tipX, tipY);
+        context.stroke();
+      });
+
+      const somaGradient = context.createRadialGradient(-neuron.r * 0.12, -neuron.r * 0.14, neuron.r * 0.08, 0, 0, neuron.r * 1.18);
+      somaGradient.addColorStop(0, `rgba(91, 98, 238, ${alpha * 0.9})`);
+      somaGradient.addColorStop(0.48, `rgba(255, 62, 179, ${alpha * 0.55})`);
+      somaGradient.addColorStop(1, `rgba(82, 255, 72, ${alpha * 0.18})`);
+      context.fillStyle = somaGradient;
+      context.beginPath();
+      context.ellipse(0, 0, neuron.r * 1.12, neuron.r * 0.72, 0, 0, Math.PI * 2);
+      context.fill();
+      context.restore();
+    });
+
+    context.globalCompositeOperation = darkMode ? "screen" : "source-over";
+    staticPuncta.forEach((dot) => {
+      const fade = isInsideAvoidZone(dot.x, dot.y, 48) ? 0.28 : 1;
+      context.fillStyle = `rgba(${dot.hue}, ${dot.alpha * glow * fade})`;
+      context.beginPath();
+      context.arc(dot.x, dot.y, dot.r, 0, Math.PI * 2);
+      context.fill();
+    });
+    context.restore();
   }
 
   function draw() {
@@ -470,10 +590,11 @@ function startBioCanvas(canvas) {
     gradient.addColorStop(1, `rgba(255, 112, 145, ${0.032 * glow})`);
     context.fillStyle = gradient;
     context.fillRect(0, 0, width, height);
+    drawStaticNeuronField(darkMode);
 
     cells.forEach((cell, index) => {
-      cell.x += cell.vx + Math.sin(frame * cell.float + cell.phase) * 0.052 * speed;
-      cell.y += cell.vy + Math.cos(frame * 0.86 * cell.float + cell.phase) * 0.062 * speed;
+      cell.x += cell.vx + Math.sin(frame * cell.float + cell.phase) * 0.12 * speed;
+      cell.y += cell.vy + Math.cos(frame * 0.86 * cell.float + cell.phase) * 0.14 * speed;
       nudgeAwayFromText(cell);
       if (cell.x < -70 || cell.x > width + 70 || cell.y < -70 || cell.y > height + 70) {
         resetCell(cell, index);
