@@ -288,6 +288,7 @@ function startBioCanvas(canvas) {
   const glow = isMemberPage ? 0.82 : isHomePage ? 0.9 : 0.88;
   const field = canvas.closest(".hero, .login-hero, .gate-hero") || canvas.parentElement;
   const staticNeurons = [];
+  const staticClusters = [];
   const staticPuncta = [];
   const scatterSlots = [
     [0.04, 0.18], [0.16, 0.16], [0.28, 0.18], [0.42, 0.16], [0.58, 0.18], [0.74, 0.16], [0.9, 0.18],
@@ -373,9 +374,30 @@ function startBioCanvas(canvas) {
       return ((hash << 5) - hash + char.charCodeAt(0)) >>> 0;
     }, 2166136261) ^ Math.floor(width * 31 + height * 17)) >>> 0;
     staticNeurons.length = 0;
+    staticClusters.length = 0;
     staticPuncta.length = 0;
 
-    const neuronCount = isMemberPage ? 5 : isHomePage ? 9 : 8;
+    const addPunctaCluster = (x, y, hue, scale, alpha, count) => {
+      staticClusters.push({
+        x,
+        y,
+        hue,
+        alpha,
+        scale,
+        dots: Array.from({ length: count }, () => {
+          const angle = staticRandom() * Math.PI * 2;
+          const radius = Math.pow(staticRandom(), 0.74) * scale;
+          return {
+            x: Math.cos(angle) * radius * (0.62 + staticRandom() * 0.7),
+            y: Math.sin(angle) * radius * (0.42 + staticRandom() * 0.72),
+            r: 0.45 + staticRandom() * 1.15,
+            alpha: 0.42 + staticRandom() * 0.58
+          };
+        })
+      });
+    };
+
+    const neuronCount = isMemberPage ? 5 : isHomePage ? 8 : 7;
     for (let index = 0; index < neuronCount; index += 1) {
       let x = 0;
       let y = 0;
@@ -388,24 +410,60 @@ function startBioCanvas(canvas) {
         if (!isInsideAvoidZone(x, y, 120) || attempt > 52) break;
       }
       const tint = palette[(index + 1) % palette.length];
-      const strandCount = 6 + Math.floor(staticRandom() * 5);
+      const strandCount = 5 + Math.floor(staticRandom() * 5);
       staticNeurons.push({
         x,
         y,
-        r: 18 + staticRandom() * 28,
+        r: 28 + staticRandom() * 42,
         angle: staticRandom() * Math.PI * 2,
         color: tint,
-        alpha: 0.15 + staticRandom() * 0.08,
+        alpha: 0.22 + staticRandom() * 0.12,
         strands: Array.from({ length: strandCount }, (_, strand) => ({
-          angle: (Math.PI * 2 * strand) / strandCount + (staticRandom() - 0.5) * 0.8,
-          length: 2.6 + staticRandom() * 2.8,
-          bend: (staticRandom() - 0.5) * 0.72,
-          width: 0.8 + staticRandom() * 1.6
+          angle: (Math.PI * 2 * strand) / strandCount + (staticRandom() - 0.5) * 1.1,
+          length: 2.4 + staticRandom() * 3.2,
+          bend: (staticRandom() - 0.5) * 1.05,
+          width: 0.65 + staticRandom() * 1.35
         }))
       });
+
+      const clusterCount = 2 + Math.floor(staticRandom() * 3);
+      for (let cluster = 0; cluster < clusterCount; cluster += 1) {
+        const clusterAngle = staticRandom() * Math.PI * 2;
+        const radius = (18 + staticRandom() * 52) * (isHomePage ? 1.12 : 1);
+        const hue = cluster % 3 === 0 ? "87, 255, 74" : cluster % 3 === 1 ? "255, 55, 164" : "106, 123, 255";
+        addPunctaCluster(
+          x + Math.cos(clusterAngle) * radius,
+          y + Math.sin(clusterAngle) * radius,
+          hue,
+          12 + staticRandom() * 24,
+          0.15 + staticRandom() * 0.12,
+          16 + Math.floor(staticRandom() * 26)
+        );
+      }
     }
 
-    const punctaCount = Math.floor((width * height) / (isHomePage ? 9800 : 12500));
+    const freeClusterCount = Math.floor((width * height) / (isHomePage ? 76000 : 90000));
+    for (let index = 0; index < freeClusterCount; index += 1) {
+      let x = 0;
+      let y = 0;
+      for (let attempt = 0; attempt < 60; attempt += 1) {
+        x = staticRandom() * width;
+        y = staticRandom() * height;
+        if (!isInsideAvoidZone(x, y, 96) || attempt > 42) break;
+      }
+      const pick = staticRandom();
+      const hue = pick < 0.58 ? "82, 255, 72" : pick < 0.78 ? "255, 62, 179" : pick < 0.9 ? "95, 232, 255" : "106, 123, 255";
+      addPunctaCluster(
+        x,
+        y,
+        hue,
+        9 + staticRandom() * 22,
+        (isInsideAvoidZone(x, y, 76) ? 0.038 : 0.1) + staticRandom() * 0.1,
+        12 + Math.floor(staticRandom() * 22)
+      );
+    }
+
+    const punctaCount = Math.floor((width * height) / (isHomePage ? 19000 : 23000));
     for (let index = 0; index < punctaCount; index += 1) {
       const x = staticRandom() * width;
       const y = staticRandom() * height;
@@ -413,9 +471,9 @@ function startBioCanvas(canvas) {
       staticPuncta.push({
         x,
         y,
-        r: 0.55 + staticRandom() * 1.65,
-        alpha: (nearText ? 0.026 : 0.09) + staticRandom() * (nearText ? 0.02 : 0.09),
-        hue: staticRandom() < 0.82 ? "88, 255, 70" : staticRandom() < 0.5 ? "255, 69, 148" : "91, 98, 238"
+        r: 0.42 + staticRandom() * 1.25,
+        alpha: (nearText ? 0.018 : 0.058) + staticRandom() * (nearText ? 0.018 : 0.07),
+        hue: staticRandom() < 0.72 ? "82, 255, 72" : staticRandom() < 0.55 ? "255, 62, 179" : "106, 123, 255"
       });
     }
   }
@@ -528,47 +586,72 @@ function startBioCanvas(canvas) {
 
   function drawStaticNeuronField(darkMode) {
     context.save();
-    context.globalCompositeOperation = darkMode ? "screen" : "multiply";
+    context.globalCompositeOperation = darkMode ? "screen" : "source-over";
     staticNeurons.forEach((neuron) => {
-      const fade = Math.min(1, Math.max(0.18, textFade(neuron)));
+      const fade = Math.min(1, Math.max(0.12, textFade(neuron)));
       const alpha = neuron.alpha * glow * fade;
       context.save();
       context.translate(neuron.x, neuron.y);
       context.rotate(neuron.angle);
-      context.shadowColor = `rgba(${neuron.color.halo}, ${alpha * 1.2})`;
-      context.shadowBlur = 18;
+      context.shadowColor = `rgba(${neuron.color.halo}, ${alpha * 1.45})`;
+      context.shadowBlur = 11;
 
       neuron.strands.forEach((strand, strandIndex) => {
         const angle = strand.angle;
         const length = neuron.r * strand.length;
-        const startX = Math.cos(angle) * neuron.r * 0.55;
-        const startY = Math.sin(angle) * neuron.r * 0.55;
-        const midX = Math.cos(angle + strand.bend) * length * 0.52;
-        const midY = Math.sin(angle + strand.bend) * length * 0.52;
-        const tipX = Math.cos(angle + strand.bend * 0.44) * length;
-        const tipY = Math.sin(angle + strand.bend * 0.44) * length;
-        const color = strandIndex % 3 === 0 ? neuron.color.fill : strandIndex % 3 === 1 ? "255, 62, 179" : "82, 255, 72";
-        context.strokeStyle = `rgba(${color}, ${alpha * 0.54})`;
+        const startX = Math.cos(angle) * neuron.r * 0.18;
+        const startY = Math.sin(angle) * neuron.r * 0.18;
+        const midAngle = angle + strand.bend;
+        const midX = Math.cos(midAngle) * length * 0.42;
+        const midY = Math.sin(midAngle) * length * 0.42;
+        const tipX = Math.cos(angle + strand.bend * 0.5) * length;
+        const tipY = Math.sin(angle + strand.bend * 0.5) * length;
+        const color = strandIndex % 4 === 0 ? "82, 255, 72" : strandIndex % 4 === 1 ? "255, 62, 179" : strandIndex % 4 === 2 ? "102, 236, 255" : neuron.color.fill;
+        context.strokeStyle = `rgba(${color}, ${alpha * 0.58})`;
         context.lineWidth = strand.width;
         context.lineCap = "round";
         context.beginPath();
         context.moveTo(startX, startY);
-        context.bezierCurveTo(midX * 0.5, midY * 0.5, midX, midY, tipX, tipY);
+        context.bezierCurveTo(
+          startX + Math.cos(angle + 0.7) * length * 0.18,
+          startY + Math.sin(angle + 0.7) * length * 0.18,
+          midX,
+          midY,
+          tipX,
+          tipY
+        );
         context.stroke();
-      });
 
-      const somaGradient = context.createRadialGradient(-neuron.r * 0.12, -neuron.r * 0.14, neuron.r * 0.08, 0, 0, neuron.r * 1.18);
-      somaGradient.addColorStop(0, `rgba(91, 98, 238, ${alpha * 0.9})`);
-      somaGradient.addColorStop(0.48, `rgba(255, 62, 179, ${alpha * 0.55})`);
-      somaGradient.addColorStop(1, `rgba(82, 255, 72, ${alpha * 0.18})`);
-      context.fillStyle = somaGradient;
-      context.beginPath();
-      context.ellipse(0, 0, neuron.r * 1.12, neuron.r * 0.72, 0, 0, Math.PI * 2);
-      context.fill();
+        const beadCount = 3 + Math.floor((strandIndex + neuron.r) % 4);
+        for (let bead = 0; bead < beadCount; bead += 1) {
+          const t = (bead + 1) / (beadCount + 1);
+          const beadX = startX * (1 - t) + tipX * t + Math.sin(t * Math.PI * 3 + strandIndex) * 5;
+          const beadY = startY * (1 - t) + tipY * t + Math.cos(t * Math.PI * 2 + strandIndex) * 4;
+          context.fillStyle = `rgba(${color}, ${alpha * (0.34 + t * 0.18)})`;
+          context.beginPath();
+          context.arc(beadX, beadY, 0.6 + t * 0.75, 0, Math.PI * 2);
+          context.fill();
+        }
+      });
       context.restore();
     });
 
-    context.globalCompositeOperation = darkMode ? "screen" : "source-over";
+    staticClusters.forEach((cluster) => {
+      const fade = Math.min(1, Math.max(0.16, textFade(cluster)));
+      const alpha = cluster.alpha * glow * fade;
+      context.save();
+      context.globalCompositeOperation = darkMode ? "screen" : "lighter";
+      context.shadowColor = `rgba(${cluster.hue}, ${alpha * 1.6})`;
+      context.shadowBlur = 6;
+      cluster.dots.forEach((dot) => {
+        context.fillStyle = `rgba(${cluster.hue}, ${alpha * dot.alpha})`;
+        context.beginPath();
+        context.arc(cluster.x + dot.x, cluster.y + dot.y, dot.r, 0, Math.PI * 2);
+        context.fill();
+      });
+      context.restore();
+    });
+
     staticPuncta.forEach((dot) => {
       const fade = isInsideAvoidZone(dot.x, dot.y, 48) ? 0.28 : 1;
       context.fillStyle = `rgba(${dot.hue}, ${dot.alpha * glow * fade})`;

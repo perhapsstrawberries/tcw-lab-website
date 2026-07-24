@@ -1308,7 +1308,7 @@ html[data-theme="dark"] .research-project-card img {
 }
 
 .alumni-photo-deepti {
-  object-position: 58% 38%;
+  object-position: 50% 56%;
 }
 
 .alumni-photo-rufuto {
@@ -1316,11 +1316,15 @@ html[data-theme="dark"] .research-project-card img {
 }
 
 .alumni-photo-emmanuel {
-  object-position: 50% 28%;
+  object-position: 50% 24%;
 }
 
 .alumni-photo-swastika {
   object-position: 24% 50%;
+}
+
+.alumni-photo-renu {
+  object-position: 50% 32%;
 }
 
 .alumni-placeholder {
