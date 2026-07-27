@@ -234,33 +234,51 @@ function customTalent() {
     <section class="notice-panel">
       <h2>Talent Acquisition</h2>
       <p>We welcome scientists, trainees, and collaborators who want to work at the interface of Alzheimer's disease genetics, human iPSC models, CRISPRi screens, and multi-omics computational biology.</p>
-      <p>Because GitHub Pages is static, this version routes applications by email instead of the old WordPress upload form.</p>
-      <p><a class="button-link" href="mailto:doctortcw@gmail.com?subject=TCW%20Lab%20Application">Email application materials</a></p>
+      <p>Please complete the required fields and attach your cover letter, CV, and reference contact lists. Major publication links are welcome but optional.</p>
     </section>
-    <section class="form-shell" aria-labelledby="apply-fields">
+    <form class="form-shell application-form" aria-labelledby="apply-fields" action="https://formsubmit.co/doctortcw@gmail.com" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_subject" value="TCW Lab Application">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://tcwlab.org/careers/?submitted=1">
+      <input type="hidden" name="_url" value="https://tcwlab.org/careers/">
+      <input type="hidden" name="_autoresponse" value="Thank you for your interest in the TCW Lab. Your application materials have been received.">
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true">
       <h2 id="apply-fields">Application Information</h2>
       <div class="field-grid">
-        <label>Name<input type="text" autocomplete="name"></label>
-        <label>Email<input type="email" autocomplete="email"></label>
-        <label>Current Affiliation<input type="text"></label>
-        <label>Position Looking For<select><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>None-of-Above</option></select></label>
+        <label>Name <span class="required-marker">*</span><input type="text" name="Applicant name" autocomplete="name" required></label>
+        <label>Email <span class="required-marker">*</span><input type="email" name="email" autocomplete="email" required></label>
+        <label>Current affiliation <span class="required-marker">*</span><input type="text" name="Current affiliation" required></label>
+        <label>Position of interest <span class="required-marker">*</span><select name="Position of interest" required><option value="">Select a position</option><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
       </div>
       <fieldset>
-        <legend>Wet lab and/or dry lab</legend>
-        <label><input type="checkbox"> Wet lab</label>
-        <label><input type="checkbox"> Dry lab</label>
-        <label><input type="checkbox"> Both</label>
+        <legend>Research track <span class="required-marker">*</span></legend>
+        <label><input type="checkbox" name="Research track" value="Wet lab"> Wet lab</label>
+        <label><input type="checkbox" name="Research track" value="Dry lab"> Dry lab</label>
+        <label><input type="checkbox" name="Research track" value="Both"> Both</label>
       </fieldset>
       <fieldset>
-        <legend>Wet lab skill sets</legend>
+        <legend>Wet lab skill set</legend>
         <div class="checkbox-grid">
-          ${["Human iPSC maintenance", "CRISPRi screen", "Any CNS cell type differentiation from iPSC", "Human iPSC reprogramming", "Western blotting", "Confocal microscopy", "Molecular cloning", "DNA/RNA purification", "Flow cytometry / FACS", "Human brain cell type preparation", "PCR / qRT-PCR", "Single cell/single nucleus library preparation", "Animal handling", "Electrophysiology"].map((item) => `<label><input type="checkbox"> ${item}</label>`).join("")}
+          ${["Human iPSC maintenance", "CRISPRi screen", "Any CNS cell type differentiation from iPSC", "Human iPSC reprogramming", "Western blotting", "Confocal microscopy", "Molecular cloning", "DNA/RNA purification", "Flow cytometry / FACS", "Human brain cell type preparation", "PCR / qRT-PCR", "Single cell/single nucleus library preparation", "Animal handling", "Electrophysiology", "Other wet lab skills"].map((item) => `<label><input type="checkbox" name="Wet lab skills" value="${item}"> ${item.replace("Other wet lab skills", "Other")}</label>`).join("")}
         </div>
       </fieldset>
-      <label>Other skills<textarea rows="4"></textarea></label>
-      <label>Any comments<textarea rows="6"></textarea></label>
-      <p class="form-note">Attach cover letter, CV, references, and major publications in the email message.</p>
-    </section>`;
+      <fieldset>
+        <legend>Dry lab skill set</legend>
+        <div class="checkbox-grid">
+          ${["R programming", "Python programming", "Single-cell / single-nucleus RNA-seq analysis", "Transcriptomics and differential expression", "GWAS, QTL, and xQTL analysis", "Multi-omics integration", "Epigenomics / DNA methylation analysis", "Proteomics or metabolomics analysis", "Machine learning for genomics", "Reproducible pipelines and Git/GitHub", "High-performance computing", "Data visualization and scientific reporting", "Other dry lab skills"].map((item) => `<label><input type="checkbox" name="Dry lab skills" value="${item}"> ${item.replace("Other dry lab skills", "Other")}</label>`).join("")}
+        </div>
+      </fieldset>
+      <label>Other skills or details<textarea name="Other skills or details" rows="4"></textarea></label>
+      <label>Publication links <span class="optional">(optional)</span><textarea name="Publication links" rows="4"></textarea></label>
+      <label>Comments <span class="required-marker">*</span><textarea name="Comments" rows="6" required></textarea></label>
+      <div class="field-grid">
+        <label>Cover letter <span class="required-marker">*</span><input type="file" name="Cover letter" accept=".pdf,.doc,.docx" required></label>
+        <label>CV <span class="required-marker">*</span><input type="file" name="CV" accept=".pdf,.doc,.docx" required></label>
+        <label>Reference contact lists <span class="required-marker">*</span><input type="file" name="Reference contact list" accept=".pdf,.doc,.docx" required></label>
+      </div>
+      <button type="submit">Submit application</button>
+      <p class="form-note"><span class="required-marker">*</span> Required field. This form sends the application directly to doctortcw@gmail.com. Attachments must be PDF, DOC, or DOCX files with a combined size under 10 MB.</p>
+    </form>`;
 }
 
 function customContact() {

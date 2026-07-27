@@ -172,7 +172,8 @@ function initIntroExperience() {
 
 document.documentElement.dataset.theme = "light";
 
-initIntroExperience();
+// Dr. TCW asked for the homepage immediately, so the intro gate stays disabled.
+// The function remains above for easy rollback, but it is intentionally not called.
 
 document.addEventListener("click", (event) => {
   const button = event.target.closest("[data-music-toggle], [data-music-start]");
@@ -271,7 +272,9 @@ function startBioCanvas(canvas) {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion) return;
 
-  const context = canvas.getContext("2d");
+  let context = canvas.getContext("2d");
+  const staticCanvas = document.createElement("canvas");
+  let staticContext = staticCanvas.getContext("2d");
   const cells = [];
   const palette = [
     { stroke: "0, 166, 184", fill: "50, 239, 231", core: "0, 88, 101", halo: "124, 255, 246" },
@@ -283,9 +286,10 @@ function startBioCanvas(canvas) {
   ];
   const isMemberPage = document.body.classList.contains("page-member");
   const isHomePage = document.body.classList.contains("is-home");
-  const speed = isMemberPage ? 0.7 : isHomePage ? 0.92 : 0.86;
-  const count = isMemberPage ? 16 : isHomePage ? 30 : 26;
-  const glow = isMemberPage ? 0.82 : isHomePage ? 0.9 : 0.88;
+  const speed = isMemberPage ? 0.44 : isHomePage ? 0.54 : 0.48;
+  const count = isMemberPage ? 7 : isHomePage ? 12 : 9;
+  const glow = isMemberPage ? 0.72 : isHomePage ? 0.78 : 0.74;
+  const targetFrameMs = isHomePage ? 44 : 52;
   const field = canvas.closest(".hero, .login-hero, .gate-hero") || canvas.parentElement;
   const staticNeurons = [];
   const staticClusters = [];
@@ -318,6 +322,10 @@ function startBioCanvas(canvas) {
   let width = 0;
   let height = 0;
   let frame = 0;
+  let lastFrameTime = 0;
+  let resizeTimer = 0;
+  let visible = true;
+  let inViewport = true;
   let staticSeed = seed ^ 0x9e3779b9;
 
   function random() {
@@ -332,14 +340,18 @@ function startBioCanvas(canvas) {
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
-    const scale = Math.min(window.devicePixelRatio || 1, 2);
+    const scale = Math.min(window.devicePixelRatio || 1, 1.25);
     width = Math.max(1, Math.floor(rect.width));
     height = Math.max(1, Math.floor(rect.height));
     canvas.width = Math.floor(width * scale);
     canvas.height = Math.floor(height * scale);
+    staticCanvas.width = canvas.width;
+    staticCanvas.height = canvas.height;
     context.setTransform(scale, 0, 0, scale, 0, 0);
+    staticContext.setTransform(scale, 0, 0, scale, 0, 0);
     updateAvoidZones();
     buildStaticNeuronField();
+    renderStaticLayer();
   }
 
   function updateAvoidZones() {
@@ -397,7 +409,7 @@ function startBioCanvas(canvas) {
       });
     };
 
-    const neuronCount = isMemberPage ? 5 : isHomePage ? 8 : 7;
+    const neuronCount = 0;
     for (let index = 0; index < neuronCount; index += 1) {
       let x = 0;
       let y = 0;
@@ -410,7 +422,7 @@ function startBioCanvas(canvas) {
         if (!isInsideAvoidZone(x, y, 120) || attempt > 52) break;
       }
       const tint = palette[(index + 1) % palette.length];
-      const strandCount = 5 + Math.floor(staticRandom() * 5);
+      const strandCount = 4 + Math.floor(staticRandom() * 3);
       staticNeurons.push({
         x,
         y,
@@ -426,7 +438,7 @@ function startBioCanvas(canvas) {
         }))
       });
 
-      const clusterCount = 2 + Math.floor(staticRandom() * 3);
+      const clusterCount = 1 + Math.floor(staticRandom() * 2);
       for (let cluster = 0; cluster < clusterCount; cluster += 1) {
         const clusterAngle = staticRandom() * Math.PI * 2;
         const radius = (18 + staticRandom() * 52) * (isHomePage ? 1.12 : 1);
@@ -437,12 +449,12 @@ function startBioCanvas(canvas) {
           hue,
           12 + staticRandom() * 24,
           0.15 + staticRandom() * 0.12,
-          16 + Math.floor(staticRandom() * 26)
+          8 + Math.floor(staticRandom() * 12)
         );
       }
     }
 
-    const freeClusterCount = Math.floor((width * height) / (isHomePage ? 76000 : 90000));
+    const freeClusterCount = Math.floor((width * height) / (isHomePage ? 170000 : 210000));
     for (let index = 0; index < freeClusterCount; index += 1) {
       let x = 0;
       let y = 0;
@@ -459,11 +471,11 @@ function startBioCanvas(canvas) {
         hue,
         9 + staticRandom() * 22,
         (isInsideAvoidZone(x, y, 76) ? 0.038 : 0.1) + staticRandom() * 0.1,
-        12 + Math.floor(staticRandom() * 22)
+        6 + Math.floor(staticRandom() * 10)
       );
     }
 
-    const punctaCount = Math.floor((width * height) / (isHomePage ? 19000 : 23000));
+    const punctaCount = Math.floor((width * height) / (isHomePage ? 62000 : 76000));
     for (let index = 0; index < punctaCount; index += 1) {
       const x = staticRandom() * width;
       const y = staticRandom() * height;
@@ -524,9 +536,9 @@ function startBioCanvas(canvas) {
     cell.phase = index * 0.77 + random() * 2;
     cell.float = 0.6 + random() * 0.7;
     cell.color = palette[index % palette.length];
-    cell.arms = 7 + Math.floor(random() * 4);
-    cell.soma = Array.from({ length: 24 }, (_, point) => ({
-      angle: (Math.PI * 2 * point) / 24,
+    cell.arms = 5 + Math.floor(random() * 3);
+    cell.soma = Array.from({ length: 14 }, (_, point) => ({
+      angle: (Math.PI * 2 * point) / 14,
       radius: point % 2 === 0 ? 1.42 + random() * 0.34 : 1.0 + random() * 0.2
     }));
     cell.branches = Array.from({ length: cell.arms }, (_, arm) => ({
@@ -537,7 +549,7 @@ function startBioCanvas(canvas) {
       fork: 0.38 + random() * 0.2,
       lean: (random() - 0.5) * 0.44,
       endBulb: 0.46 + random() * 0.24,
-      twigs: 2 + Math.floor(random() * 3)
+      twigs: 1 + Math.floor(random() * 2)
     }));
   }
 
@@ -582,6 +594,21 @@ function startBioCanvas(canvas) {
       cell.vx = (cell.vx / drift) * maxDrift;
       cell.vy = (cell.vy / drift) * maxDrift;
     }
+  }
+
+  function renderStaticLayer() {
+    const liveContext = context;
+    context = staticContext;
+    context.clearRect(0, 0, width, height);
+    const darkMode = document.documentElement.dataset.theme === "dark";
+    const gradient = context.createLinearGradient(0, 0, width, height);
+    gradient.addColorStop(0, `rgba(117, 244, 240, ${0.07 * glow})`);
+    gradient.addColorStop(0.45, `rgba(216, 144, 255, ${0.035 * glow})`);
+    gradient.addColorStop(1, `rgba(255, 112, 145, ${0.032 * glow})`);
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, width, height);
+    drawStaticNeuronField(darkMode);
+    context = liveContext;
   }
 
   function drawStaticNeuronField(darkMode) {
@@ -662,18 +689,15 @@ function startBioCanvas(canvas) {
     context.restore();
   }
 
-  function draw() {
+  function draw(timestamp = 0) {
+    requestAnimationFrame(draw);
+    if (!visible || !inViewport) return;
+    if (timestamp - lastFrameTime < targetFrameMs) return;
+    lastFrameTime = timestamp;
     frame += 0.014 * speed;
     context.clearRect(0, 0, width, height);
+    context.drawImage(staticCanvas, 0, 0, width, height);
     const darkMode = document.documentElement.dataset.theme === "dark";
-
-    const gradient = context.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, `rgba(117, 244, 240, ${0.07 * glow})`);
-    gradient.addColorStop(0.45, `rgba(216, 144, 255, ${0.035 * glow})`);
-    gradient.addColorStop(1, `rgba(255, 112, 145, ${0.032 * glow})`);
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, width, height);
-    drawStaticNeuronField(darkMode);
 
     cells.forEach((cell, index) => {
       cell.x += cell.vx + Math.sin(frame * cell.float + cell.phase) * 0.12 * speed;
@@ -683,26 +707,6 @@ function startBioCanvas(canvas) {
         resetCell(cell, index);
       }
     });
-
-    for (let i = 0; i < cells.length; i += 1) {
-      for (let j = i + 1; j < cells.length; j += 1) {
-        const a = cells[i];
-        const b = cells[j];
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        const distance = Math.hypot(dx, dy);
-        if (distance < 76) {
-          const bridge = i % 2 === 0 ? a.color.stroke : b.color.stroke;
-          context.strokeStyle = `rgba(${bridge}, ${0.022 * glow * (1 - distance / 76)})`;
-          context.lineWidth = 0.55;
-          context.lineCap = "round";
-          context.beginPath();
-          context.moveTo(a.x, a.y);
-          context.lineTo(b.x, b.y);
-          context.stroke();
-        }
-      }
-    }
 
     cells.forEach((cell) => {
       const heartbeat = 0.52 + Math.pow((Math.sin(frame * 12 + cell.phase) + 1) / 2, 5) * 0.18;
@@ -775,7 +779,7 @@ function startBioCanvas(canvas) {
         context.quadraticCurveTo(midX, midY, tipX, tipY);
         context.stroke();
 
-        Array.from({ length: branch.twigs }, (_, twig) => twig).forEach((twig) => {
+        for (let twig = 0; twig < branch.twigs; twig += 1) {
           const side = twig % 2 === 0 ? -1 : 1;
           const branchAngle = angle + side * (branch.fork + Math.sin(frame + cell.phase + twig) * 0.08);
           const branchLength = length * (0.17 + twig * 0.04);
@@ -799,7 +803,7 @@ function startBioCanvas(canvas) {
           context.fillStyle = `rgba(${fill}, ${Math.min(0.36, 0.24 * glow) * edgeFade})`;
           context.arc(branchTipX, branchTipY, Math.max(0.65, cell.r * 0.055), 0, Math.PI * 2);
           context.fill();
-        });
+        }
 
         context.beginPath();
         context.fillStyle = `rgba(${fill}, ${Math.min(0.38, 0.26 * glow) * edgeFade})`;
@@ -840,12 +844,22 @@ function startBioCanvas(canvas) {
       context.fill();
       context.restore();
     });
-
-    requestAnimationFrame(draw);
   }
 
-  window.addEventListener("resize", resize);
-  draw();
+  window.addEventListener("resize", () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(resize, 140);
+  });
+  document.addEventListener("visibilitychange", () => {
+    visible = !document.hidden;
+  });
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      inViewport = entries.some((entry) => entry.isIntersecting);
+    }, { rootMargin: "160px" });
+    observer.observe(canvas);
+  }
+  requestAnimationFrame(draw);
 }
 
 document.querySelectorAll(".bio-canvas").forEach(startBioCanvas);

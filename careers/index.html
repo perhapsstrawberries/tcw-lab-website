@@ -10,7 +10,7 @@
   <title>Careers | TCW Lab</title>
   <meta name="description" content="Career opportunities for scientists, trainees, and collaborators interested in Alzheimer's disease genetics, iPSC systems, and computational biology.">
   <link rel="stylesheet" href="../assets/css/styles.css?v=20260724a">
-  <script src="../assets/js/site.js?v=20260724a" defer></script>
+  <script src="../assets/js/site.js?v=20260727b" defer></script>
 </head>
 <body class="page-careers">
   <header class="site-header">
@@ -54,74 +54,79 @@
       <p>Please complete the required fields and attach your cover letter, CV, and reference contact lists. Major publication links are welcome but optional.</p>
     </section>
     <div class="form-success" id="application-success" hidden>
-      <h2>Email draft ready</h2>
-      <p>Your application summary has been prepared. Attach your cover letter, CV, and reference contact list in the email draft before sending.</p>
-      <label>Application summary<textarea id="application-email-summary" rows="10" readonly></textarea></label>
-      <p class="form-note">If your email app did not open, copy the summary above and email it with your attachments to <a href="mailto:doctortcw@gmail.com">doctortcw@gmail.com</a>.</p>
+      <h2>Application sent</h2>
+      <p>Thank you. Your application has been sent to the TCW Lab inbox with your selected attachments.</p>
+      <p class="form-note">If you do not receive a confirmation or need to update your materials, email <a href="mailto:doctortcw@gmail.com">doctortcw@gmail.com</a>.</p>
     </div>
-    <form class="form-shell application-form" id="career-application" aria-labelledby="apply-fields" data-email-to="doctortcw@gmail.com">
+    <form class="form-shell application-form" id="career-application" aria-labelledby="apply-fields" action="https://formsubmit.co/doctortcw@gmail.com" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_subject" id="application-subject" value="TCW Lab Application">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://tcwlab.org/careers/?submitted=1">
+      <input type="hidden" name="_url" value="https://tcwlab.org/careers/">
+      <input type="hidden" name="_autoresponse" value="Thank you for your interest in the TCW Lab. Your application materials have been received.">
+      <input type="hidden" name="Application summary" id="application-summary-field">
       <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true">
       <h2 id="apply-fields">Application Information</h2>
       <div class="field-grid">
-        <label>Name <span class="required-marker">*</span><input type="text" name="name" autocomplete="name" required></label>
+        <label>Name <span class="required-marker">*</span><input type="text" name="Applicant name" autocomplete="name" required></label>
         <label>Email <span class="required-marker">*</span><input type="email" name="email" autocomplete="email" required></label>
-        <label>Current affiliation <span class="required-marker">*</span><input type="text" name="affiliation" required></label>
-        <label>Position of interest <span class="required-marker">*</span><select name="position" required><option value="">Select a position</option><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
+        <label>Current affiliation <span class="required-marker">*</span><input type="text" name="Current affiliation" required></label>
+        <label>Position of interest <span class="required-marker">*</span><select name="Position of interest" required><option value="">Select a position</option><option>Postdoctoral Fellow</option><option>Research Associate</option><option>Internship</option><option>Research Professor</option><option>Other / not listed</option></select></label>
       </div>
       <fieldset>
         <legend>Research track <span class="required-marker">*</span></legend>
-        <label><input type="checkbox" name="track" value="Wet lab" data-track="wet"> Wet lab</label>
-        <label><input type="checkbox" name="track" value="Dry lab" data-track="dry"> Dry lab</label>
+        <label><input type="checkbox" name="Research track" value="Wet lab" data-track="wet"> Wet lab</label>
+        <label><input type="checkbox" name="Research track" value="Dry lab" data-track="dry"> Dry lab</label>
         <label><input type="checkbox" data-track-both> Both</label>
       </fieldset>
       <fieldset data-skill-section="wet" hidden>
         <legend>Wet lab skill set <span class="required-marker">*</span></legend>
         <div class="checkbox-grid skill-grid" data-skill-group="wet">
-          <label><input type="checkbox" name="wet_skills" value="Human iPSC maintenance"> Human iPSC maintenance</label>
-          <label><input type="checkbox" name="wet_skills" value="CRISPRi screen"> CRISPRi screen</label>
-          <label><input type="checkbox" name="wet_skills" value="Any CNS cell type differentiation from iPSC"> Any CNS cell type differentiation from iPSC</label>
-          <label><input type="checkbox" name="wet_skills" value="Human iPSC reprogramming"> Human iPSC reprogramming</label>
-          <label><input type="checkbox" name="wet_skills" value="Western blotting"> Western blotting</label>
-          <label><input type="checkbox" name="wet_skills" value="Confocal microscopy"> Confocal microscopy</label>
-          <label><input type="checkbox" name="wet_skills" value="Molecular cloning"> Molecular cloning</label>
-          <label><input type="checkbox" name="wet_skills" value="DNA/RNA purification"> DNA/RNA purification</label>
-          <label><input type="checkbox" name="wet_skills" value="Flow cytometry / FACS"> Flow cytometry / FACS</label>
-          <label><input type="checkbox" name="wet_skills" value="Human brain cell type preparation"> Human brain cell type preparation</label>
-          <label><input type="checkbox" name="wet_skills" value="PCR / qRT-PCR"> PCR / qRT-PCR</label>
-          <label><input type="checkbox" name="wet_skills" value="Single cell/single nucleus library preparation"> Single cell/single nucleus library preparation</label>
-          <label><input type="checkbox" name="wet_skills" value="Animal handling"> Animal handling</label>
-          <label><input type="checkbox" name="wet_skills" value="Electrophysiology"> Electrophysiology</label>
-          <label><input type="checkbox" name="wet_skills" value="Other wet lab skills"> Other</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Human iPSC maintenance"> Human iPSC maintenance</label>
+          <label><input type="checkbox" name="Wet lab skills" value="CRISPRi screen"> CRISPRi screen</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Any CNS cell type differentiation from iPSC"> Any CNS cell type differentiation from iPSC</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Human iPSC reprogramming"> Human iPSC reprogramming</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Western blotting"> Western blotting</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Confocal microscopy"> Confocal microscopy</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Molecular cloning"> Molecular cloning</label>
+          <label><input type="checkbox" name="Wet lab skills" value="DNA/RNA purification"> DNA/RNA purification</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Flow cytometry / FACS"> Flow cytometry / FACS</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Human brain cell type preparation"> Human brain cell type preparation</label>
+          <label><input type="checkbox" name="Wet lab skills" value="PCR / qRT-PCR"> PCR / qRT-PCR</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Single cell/single nucleus library preparation"> Single cell/single nucleus library preparation</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Animal handling"> Animal handling</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Electrophysiology"> Electrophysiology</label>
+          <label><input type="checkbox" name="Wet lab skills" value="Other wet lab skills"> Other</label>
         </div>
       </fieldset>
       <fieldset data-skill-section="dry" hidden>
         <legend>Dry lab skill set <span class="required-marker">*</span></legend>
         <div class="checkbox-grid skill-grid" data-skill-group="dry">
-          <label><input type="checkbox" name="dry_skills" value="R programming"> R programming</label>
-          <label><input type="checkbox" name="dry_skills" value="Python programming"> Python programming</label>
-          <label><input type="checkbox" name="dry_skills" value="Single-cell / single-nucleus RNA-seq analysis"> Single-cell / single-nucleus RNA-seq analysis</label>
-          <label><input type="checkbox" name="dry_skills" value="Transcriptomics and differential expression"> Transcriptomics and differential expression</label>
-          <label><input type="checkbox" name="dry_skills" value="GWAS, QTL, and xQTL analysis"> GWAS, QTL, and xQTL analysis</label>
-          <label><input type="checkbox" name="dry_skills" value="Multi-omics integration"> Multi-omics integration</label>
-          <label><input type="checkbox" name="dry_skills" value="Epigenomics / DNA methylation analysis"> Epigenomics / DNA methylation analysis</label>
-          <label><input type="checkbox" name="dry_skills" value="Proteomics or metabolomics analysis"> Proteomics or metabolomics analysis</label>
-          <label><input type="checkbox" name="dry_skills" value="Machine learning for genomics"> Machine learning for genomics</label>
-          <label><input type="checkbox" name="dry_skills" value="Reproducible pipelines and Git/GitHub"> Reproducible pipelines and Git/GitHub</label>
-          <label><input type="checkbox" name="dry_skills" value="High-performance computing"> High-performance computing</label>
-          <label><input type="checkbox" name="dry_skills" value="Data visualization and scientific reporting"> Data visualization and scientific reporting</label>
-          <label><input type="checkbox" name="dry_skills" value="Other dry lab skills"> Other</label>
+          <label><input type="checkbox" name="Dry lab skills" value="R programming"> R programming</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Python programming"> Python programming</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Single-cell / single-nucleus RNA-seq analysis"> Single-cell / single-nucleus RNA-seq analysis</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Transcriptomics and differential expression"> Transcriptomics and differential expression</label>
+          <label><input type="checkbox" name="Dry lab skills" value="GWAS, QTL, and xQTL analysis"> GWAS, QTL, and xQTL analysis</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Multi-omics integration"> Multi-omics integration</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Epigenomics / DNA methylation analysis"> Epigenomics / DNA methylation analysis</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Proteomics or metabolomics analysis"> Proteomics or metabolomics analysis</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Machine learning for genomics"> Machine learning for genomics</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Reproducible pipelines and Git/GitHub"> Reproducible pipelines and Git/GitHub</label>
+          <label><input type="checkbox" name="Dry lab skills" value="High-performance computing"> High-performance computing</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Data visualization and scientific reporting"> Data visualization and scientific reporting</label>
+          <label><input type="checkbox" name="Dry lab skills" value="Other dry lab skills"> Other</label>
         </div>
       </fieldset>
-      <label>Other skills or details<textarea name="other_skills" rows="4" placeholder="If you selected Other, please describe it here."></textarea></label>
-      <label>Publication links <span class="optional">(optional)</span><textarea name="publication_links" rows="4" placeholder="Links to major publications, Google Scholar, ORCID, portfolio, or GitHub"></textarea></label>
-      <label>Comments <span class="required-marker">*</span><textarea name="comments" rows="6" required></textarea></label>
+      <label>Other skills or details<textarea name="Other skills or details" rows="4" placeholder="If you selected Other, please describe it here."></textarea></label>
+      <label>Publication links <span class="optional">(optional)</span><textarea name="Publication links" rows="4" placeholder="Links to major publications, Google Scholar, ORCID, portfolio, or GitHub"></textarea></label>
+      <label>Comments <span class="required-marker">*</span><textarea name="Comments" rows="6" required></textarea></label>
       <div class="field-grid">
-        <label>Cover letter <span class="required-marker">*</span><input type="file" name="cover_letter" accept=".pdf,.doc,.docx" required></label>
-        <label>CV <span class="required-marker">*</span><input type="file" name="cv" accept=".pdf,.doc,.docx" required></label>
-        <label>Reference contact lists <span class="required-marker">*</span><input type="file" name="reference_contact_lists" accept=".pdf,.doc,.docx" required></label>
+        <label>Cover letter <span class="required-marker">*</span><input type="file" name="Cover letter" accept=".pdf,.doc,.docx" required></label>
+        <label>CV <span class="required-marker">*</span><input type="file" name="CV" accept=".pdf,.doc,.docx" required></label>
+        <label>Reference contact lists <span class="required-marker">*</span><input type="file" name="Reference contact list" accept=".pdf,.doc,.docx" required></label>
       </div>
-      <button type="submit">Prepare email application</button>
-      <p class="form-note"><span class="required-marker">*</span> Required field. Your email app will open a draft to doctortcw@gmail.com. Attach the cover letter, CV, and reference contact list before sending.</p>
+      <button type="submit">Submit application</button>
+      <p class="form-note"><span class="required-marker">*</span> Required field. This form sends the application directly to doctortcw@gmail.com. Attachments must be PDF, DOC, or DOCX files with a combined size under 10 MB.</p>
     </form>
         </article>
         
@@ -172,36 +177,66 @@
         var input = form.querySelector("input[name='" + inputName + "']");
         if (!input || !input.files || !input.files.length) return "Not selected";
         return Array.prototype.map.call(input.files, function (file) {
-          return file.name;
+          return file.name + " (" + formatFileSize(file.size) + ")";
         }).join(", ");
+      }
+
+      function attachmentSize() {
+        return ["Cover letter", "CV", "Reference contact list"].reduce(function (total, inputName) {
+          var input = form.querySelector("input[name='" + inputName + "']");
+          if (!input || !input.files) return total;
+          return total + Array.prototype.reduce.call(input.files, function (sum, file) {
+            return sum + file.size;
+          }, 0);
+        }, 0);
+      }
+
+      function formatFileSize(bytes) {
+        if (!bytes) return "0 KB";
+        if (bytes < 1048576) return Math.max(1, Math.round(bytes / 1024)) + " KB";
+        return (bytes / 1048576).toFixed(1) + " MB";
+      }
+
+      function clean(value) {
+        return String(value || "").trim();
       }
 
       function buildEmailBody(data) {
         return [
-          "TCW Lab Application",
+          "TCW Lab Application Packet",
+          "Please review the applicant information below. The required files were uploaded through the TCW Lab application form.",
           "",
-          "Name: " + (data.get("name") || ""),
-          "Email: " + (data.get("email") || ""),
-          "Current affiliation: " + (data.get("affiliation") || ""),
-          "Position of interest: " + (data.get("position") || ""),
-          "Research track: " + listValues(data, "track"),
+          "Applicant Information",
+          "---------------------",
+          "Name: " + clean(data.get("Applicant name")),
+          "Email: " + clean(data.get("email")),
+          "Current affiliation: " + clean(data.get("Current affiliation")),
+          "Position of interest: " + clean(data.get("Position of interest")),
+          "Research track: " + listValues(data, "Research track"),
           "",
-          "Wet lab skills: " + listValues(data, "wet_skills"),
-          "Dry lab skills: " + listValues(data, "dry_skills"),
+          "Skill Set",
+          "---------",
+          "Wet lab skills: " + listValues(data, "Wet lab skills"),
+          "Dry lab skills: " + listValues(data, "Dry lab skills"),
           "",
           "Other skills or details:",
-          data.get("other_skills") || "",
+          clean(data.get("Other skills or details")) || "None provided",
           "",
           "Publication links:",
-          data.get("publication_links") || "",
+          clean(data.get("Publication links")) || "None provided",
           "",
-          "Comments:",
-          data.get("comments") || "",
+          "Applicant Comments",
+          "------------------",
+          clean(data.get("Comments")),
           "",
-          "Files to attach before sending:",
-          "Cover letter: " + fileNames("cover_letter"),
-          "CV: " + fileNames("cv"),
-          "Reference contact list: " + fileNames("reference_contact_lists")
+          "Attachment Checklist",
+          "--------------------",
+          "Cover letter: " + fileNames("Cover letter"),
+          "CV: " + fileNames("CV"),
+          "Reference contact list: " + fileNames("Reference contact list"),
+          "Combined attachment size: " + formatFileSize(attachmentSize()),
+          "",
+          "The required files were uploaded through the TCW Lab application form."
         ].join("\\n");
       }
 
@@ -219,49 +254,56 @@
       });
 
       form.addEventListener("submit", function (event) {
-        event.preventDefault();
         var data = new FormData(form);
-        var tracks = data.getAll("track");
+        if (clean(data.get("_honey"))) {
+          event.preventDefault();
+          return;
+        }
+        var tracks = data.getAll("Research track");
         var wantsWet = tracks.indexOf("Wet lab") !== -1;
         var wantsDry = tracks.indexOf("Dry lab") !== -1;
-        var hasWetSkill = data.getAll("wet_skills").length > 0;
-        var hasDrySkill = data.getAll("dry_skills").length > 0;
-        var selectedOther = data.getAll("wet_skills").concat(data.getAll("dry_skills")).some(function (value) {
+        var hasWetSkill = data.getAll("Wet lab skills").length > 0;
+        var hasDrySkill = data.getAll("Dry lab skills").length > 0;
+        var selectedOther = data.getAll("Wet lab skills").concat(data.getAll("Dry lab skills")).some(function (value) {
           return value.toLowerCase().indexOf("other") !== -1;
         });
 
         if (!tracks.length) {
+          event.preventDefault();
           alert("Please select a research track.");
           return;
         }
 
         if (wantsWet && !hasWetSkill) {
+          event.preventDefault();
           alert("Please select at least one wet lab skill, or choose Other.");
           return;
         }
 
         if (wantsDry && !hasDrySkill) {
+          event.preventDefault();
           alert("Please select at least one dry lab skill, or choose Other.");
           return;
         }
 
-        if (selectedOther && !(data.get("other_skills") || "").trim()) {
+        if (selectedOther && !(data.get("Other skills or details") || "").trim()) {
+          event.preventDefault();
           alert("Please describe your Other skill in the Other skills or details field.");
           return;
         }
 
-        var recipient = form.getAttribute("data-email-to") || "doctortcw@gmail.com";
-        var subject = "TCW Lab Application - " + (data.get("name") || "Applicant");
-        var body = buildEmailBody(data);
-        var summary = document.querySelector("#application-email-summary");
-        if (summary) summary.value = body;
-        if (success) {
-          success.hidden = false;
-          success.scrollIntoView({ block: "start" });
+        if (attachmentSize() > 10 * 1024 * 1024) {
+          event.preventDefault();
+          alert("Please keep the cover letter, CV, and reference contact list under 10 MB combined.");
+          return;
         }
-        window.location.href = "mailto:" + recipient +
-          "?subject=" + encodeURIComponent(subject) +
-          "&body=" + encodeURIComponent(body + "\\n\\nPlease attach cover letter, CV, and reference contact list before sending.");
+
+        var subject = "TCW Lab Application - " + clean(data.get("Applicant name") || "Applicant") + " - " + clean(data.get("Position of interest") || "Position not specified");
+        var body = buildEmailBody(data);
+        var summaryField = document.querySelector("#application-summary-field");
+        var subjectField = document.querySelector("#application-subject");
+        if (summaryField) summaryField.value = body;
+        if (subjectField) subjectField.value = subject;
       });
 
       updateSkillSections();
