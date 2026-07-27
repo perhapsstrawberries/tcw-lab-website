@@ -502,8 +502,8 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260715.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
-  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260727c">
-  <script src="${base}assets/js/site.js?v=20260727c" defer></script>
+  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260727d">
+  <script src="${base}assets/js/site.js?v=20260727d" defer></script>
 </head>
 <body class="${classes}">
   <header class="site-header">
@@ -529,7 +529,7 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   </form>
   <main>
     <section class="hero">
-      <canvas class="bio-canvas" aria-hidden="true"></canvas>
+      ${home ? "" : `<canvas class="bio-canvas" aria-hidden="true"></canvas>`}
       <div class="hero-inner">
         <p class="hero-eyebrow">${eyebrow}</p>
         <h1>${heroTitle}</h1>

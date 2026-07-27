@@ -868,7 +868,9 @@ function startBioCanvas(canvas) {
   requestAnimationFrame(draw);
 }
 
-document.querySelectorAll(".bio-canvas").forEach(startBioCanvas);
+if (!document.body.classList.contains("is-home")) {
+  document.querySelectorAll(".bio-canvas").forEach(startBioCanvas);
+}
 
 function initImageLightbox() {
   const explicitTriggers = Array.from(document.querySelectorAll("[data-lightbox-src]"));
