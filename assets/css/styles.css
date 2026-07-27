@@ -497,21 +497,8 @@ img {
 
 .is-home .hero {
   background:
-    linear-gradient(90deg, rgba(217, 255, 255, 0.42), rgba(239, 255, 255, 0.78) 66%),
-    linear-gradient(to bottom, rgba(239, 255, 255, 0.18), rgba(217, 255, 255, 0.24));
-}
-
-.is-home .hero::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 -190px;
-  z-index: 0;
-  background:
-    linear-gradient(90deg, rgba(217, 255, 255, 0.18), rgba(239, 255, 255, 0.66) 68%),
-    url("../images/home-glial-microscopy-bg-20260727.webp") center top / cover no-repeat;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0.72) 84%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0.72) 84%, transparent 100%);
-  pointer-events: none;
+    radial-gradient(circle at 12% 22%, rgba(99, 255, 242, 0.22), transparent 36%),
+    linear-gradient(105deg, rgba(217, 255, 255, 0.66), rgba(239, 255, 255, 0.86) 62%, rgba(246, 255, 255, 0.94));
 }
 
 .hero::before {
@@ -541,6 +528,75 @@ img {
 .is-home .bio-canvas {
   display: none;
 }
+
+.glial-field {
+  position: absolute;
+  inset: 0 0 -150px;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 72%, rgba(0, 0, 0, 0.58) 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 72%, rgba(0, 0, 0, 0.58) 86%, transparent 100%);
+}
+
+.glial-cell {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  aspect-ratio: 1;
+  opacity: var(--o);
+  background: var(--sprite) center / contain no-repeat;
+  transform: translate(-50%, -50%) rotate(var(--r)) scaleX(var(--sx, 1));
+  filter: blur(var(--b, 0)) saturate(var(--sat, 1.05));
+}
+
+.glial-cell-1,
+.glial-cell-7,
+.glial-cell-13,
+.glial-cell-19 { --sprite: url("../images/glial-cells/glial-cell-1.webp"); }
+
+.glial-cell-2,
+.glial-cell-8,
+.glial-cell-14,
+.glial-cell-20 { --sprite: url("../images/glial-cells/glial-cell-2.webp"); }
+
+.glial-cell-3,
+.glial-cell-9,
+.glial-cell-15 { --sprite: url("../images/glial-cells/glial-cell-3.webp"); }
+
+.glial-cell-4,
+.glial-cell-10,
+.glial-cell-16 { --sprite: url("../images/glial-cells/glial-cell-4.webp"); }
+
+.glial-cell-5,
+.glial-cell-11,
+.glial-cell-17 { --sprite: url("../images/glial-cells/glial-cell-5.webp"); }
+
+.glial-cell-6,
+.glial-cell-12,
+.glial-cell-18 { --sprite: url("../images/glial-cells/glial-cell-6.webp"); }
+
+.glial-cell-1 { --x: 6%; --y: 20%; --s: 168px; --o: 0.44; --r: -18deg; --b: 1.1px; --sx: 1.08; }
+.glial-cell-2 { --x: 19%; --y: 13%; --s: 82px; --o: 0.34; --r: 22deg; --b: 1.4px; }
+.glial-cell-3 { --x: 31%; --y: 23%; --s: 126px; --o: 0.28; --r: -9deg; --b: 1.8px; }
+.glial-cell-4 { --x: 46%; --y: 14%; --s: 92px; --o: 0.3; --r: 15deg; --b: 1.2px; --sx: 0.92; }
+.glial-cell-5 { --x: 63%; --y: 20%; --s: 112px; --o: 0.36; --r: -24deg; --b: 1px; }
+.glial-cell-6 { --x: 86%; --y: 17%; --s: 150px; --o: 0.42; --r: 28deg; --b: 0.9px; }
+.glial-cell-7 { --x: 96%; --y: 38%; --s: 208px; --o: 0.32; --r: -12deg; --b: 2px; }
+.glial-cell-8 { --x: 11%; --y: 47%; --s: 132px; --o: 0.32; --r: 8deg; --b: 1.6px; }
+.glial-cell-9 { --x: 24%; --y: 60%; --s: 74px; --o: 0.44; --r: -33deg; --b: 0.6px; }
+.glial-cell-10 { --x: 42%; --y: 53%; --s: 96px; --o: 0.24; --r: 19deg; --b: 1.8px; --sx: 1.12; }
+.glial-cell-11 { --x: 59%; --y: 50%; --s: 148px; --o: 0.28; --r: -7deg; --b: 1.4px; }
+.glial-cell-12 { --x: 78%; --y: 55%; --s: 104px; --o: 0.46; --r: 31deg; --b: 0.7px; }
+.glial-cell-13 { --x: 93%; --y: 70%; --s: 138px; --o: 0.38; --r: 4deg; --b: 1.1px; }
+.glial-cell-14 { --x: 4%; --y: 76%; --s: 118px; --o: 0.42; --r: -27deg; --b: 1px; --sx: 0.96; }
+.glial-cell-15 { --x: 18%; --y: 86%; --s: 86px; --o: 0.3; --r: 18deg; --b: 1.5px; }
+.glial-cell-16 { --x: 35%; --y: 78%; --s: 164px; --o: 0.24; --r: 37deg; --b: 2.2px; }
+.glial-cell-17 { --x: 52%; --y: 83%; --s: 78px; --o: 0.4; --r: -14deg; --b: 0.8px; }
+.glial-cell-18 { --x: 68%; --y: 76%; --s: 176px; --o: 0.24; --r: 10deg; --b: 2px; }
+.glial-cell-19 { --x: 82%; --y: 88%; --s: 96px; --o: 0.32; --r: -35deg; --b: 1px; }
+.glial-cell-20 { --x: 49%; --y: 35%; --s: 62px; --o: 0.32; --r: 25deg; --b: 1px; }
 
 .page-member .bio-canvas {
   opacity: 0.86;
