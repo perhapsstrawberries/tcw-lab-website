@@ -502,8 +502,8 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260715.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
-  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260727e">
-  <script src="${base}assets/js/site.js?v=20260727e" defer></script>
+  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260727f">
+  <script src="${base}assets/js/site.js?v=20260727f" defer></script>
 </head>
 <body class="${classes}">
   <header class="site-header">
