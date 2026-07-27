@@ -497,8 +497,8 @@ img {
 
 .is-home .hero {
   background:
-    linear-gradient(90deg, rgba(217, 255, 255, 0.7), rgba(239, 255, 255, 0.94) 62%),
-    url("../images/home-glial-field-20260727.webp") center top / min(1120px, 118vw) auto no-repeat;
+    url("../images/home-glial-field-20260727.webp") center top / min(1120px, 118vw) auto no-repeat,
+    linear-gradient(90deg, rgba(217, 255, 255, 0.7), rgba(239, 255, 255, 0.94) 62%);
 }
 
 .hero::before {
