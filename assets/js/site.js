@@ -286,8 +286,9 @@ function startBioCanvas(canvas) {
   ];
   const isMemberPage = document.body.classList.contains("page-member");
   const isHomePage = document.body.classList.contains("is-home");
+  const freezeAnimation = isHomePage;
   const speed = isMemberPage ? 0.44 : isHomePage ? 0.54 : 0.48;
-  const count = isMemberPage ? 7 : isHomePage ? 12 : 9;
+  const count = isMemberPage ? 7 : isHomePage ? 9 : 9;
   const glow = isMemberPage ? 0.72 : isHomePage ? 0.78 : 0.74;
   const targetFrameMs = isHomePage ? 44 : 52;
   const field = canvas.closest(".hero, .login-hero, .gate-hero") || canvas.parentElement;
@@ -690,23 +691,25 @@ function startBioCanvas(canvas) {
   }
 
   function draw(timestamp = 0) {
-    requestAnimationFrame(draw);
+    if (!freezeAnimation) requestAnimationFrame(draw);
     if (!visible || !inViewport) return;
-    if (timestamp - lastFrameTime < targetFrameMs) return;
+    if (!freezeAnimation && timestamp - lastFrameTime < targetFrameMs) return;
     lastFrameTime = timestamp;
-    frame += 0.014 * speed;
+    frame += freezeAnimation ? 0 : 0.014 * speed;
     context.clearRect(0, 0, width, height);
     context.drawImage(staticCanvas, 0, 0, width, height);
     const darkMode = document.documentElement.dataset.theme === "dark";
 
-    cells.forEach((cell, index) => {
-      cell.x += cell.vx + Math.sin(frame * cell.float + cell.phase) * 0.12 * speed;
-      cell.y += cell.vy + Math.cos(frame * 0.86 * cell.float + cell.phase) * 0.14 * speed;
-      nudgeAwayFromText(cell);
-      if (cell.x < -70 || cell.x > width + 70 || cell.y < -70 || cell.y > height + 70) {
-        resetCell(cell, index);
-      }
-    });
+    if (!freezeAnimation) {
+      cells.forEach((cell, index) => {
+        cell.x += cell.vx + Math.sin(frame * cell.float + cell.phase) * 0.12 * speed;
+        cell.y += cell.vy + Math.cos(frame * 0.86 * cell.float + cell.phase) * 0.14 * speed;
+        nudgeAwayFromText(cell);
+        if (cell.x < -70 || cell.x > width + 70 || cell.y < -70 || cell.y > height + 70) {
+          resetCell(cell, index);
+        }
+      });
+    }
 
     cells.forEach((cell) => {
       const heartbeat = 0.52 + Math.pow((Math.sin(frame * 12 + cell.phase) + 1) / 2, 5) * 0.18;
@@ -848,7 +851,10 @@ function startBioCanvas(canvas) {
 
   window.addEventListener("resize", () => {
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(resize, 140);
+    resizeTimer = window.setTimeout(() => {
+      resize();
+      if (freezeAnimation) requestAnimationFrame(draw);
+    }, 140);
   });
   document.addEventListener("visibilitychange", () => {
     visible = !document.hidden;
