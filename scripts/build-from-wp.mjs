@@ -381,14 +381,6 @@ function sidebarFor(route) {
   if (route !== "/") return "";
   return `
     <aside class="sidebar-stack" aria-label="Explore more">
-      <section class="sidebar-card" aria-labelledby="related-links-title">
-        <h2 id="related-links-title">Explore AD Research</h2>
-        <ul>
-          <li><a href="https://www.cell.com/cell/fulltext/S0092-8674(22)00648-1">Cell Publication</a></li>
-          <li><a href="https://www.alzforum.org/">Alzforum</a></li>
-          <li><a href="https://www.alzforum.org/news/research-news/cholesterol-dysregulation-early-step-tau-pathology">Cholesterol Dysregulation</a></li>
-        </ul>
-      </section>
       <section class="sidebar-card" aria-labelledby="home-news-title">
         <div class="section-kicker">News</div>
         <h2 id="home-news-title">News</h2>
@@ -410,6 +402,14 @@ function sidebarFor(route) {
           </li>
         </ul>
         <a class="text-link" href="${relHref(route, "/ourteam/activity/")}">View all updates</a>
+      </section>
+      <section class="sidebar-card" aria-labelledby="related-links-title">
+        <h2 id="related-links-title">Explore AD Research</h2>
+        <ul>
+          <li><a href="https://www.cell.com/cell/fulltext/S0092-8674(22)00648-1">Cell Publication</a></li>
+          <li><a href="https://www.alzforum.org/">Alzforum</a></li>
+          <li><a href="https://www.alzforum.org/news/research-news/cholesterol-dysregulation-early-step-tau-pathology">Cholesterol Dysregulation</a></li>
+        </ul>
       </section>
     </aside>`;
 }
@@ -509,8 +509,8 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260715.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
-  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260727i">
-  <script src="${base}assets/js/site.js?v=20260727i" defer></script>
+  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260727j">
+  <script src="${base}assets/js/site.js?v=20260727j" defer></script>
 </head>
 <body class="${classes}">
   <header class="site-header">
