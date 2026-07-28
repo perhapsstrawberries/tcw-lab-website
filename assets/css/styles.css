@@ -62,6 +62,12 @@ body {
   overflow-x: hidden;
 }
 
+body.page-home {
+  background:
+    radial-gradient(circle at 12% 22%, rgba(99, 255, 242, 0.16), transparent 38%),
+    linear-gradient(105deg, #dcffff 0%, #efffff 62%, #f8ffff 100%);
+}
+
 body.intro-lock {
   overflow: hidden;
 }
@@ -496,9 +502,7 @@ img {
 }
 
 .is-home .hero {
-  background:
-    radial-gradient(circle at 12% 22%, rgba(99, 255, 242, 0.22), transparent 36%),
-    linear-gradient(105deg, rgba(217, 255, 255, 0.66), rgba(239, 255, 255, 0.86) 62%, rgba(246, 255, 255, 0.94));
+  background: transparent;
 }
 
 .hero::before {
