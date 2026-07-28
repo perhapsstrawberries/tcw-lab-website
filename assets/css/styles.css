@@ -551,12 +551,22 @@ img {
   position: absolute;
   left: var(--x);
   top: var(--y);
+  --dx: 14px;
+  --dy: 10px;
+  --turn: 3deg;
+  --dur: 19s;
+  --delay: 0s;
   width: var(--s);
   aspect-ratio: 1;
   opacity: var(--o);
   background: var(--sprite) center / contain no-repeat;
-  transform: translate(-50%, -50%) rotate(var(--r)) scaleX(var(--sx, 1));
-  filter: blur(var(--b, 0)) saturate(var(--sat, 1.05));
+  transform: translate3d(-50%, -50%, 0) rotate(var(--r)) scaleX(var(--sx, 1));
+  transform-origin: 50% 50%;
+  filter: blur(var(--b, 0)) saturate(var(--sat, 1.18)) brightness(1.18);
+  animation: glial-drift var(--dur) ease-in-out var(--delay) infinite alternate;
+  backface-visibility: hidden;
+  contain: layout paint style;
+  will-change: transform;
 }
 
 .glial-cell-1,
@@ -585,26 +595,36 @@ img {
 .glial-cell-12,
 .glial-cell-18 { --sprite: url("../images/glial-cells/glial-cell-6.webp"); }
 
-.glial-cell-1 { --x: 6%; --y: 20%; --s: 168px; --o: 0.44; --r: -18deg; --b: 1.1px; --sx: 1.08; }
-.glial-cell-2 { --x: 19%; --y: 13%; --s: 82px; --o: 0.34; --r: 22deg; --b: 1.4px; }
-.glial-cell-3 { --x: 31%; --y: 23%; --s: 126px; --o: 0.28; --r: -9deg; --b: 1.8px; }
-.glial-cell-4 { --x: 46%; --y: 14%; --s: 92px; --o: 0.3; --r: 15deg; --b: 1.2px; --sx: 0.92; }
-.glial-cell-5 { --x: 63%; --y: 20%; --s: 112px; --o: 0.36; --r: -24deg; --b: 1px; }
-.glial-cell-6 { --x: 86%; --y: 17%; --s: 150px; --o: 0.42; --r: 28deg; --b: 0.9px; }
-.glial-cell-7 { --x: 96%; --y: 38%; --s: 208px; --o: 0.32; --r: -12deg; --b: 2px; }
-.glial-cell-8 { --x: 11%; --y: 47%; --s: 132px; --o: 0.32; --r: 8deg; --b: 1.6px; }
-.glial-cell-9 { --x: 24%; --y: 60%; --s: 74px; --o: 0.44; --r: -33deg; --b: 0.6px; }
-.glial-cell-10 { --x: 42%; --y: 53%; --s: 96px; --o: 0.24; --r: 19deg; --b: 1.8px; --sx: 1.12; }
-.glial-cell-11 { --x: 59%; --y: 50%; --s: 148px; --o: 0.28; --r: -7deg; --b: 1.4px; }
-.glial-cell-12 { --x: 78%; --y: 55%; --s: 104px; --o: 0.46; --r: 31deg; --b: 0.7px; }
-.glial-cell-13 { --x: 93%; --y: 70%; --s: 138px; --o: 0.38; --r: 4deg; --b: 1.1px; }
-.glial-cell-14 { --x: 4%; --y: 76%; --s: 118px; --o: 0.42; --r: -27deg; --b: 1px; --sx: 0.96; }
-.glial-cell-15 { --x: 18%; --y: 86%; --s: 86px; --o: 0.3; --r: 18deg; --b: 1.5px; }
-.glial-cell-16 { --x: 35%; --y: 78%; --s: 164px; --o: 0.24; --r: 37deg; --b: 2.2px; }
-.glial-cell-17 { --x: 52%; --y: 83%; --s: 78px; --o: 0.4; --r: -14deg; --b: 0.8px; }
-.glial-cell-18 { --x: 68%; --y: 76%; --s: 176px; --o: 0.24; --r: 10deg; --b: 2px; }
-.glial-cell-19 { --x: 82%; --y: 88%; --s: 96px; --o: 0.32; --r: -35deg; --b: 1px; }
-.glial-cell-20 { --x: 49%; --y: 35%; --s: 62px; --o: 0.32; --r: 25deg; --b: 1px; }
+.glial-cell-1 { --x: 6%; --y: 20%; --s: 168px; --o: 0.52; --r: -18deg; --b: 1.1px; --sx: 1.08; --dx: 22px; --dy: -14px; --turn: 3deg; --dur: 21s; --delay: -4s; }
+.glial-cell-2 { --x: 19%; --y: 13%; --s: 82px; --o: 0.43; --r: 22deg; --b: 1.4px; --dx: -14px; --dy: 18px; --turn: 5deg; --dur: 17s; --delay: -11s; }
+.glial-cell-3 { --x: 31%; --y: 23%; --s: 126px; --o: 0.38; --r: -9deg; --b: 1.8px; --dx: 18px; --dy: 12px; --turn: 4deg; --dur: 24s; --delay: -7s; }
+.glial-cell-4 { --x: 46%; --y: 14%; --s: 92px; --o: 0.4; --r: 15deg; --b: 1.2px; --sx: 0.92; --dx: -16px; --dy: -10px; --turn: 6deg; --dur: 19s; --delay: -2s; }
+.glial-cell-5 { --x: 63%; --y: 20%; --s: 112px; --o: 0.45; --r: -24deg; --b: 1px; --dx: 19px; --dy: -15px; --turn: 4deg; --dur: 22s; --delay: -14s; }
+.glial-cell-6 { --x: 86%; --y: 17%; --s: 150px; --o: 0.5; --r: 28deg; --b: 0.9px; --dx: -24px; --dy: 12px; --turn: 3deg; --dur: 25s; --delay: -6s; }
+.glial-cell-7 { --x: 96%; --y: 38%; --s: 208px; --o: 0.4; --r: -12deg; --b: 2px; --dx: -28px; --dy: -18px; --turn: 2deg; --dur: 28s; --delay: -16s; }
+.glial-cell-8 { --x: 11%; --y: 47%; --s: 132px; --o: 0.4; --r: 8deg; --b: 1.6px; --dx: 18px; --dy: 15px; --turn: 4deg; --dur: 20s; --delay: -9s; }
+.glial-cell-9 { --x: 24%; --y: 60%; --s: 74px; --o: 0.52; --r: -33deg; --b: 0.6px; --dx: -12px; --dy: 14px; --turn: 7deg; --dur: 16s; --delay: -5s; }
+.glial-cell-10 { --x: 42%; --y: 53%; --s: 96px; --o: 0.34; --r: 19deg; --b: 1.8px; --sx: 1.12; --dx: 13px; --dy: -16px; --turn: 5deg; --dur: 23s; --delay: -12s; }
+.glial-cell-11 { --x: 59%; --y: 50%; --s: 148px; --o: 0.38; --r: -7deg; --b: 1.4px; --dx: -20px; --dy: 13px; --turn: 3deg; --dur: 26s; --delay: -8s; }
+.glial-cell-12 { --x: 78%; --y: 55%; --s: 104px; --o: 0.54; --r: 31deg; --b: 0.7px; --dx: 16px; --dy: -13px; --turn: 6deg; --dur: 18s; --delay: -3s; }
+.glial-cell-13 { --x: 93%; --y: 70%; --s: 138px; --o: 0.47; --r: 4deg; --b: 1.1px; --dx: -22px; --dy: 15px; --turn: 4deg; --dur: 24s; --delay: -18s; }
+.glial-cell-14 { --x: 4%; --y: 76%; --s: 118px; --o: 0.5; --r: -27deg; --b: 1px; --sx: 0.96; --dx: 19px; --dy: -12px; --turn: 5deg; --dur: 21s; --delay: -13s; }
+.glial-cell-15 { --x: 18%; --y: 86%; --s: 86px; --o: 0.4; --r: 18deg; --b: 1.5px; --dx: -15px; --dy: -11px; --turn: 6deg; --dur: 19s; --delay: -1s; }
+.glial-cell-16 { --x: 35%; --y: 78%; --s: 164px; --o: 0.34; --r: 37deg; --b: 2.2px; --dx: 22px; --dy: 14px; --turn: 3deg; --dur: 29s; --delay: -17s; }
+.glial-cell-17 { --x: 52%; --y: 83%; --s: 78px; --o: 0.48; --r: -14deg; --b: 0.8px; --dx: -12px; --dy: 16px; --turn: 7deg; --dur: 17s; --delay: -10s; }
+.glial-cell-18 { --x: 68%; --y: 76%; --s: 176px; --o: 0.34; --r: 10deg; --b: 2px; --dx: 20px; --dy: -18px; --turn: 3deg; --dur: 30s; --delay: -21s; }
+.glial-cell-19 { --x: 82%; --y: 88%; --s: 96px; --o: 0.42; --r: -35deg; --b: 1px; --dx: -17px; --dy: -14px; --turn: 6deg; --dur: 20s; --delay: -15s; }
+.glial-cell-20 { --x: 49%; --y: 35%; --s: 62px; --o: 0.42; --r: 25deg; --b: 1px; --dx: 11px; --dy: 13px; --turn: 8deg; --dur: 15s; --delay: -6s; }
+
+@keyframes glial-drift {
+  from {
+    transform: translate3d(calc(-50% - var(--dx)), calc(-50% - var(--dy)), 0) rotate(calc(var(--r) - var(--turn))) scaleX(var(--sx, 1));
+  }
+
+  to {
+    transform: translate3d(calc(-50% + var(--dx)), calc(-50% + var(--dy)), 0) rotate(calc(var(--r) + var(--turn))) scaleX(var(--sx, 1));
+  }
+}
 
 .page-member .bio-canvas {
   opacity: 0.86;
@@ -1423,6 +1443,10 @@ html[data-theme="dark"] .research-project-card img {
   object-position: 50% 32%;
 }
 
+.alumni-photo-lucrezia {
+  object-position: 50% 28%;
+}
+
 .alumni-placeholder {
   display: grid;
   place-items: center;
@@ -1668,6 +1692,10 @@ html[data-theme="dark"] .research-project-card img {
 
   .bio-canvas {
     display: none;
+  }
+
+  .glial-cell {
+    animation: none;
   }
 
   .brand-mark {
