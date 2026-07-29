@@ -503,13 +503,13 @@ function template({ route, title, body, sidebar = "", description = "" }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260729.png">
-  <link rel="shortcut icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260729.png">
-  <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260715.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="${base}assets/icons/tcw-circle-favicon-20260729b.png">
+  <link rel="shortcut icon" href="/favicon.ico?v=20260729b">
+  <link rel="apple-touch-icon" sizes="512x512" href="/apple-touch-icon.png?v=20260729b">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
-  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260729a">
-  <script src="${base}assets/js/site.js?v=20260729a" defer></script>
+  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260729b">
+  <script src="${base}assets/js/site.js?v=20260729b" defer></script>
 </head>
 <body class="${classes}">
   <header class="site-header">

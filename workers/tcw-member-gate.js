@@ -147,11 +147,11 @@ function loginPage(url, error = "") {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="/assets/icons/tcw-circle-favicon-20260729.png">
-  <link rel="shortcut icon" type="image/png" href="/assets/icons/tcw-circle-favicon-20260729.png">
-  <link rel="apple-touch-icon" href="/assets/icons/tcw-circle-touch-20260715.png">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=20260729a">
-  <script src="/assets/js/site.js?v=20260729a" defer></script>
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/tcw-circle-favicon-20260729b.png">
+  <link rel="shortcut icon" href="/favicon.ico?v=20260729b">
+  <link rel="apple-touch-icon" sizes="512x512" href="/apple-touch-icon.png?v=20260729b">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=20260729b">
+  <script src="/assets/js/site.js?v=20260729b" defer></script>
   <title>Member Access | TCW Lab</title>
   <style>
     body.page-member-gate {

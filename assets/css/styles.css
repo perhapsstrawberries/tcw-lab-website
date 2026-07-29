@@ -122,7 +122,7 @@ body.intro-lock {
   height: 116px;
   margin: 0 auto 24px;
   border-radius: 50%;
-  background: url("../icons/tcw-circle-favicon-20260729.png") center / cover no-repeat;
+  background: url("../icons/tcw-circle-favicon-20260729b.png") center / cover no-repeat;
   color: transparent;
   box-shadow: 0 22px 58px rgba(0, 142, 145, 0.22);
   text-indent: -999px;
@@ -263,7 +263,7 @@ img {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: url("../icons/tcw-circle-favicon-20260729.png") center / cover no-repeat;
+  background: url("../icons/tcw-circle-favicon-20260729b.png") center / cover no-repeat;
   color: transparent;
   font-family: "DM Serif Display", Georgia, serif;
   font-size: 17px;
@@ -535,10 +535,12 @@ img {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  --dx: 64px;
-  --dy: 36px;
-  --turn: 18deg;
-  --dur: 7s;
+  --dx: 18px;
+  --dy: 14px;
+  --tx: -10px;
+  --ty: 12px;
+  --turn: 5deg;
+  --dur: 20s;
   --delay: 0s;
   --cell: #49f1ec;
   --core: #fff3a1;
@@ -605,39 +607,43 @@ img {
 .glial-cell-12,
 .glial-cell-18 { --cell: #ff9ad9; --core: #fff0ad; --nucleus: #df58b2; }
 
-.glial-cell-1 { --x: 4%; --y: 17%; --s: 96px; --o: 0.82; --r: -18deg; --sx: 1.08; --dx: 90px; --dy: -34px; --turn: 26deg; --dur: 10.5s; --delay: -1.2s; }
-.glial-cell-2 { --x: 17%; --y: 11%; --s: 52px; --o: 0.72; --r: 22deg; --dx: -62px; --dy: 48px; --turn: 34deg; --dur: 9.4s; --delay: -3.8s; }
-.glial-cell-3 { --x: 30%; --y: 21%; --s: 74px; --o: 0.64; --r: -9deg; --dx: 78px; --dy: 42px; --turn: 30deg; --dur: 11.2s; --delay: -2.4s; }
-.glial-cell-4 { --x: 45%; --y: 13%; --s: 58px; --o: 0.68; --r: 15deg; --sx: 0.92; --dx: -70px; --dy: -32px; --turn: 38deg; --dur: 9.9s; --delay: -0.7s; }
-.glial-cell-5 { --x: 62%; --y: 19%; --s: 68px; --o: 0.72; --r: -24deg; --dx: 82px; --dy: -44px; --turn: 28deg; --dur: 10.8s; --delay: -4.1s; }
-.glial-cell-6 { --x: 86%; --y: 16%; --s: 88px; --o: 0.78; --r: 28deg; --dx: -94px; --dy: 38px; --turn: 26deg; --dur: 11.6s; --delay: -2s; }
-.glial-cell-7 { --x: 97%; --y: 38%; --s: 118px; --o: 0.64; --r: -12deg; --dx: -120px; --dy: -54px; --turn: 22deg; --dur: 12.2s; --delay: -5.4s; }
-.glial-cell-8 { --x: 7%; --y: 73%; --s: 82px; --o: 0.7; --r: 8deg; --dx: 76px; --dy: 50px; --turn: 32deg; --dur: 10.2s; --delay: -3.1s; }
-.glial-cell-9 { --x: 22%; --y: 76%; --s: 48px; --o: 0.82; --r: -33deg; --dx: -58px; --dy: 44px; --turn: 40deg; --dur: 9.1s; --delay: -1.8s; }
-.glial-cell-10 { --x: 43%; --y: 75%; --s: 58px; --o: 0.58; --r: 19deg; --sx: 1.12; --dx: 68px; --dy: -50px; --turn: 36deg; --dur: 10.9s; --delay: -4.7s; }
-.glial-cell-11 { --x: 62%; --y: 55%; --s: 92px; --o: 0.64; --r: -7deg; --dx: -86px; --dy: 46px; --turn: 26deg; --dur: 11.8s; --delay: -2.8s; }
-.glial-cell-12 { --x: 78%; --y: 48%; --s: 64px; --o: 0.82; --r: 31deg; --dx: 70px; --dy: -48px; --turn: 36deg; --dur: 9.6s; --delay: -1s; }
-.glial-cell-13 { --x: 92%; --y: 70%; --s: 84px; --o: 0.72; --r: 4deg; --dx: -90px; --dy: 50px; --turn: 31deg; --dur: 11s; --delay: -5.9s; }
-.glial-cell-14 { --x: 5%; --y: 88%; --s: 78px; --o: 0.78; --r: -27deg; --sx: 0.96; --dx: 84px; --dy: -42px; --turn: 34deg; --dur: 10.4s; --delay: -3.7s; }
-.glial-cell-15 { --x: 18%; --y: 86%; --s: 52px; --o: 0.68; --r: 18deg; --dx: -62px; --dy: -38px; --turn: 42deg; --dur: 9.3s; --delay: -0.4s; }
-.glial-cell-16 { --x: 35%; --y: 78%; --s: 96px; --o: 0.56; --r: 37deg; --dx: 92px; --dy: 48px; --turn: 25deg; --dur: 12.4s; --delay: -6.2s; }
-.glial-cell-17 { --x: 52%; --y: 83%; --s: 46px; --o: 0.8; --r: -14deg; --dx: -54px; --dy: 48px; --turn: 44deg; --dur: 9s; --delay: -2.6s; }
-.glial-cell-18 { --x: 68%; --y: 76%; --s: 104px; --o: 0.58; --r: 10deg; --dx: 86px; --dy: -58px; --turn: 24deg; --dur: 12.8s; --delay: -6.8s; }
-.glial-cell-19 { --x: 82%; --y: 88%; --s: 58px; --o: 0.72; --r: -35deg; --dx: -72px; --dy: -46px; --turn: 39deg; --dur: 10s; --delay: -4.8s; }
-.glial-cell-20 { --x: 70%; --y: 33%; --s: 42px; --o: 0.72; --r: 25deg; --dx: 52px; --dy: 54px; --turn: 46deg; --dur: 8.8s; --delay: -1.9s; }
+.glial-cell-1 { --x: 4%; --y: 17%; --s: 96px; --o: 0.82; --r: -18deg; --sx: 1.08; --dx: 20px; --dy: -14px; --tx: -12px; --ty: 9px; --turn: 5deg; --dur: 24s; --delay: -1.2s; }
+.glial-cell-2 { --x: 17%; --y: 11%; --s: 52px; --o: 0.72; --r: 22deg; --dx: -14px; --dy: 16px; --tx: 10px; --ty: -8px; --turn: 4deg; --dur: 20s; --delay: -3.8s; }
+.glial-cell-3 { --x: 30%; --y: 21%; --s: 74px; --o: 0.64; --r: -9deg; --dx: 18px; --dy: 13px; --tx: -9px; --ty: -12px; --turn: 5deg; --dur: 26s; --delay: -2.4s; }
+.glial-cell-4 { --x: 45%; --y: 13%; --s: 58px; --o: 0.68; --r: 15deg; --sx: 0.92; --dx: -16px; --dy: -11px; --tx: 13px; --ty: 8px; --turn: 4deg; --dur: 21s; --delay: -0.7s; }
+.glial-cell-5 { --x: 62%; --y: 19%; --s: 68px; --o: 0.72; --r: -24deg; --dx: 22px; --dy: -12px; --tx: -11px; --ty: 10px; --turn: 5deg; --dur: 25s; --delay: -4.1s; }
+.glial-cell-6 { --x: 86%; --y: 16%; --s: 88px; --o: 0.78; --r: 28deg; --dx: -24px; --dy: 14px; --tx: 12px; --ty: -10px; --turn: 5deg; --dur: 27s; --delay: -2s; }
+.glial-cell-7 { --x: 97%; --y: 38%; --s: 118px; --o: 0.64; --r: -12deg; --dx: -28px; --dy: -18px; --tx: 15px; --ty: 12px; --turn: 4deg; --dur: 29s; --delay: -5.4s; }
+.glial-cell-8 { --x: 7%; --y: 73%; --s: 82px; --o: 0.7; --r: 8deg; --dx: 18px; --dy: 18px; --tx: -12px; --ty: -8px; --turn: 5deg; --dur: 23s; --delay: -3.1s; }
+.glial-cell-9 { --x: 22%; --y: 76%; --s: 48px; --o: 0.82; --r: -33deg; --dx: -13px; --dy: 15px; --tx: 9px; --ty: -12px; --turn: 4deg; --dur: 19s; --delay: -1.8s; }
+.glial-cell-10 { --x: 43%; --y: 75%; --s: 58px; --o: 0.58; --r: 19deg; --sx: 1.12; --dx: 17px; --dy: -16px; --tx: -10px; --ty: 10px; --turn: 4deg; --dur: 24s; --delay: -4.7s; }
+.glial-cell-11 { --x: 62%; --y: 55%; --s: 92px; --o: 0.64; --r: -7deg; --dx: -20px; --dy: 14px; --tx: 11px; --ty: -9px; --turn: 5deg; --dur: 28s; --delay: -2.8s; }
+.glial-cell-12 { --x: 78%; --y: 48%; --s: 64px; --o: 0.82; --r: 31deg; --dx: 16px; --dy: -15px; --tx: -13px; --ty: 8px; --turn: 4deg; --dur: 21s; --delay: -1s; }
+.glial-cell-13 { --x: 92%; --y: 70%; --s: 84px; --o: 0.72; --r: 4deg; --dx: -22px; --dy: 18px; --tx: 12px; --ty: -11px; --turn: 5deg; --dur: 26s; --delay: -5.9s; }
+.glial-cell-14 { --x: 5%; --y: 88%; --s: 78px; --o: 0.78; --r: -27deg; --sx: 0.96; --dx: 19px; --dy: -13px; --tx: -9px; --ty: 12px; --turn: 4deg; --dur: 23s; --delay: -3.7s; }
+.glial-cell-15 { --x: 18%; --y: 86%; --s: 52px; --o: 0.68; --r: 18deg; --dx: -15px; --dy: -12px; --tx: 10px; --ty: 9px; --turn: 4deg; --dur: 20s; --delay: -0.4s; }
+.glial-cell-16 { --x: 35%; --y: 78%; --s: 96px; --o: 0.56; --r: 37deg; --dx: 21px; --dy: 16px; --tx: -12px; --ty: -10px; --turn: 5deg; --dur: 30s; --delay: -6.2s; }
+.glial-cell-17 { --x: 52%; --y: 83%; --s: 46px; --o: 0.8; --r: -14deg; --dx: -12px; --dy: 16px; --tx: 8px; --ty: -11px; --turn: 4deg; --dur: 18s; --delay: -2.6s; }
+.glial-cell-18 { --x: 68%; --y: 76%; --s: 104px; --o: 0.58; --r: 10deg; --dx: 22px; --dy: -18px; --tx: -13px; --ty: 11px; --turn: 5deg; --dur: 31s; --delay: -6.8s; }
+.glial-cell-19 { --x: 82%; --y: 88%; --s: 58px; --o: 0.72; --r: -35deg; --dx: -17px; --dy: -14px; --tx: 11px; --ty: 9px; --turn: 4deg; --dur: 22s; --delay: -4.8s; }
+.glial-cell-20 { --x: 70%; --y: 33%; --s: 42px; --o: 0.72; --r: 25deg; --dx: 13px; --dy: 17px; --tx: -8px; --ty: -10px; --turn: 4deg; --dur: 19s; --delay: -1.9s; }
 
 @keyframes glial-drift-loop {
   0%,
   100% {
-    transform: translate3d(calc(-50% - var(--dx)), calc(-50% - var(--dy)), 0) rotate(calc(var(--r) - var(--turn))) scaleX(var(--sx, 1));
+    transform: translate3d(-50%, -50%, 0) rotate(var(--r)) scaleX(var(--sx, 1));
   }
 
-  34% {
-    transform: translate3d(calc(-50% + var(--dy)), calc(-50% - var(--dx)), 0) rotate(var(--r)) scaleX(var(--sx, 1));
-  }
-
-  68% {
+  28% {
     transform: translate3d(calc(-50% + var(--dx)), calc(-50% + var(--dy)), 0) rotate(calc(var(--r) + var(--turn))) scaleX(var(--sx, 1));
+  }
+
+  58% {
+    transform: translate3d(calc(-50% + var(--tx)), calc(-50% + var(--ty)), 0) rotate(calc(var(--r) - var(--turn))) scaleX(var(--sx, 1));
+  }
+
+  82% {
+    transform: translate3d(calc(-50% - var(--dy)), calc(-50% + var(--dx)), 0) rotate(calc(var(--r) + 2deg)) scaleX(var(--sx, 1));
   }
 }
 
