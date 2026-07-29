@@ -505,12 +505,11 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260715.png">
   <link rel="shortcut icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260715.png">
-  <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260715.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
-  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260728a">
-  <script src="${base}assets/js/site.js?v=20260728a" defer></script>
+  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260728b">
+  <script src="${base}assets/js/site.js?v=20260728b" defer></script>
 </head>
 <body class="${classes}">
   <header class="site-header">
