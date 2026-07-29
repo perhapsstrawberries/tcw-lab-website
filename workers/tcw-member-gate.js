@@ -147,11 +147,11 @@ function loginPage(url, error = "") {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="/assets/icons/tcw-circle-favicon-20260715.png">
-  <link rel="shortcut icon" type="image/png" href="/assets/icons/tcw-circle-favicon-20260715.png">
+  <link rel="icon" type="image/png" href="/assets/icons/tcw-circle-favicon-20260729.png">
+  <link rel="shortcut icon" type="image/png" href="/assets/icons/tcw-circle-favicon-20260729.png">
   <link rel="apple-touch-icon" href="/assets/icons/tcw-circle-touch-20260715.png">
-  <link rel="stylesheet" href="/assets/css/styles.css?v=20260728b">
-  <script src="/assets/js/site.js?v=20260728b" defer></script>
+  <link rel="stylesheet" href="/assets/css/styles.css?v=20260729a">
+  <script src="/assets/js/site.js?v=20260729a" defer></script>
   <title>Member Access | TCW Lab</title>
   <style>
     body.page-member-gate {
@@ -178,7 +178,7 @@ function loginPage(url, error = "") {
         radial-gradient(circle at 64% 78%, rgba(255, 214, 61, 0.12), transparent 26%);
       pointer-events: none;
     }
-    .gate-hero .bio-canvas {
+    .gate-hero .glial-field {
       inset: -8% -6%;
       width: 112%;
       height: 116%;
@@ -350,7 +350,7 @@ function loginPage(url, error = "") {
     <div class="search-results" id="site-search-results"></div>
   </form>
   <main class="gate-hero">
-    <canvas class="bio-canvas" aria-hidden="true"></canvas>
+    <div class="glial-field" aria-hidden="true"><span class="glial-cell glial-cell-1"></span><span class="glial-cell glial-cell-2"></span><span class="glial-cell glial-cell-3"></span><span class="glial-cell glial-cell-4"></span><span class="glial-cell glial-cell-5"></span><span class="glial-cell glial-cell-6"></span><span class="glial-cell glial-cell-7"></span><span class="glial-cell glial-cell-8"></span><span class="glial-cell glial-cell-9"></span><span class="glial-cell glial-cell-10"></span><span class="glial-cell glial-cell-11"></span><span class="glial-cell glial-cell-12"></span><span class="glial-cell glial-cell-13"></span><span class="glial-cell glial-cell-14"></span><span class="glial-cell glial-cell-15"></span><span class="glial-cell glial-cell-16"></span><span class="glial-cell glial-cell-17"></span><span class="glial-cell glial-cell-18"></span><span class="glial-cell glial-cell-19"></span><span class="glial-cell glial-cell-20"></span></div>
     <div class="gate-grid">
       <section class="gate-copy" aria-labelledby="member-gate-title">
         <p class="hero-eyebrow">Members only</p>

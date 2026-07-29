@@ -429,7 +429,7 @@ function navMarkup(route) {
   }).join("");
 }
 
-function homeGlialField() {
+function glialField() {
   return `<div class="glial-field" aria-hidden="true">${Array.from({ length: 20 }, (_, index) => {
     const number = index + 1;
     return `<span class="glial-cell glial-cell-${number}"></span>`;
@@ -503,13 +503,13 @@ function template({ route, title, body, sidebar = "", description = "" }) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260715.png">
-  <link rel="shortcut icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260715.png">
+  <link rel="icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260729.png">
+  <link rel="shortcut icon" type="image/png" href="${base}assets/icons/tcw-circle-favicon-20260729.png">
   <link rel="apple-touch-icon" href="${base}assets/icons/tcw-circle-touch-20260715.png">
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
-  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260728b">
-  <script src="${base}assets/js/site.js?v=20260728b" defer></script>
+  <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260729a">
+  <script src="${base}assets/js/site.js?v=20260729a" defer></script>
 </head>
 <body class="${classes}">
   <header class="site-header">
@@ -535,7 +535,7 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   </form>
   <main>
     <section class="hero">
-      ${home ? homeGlialField() : `<canvas class="bio-canvas" aria-hidden="true"></canvas>`}
+      ${glialField()}
       <div class="hero-inner">
         <p class="hero-eyebrow">${eyebrow}</p>
         <h1>${heroTitle}</h1>
