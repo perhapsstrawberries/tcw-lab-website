@@ -498,14 +498,13 @@ function template({ route, title, body, sidebar = "", description = "" }) {
   const home = route === "/";
   const heroTitle = home ? "TCW Laboratory" : title;
   const classes = `${pageClass(route)}${home ? " is-home" : ""}`;
+  const iconLinks = `<link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/tcw-logo-20260731p.png?v=20260731p">`;
   return `<!doctype html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" sizes="512x512" href="${base}assets/icons/tcw-circle-favicon-20260729b.png">
-  <link rel="shortcut icon" href="/favicon.ico?v=20260729b">
-  <link rel="apple-touch-icon" sizes="512x512" href="/apple-touch-icon.png?v=20260729b">
+  ${iconLinks}
   <title>${title} | TCW Lab</title>
   <meta name="description" content="${description || "TCW Laboratory static website"}">
   <link rel="stylesheet" href="${base}assets/css/styles.css?v=20260729b">
