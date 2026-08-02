@@ -156,161 +156,190 @@ function loginPage(url, error = "") {
       min-height: 100vh;
       overflow-x: hidden;
     }
-    .gate-hero {
+    .login-hero {
       position: relative;
-      min-height: calc(100vh - 96px);
+      min-height: clamp(560px, 88vh, 920px);
       display: grid;
       place-items: center;
       overflow: hidden;
-      isolation: isolate;
-      padding: clamp(30px, 6vw, 72px) 24px;
+      padding: 120px 24px 80px;
     }
-    .gate-hero::before {
+    .login-hero::before {
       content: "";
       position: absolute;
-      inset: 0;
-      z-index: 0;
-      background:
-        radial-gradient(circle at 26% 20%, rgba(162, 248, 246, 0.38), transparent 28%),
-        radial-gradient(circle at 76% 24%, rgba(216, 144, 255, 0.15), transparent 24%),
-        radial-gradient(circle at 64% 78%, rgba(255, 214, 61, 0.12), transparent 26%);
+      inset: -20% 30% auto -10%;
+      height: 70%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(162, 248, 246, 0.26), transparent 66%);
+      filter: blur(22px);
       pointer-events: none;
     }
-    .gate-hero .glial-field {
-      inset: -8% -6%;
-      width: 112%;
-      height: 116%;
-      opacity: 0.9;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 82%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 82%, transparent 100%);
-    }
-    .gate-grid {
+    .login-grid {
       position: relative;
-      z-index: 2;
-      width: min(100%, 1080px);
+      z-index: 1;
+      width: min(100%, 980px);
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 480px);
-      gap: clamp(30px, 6vw, 78px);
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: clamp(28px, 5vw, 64px);
       align-items: center;
     }
-    .gate-copy .hero-eyebrow {
-      margin-bottom: 14px;
-    }
-    .gate-copy h1 {
-      max-width: 560px;
+    .login-intro .hero-eyebrow { margin-bottom: 14px; }
+    .login-intro h1 {
       margin: 0;
       font-family: "DM Serif Display", Georgia, serif;
-      font-size: clamp(48px, 7vw, 96px);
-      line-height: 0.94;
-      letter-spacing: 0;
-      color: var(--ink);
+      font-size: clamp(40px, 6vw, 76px);
+      font-weight: 700;
+      line-height: 0.96;
     }
-    .gate-copy p {
-      max-width: 520px;
-      margin: 24px 0 0;
+    .login-intro p.lede {
+      max-width: 440px;
+      margin: 22px 0 0;
       color: var(--muted);
-      font-size: clamp(17px, 2vw, 21px);
-      line-height: 1.55;
+      font-size: clamp(16px, 1.7vw, 19px);
+      line-height: 1.6;
     }
-    .gate-card {
+    .login-intro .intro-list {
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+    .login-intro .intro-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .login-intro .intro-list .dot {
+      flex: none;
+      width: 22px;
+      height: 22px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--blue));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+      display: grid;
+      place-items: center;
+      color: #061112;
+      font-weight: 900;
+      font-size: 12px;
+    }
+    .login-card {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.9);
+      background: var(--surface-strong);
       box-shadow: var(--shadow);
-      padding: clamp(24px, 3.2vw, 38px);
+      padding: clamp(22px, 3vw, 34px);
       backdrop-filter: blur(16px);
     }
-    .gate-card h2 {
-      margin: 0 0 6px;
-      font-family: "DM Serif Display", Georgia, serif;
-      font-size: clamp(28px, 3.2vw, 36px);
-      line-height: 1.08;
-      color: var(--ink);
+    .login-card h2 {
+      margin: 0 0 4px;
+      font-size: clamp(24px, 2.6vw, 30px);
     }
-    .gate-card p {
-      margin: 0 0 24px;
+    .login-card .card-sub {
+      margin: 0 0 20px;
       color: var(--muted);
-      font-size: 15.5px;
-      line-height: 1.5;
+      font-size: 14.5px;
     }
-    .gate-card label {
+    .auth-panel {
       display: grid;
-      gap: 8px;
-      color: var(--ink);
-      font-weight: 800;
+      gap: 14px;
     }
-    .gate-field {
-      position: relative;
+    .field { display: grid; gap: 7px; }
+    .field label {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.02em;
     }
-    .gate-field input {
+    .field input {
       width: 100%;
-      min-height: 64px;
-      border: 2px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.86);
-      color: var(--ink);
-      font: inherit;
-      font-size: 19px;
-      padding: 16px 58px 16px 18px;
-      outline: none;
-      transition: border-color 160ms ease, box-shadow 160ms ease;
-    }
-    .gate-field input:focus {
-      border-color: var(--teal-deep);
-      box-shadow: 0 0 0 4px rgba(162, 248, 246, 0.42);
-    }
-    .gate-field button {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      min-width: 42px;
-      min-height: 42px;
       border: 1px solid var(--line);
       border-radius: 14px;
       background: var(--surface-strong);
       color: var(--ink);
-      font-weight: 800;
+      font: inherit;
+      padding: 12px 14px;
+    }
+    .field input:focus-visible {
+      outline: 2px solid var(--teal-deep);
+      outline-offset: 1px;
+    }
+    .password-field {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-field input {
+      padding-right: 74px;
+    }
+    .password-toggle {
+      appearance: none;
+      position: absolute;
+      right: 9px;
+      min-width: 52px;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--teal-soft);
+      color: var(--teal-deep);
       cursor: pointer;
-    }
-    .gate-error {
-      min-height: 28px;
-      margin: 14px 0 0;
-      color: #c83f36;
+      font: inherit;
+      font-size: 11px;
       font-weight: 800;
-      line-height: 1.35;
     }
-    .gate-submit {
-      width: 100%;
-      min-height: 62px;
-      margin-top: 18px;
+    .password-toggle:focus-visible {
+      outline: 2px solid var(--teal-deep);
+      outline-offset: 2px;
+    }
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 50px;
       border: 0;
       border-radius: 999px;
       background: linear-gradient(135deg, var(--teal), var(--blue));
       color: #061112;
-      font: inherit;
-      font-size: 18px;
-      font-weight: 900;
+      font-weight: 800;
+      font-size: 15px;
       cursor: pointer;
-      box-shadow: 0 14px 32px rgba(0, 142, 145, 0.16);
+      transition: filter 160ms ease, transform 160ms ease;
     }
-    .gate-note {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--line);
+    .submit-btn:hover { filter: saturate(1.15) brightness(1.03); }
+    .submit-btn:active { transform: translateY(1px); }
+    .auth-error {
+      margin: 0;
+      min-height: 18px;
+      color: #c2453f;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    html[data-theme="dark"] .auth-error { color: #ff9a94; }
+    .auth-note {
+      margin: 2px 0 0;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 12.5px;
       line-height: 1.5;
     }
-    .gate-note a {
-      color: var(--teal-deep);
-      font-weight: 800;
+    .login-foot {
+      margin: 20px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.55;
     }
+    .login-foot a { font-weight: 700; }
     @media (max-width: 840px) {
-      .gate-grid {
+      .login-grid {
         grid-template-columns: 1fr;
       }
-      .gate-copy h1 {
+      .login-intro h1 {
         max-width: 420px;
       }
     }
@@ -347,32 +376,42 @@ function loginPage(url, error = "") {
     </label>
     <div class="search-results" id="site-search-results"></div>
   </form>
-  <main class="gate-hero">
+  <main>
+  <section class="login-hero">
     <div class="glial-field" aria-hidden="true"><span class="glial-cell glial-cell-1"></span><span class="glial-cell glial-cell-2"></span><span class="glial-cell glial-cell-3"></span><span class="glial-cell glial-cell-4"></span><span class="glial-cell glial-cell-5"></span><span class="glial-cell glial-cell-6"></span><span class="glial-cell glial-cell-7"></span><span class="glial-cell glial-cell-8"></span><span class="glial-cell glial-cell-9"></span><span class="glial-cell glial-cell-10"></span><span class="glial-cell glial-cell-11"></span><span class="glial-cell glial-cell-12"></span><span class="glial-cell glial-cell-13"></span><span class="glial-cell glial-cell-14"></span><span class="glial-cell glial-cell-15"></span><span class="glial-cell glial-cell-16"></span><span class="glial-cell glial-cell-17"></span><span class="glial-cell glial-cell-18"></span><span class="glial-cell glial-cell-19"></span><span class="glial-cell glial-cell-20"></span></div>
-    <div class="gate-grid">
-      <section class="gate-copy" aria-labelledby="member-gate-title">
-        <p class="hero-eyebrow">Members only</p>
+    <div class="login-grid">
+      <section class="login-intro" aria-labelledby="member-gate-title">
+        <p class="hero-eyebrow">Members Only</p>
         <h1 id="member-gate-title">Lab Member Portal</h1>
-        <p>One door to member-only resources for current TCW Lab members.</p>
+        <p class="lede">One door to the member-only resources the TCW Lab runs on: database access, protocols, code, and shared onboarding materials.</p>
+        <ul class="intro-list">
+          <li><span class="dot">+</span> Use the current passcode shared with lab members.</li>
+          <li><span class="dot">+</span> Access shared lab resources after unlocking.</li>
+          <li><span class="dot">+</span> Keep member materials private and current.</li>
+        </ul>
       </section>
-      <form class="gate-card" method="post" action="${escapeAttribute(action)}">
+      <div class="login-card">
         <h2>Member access</h2>
-        <p>Enter the current lab member passcode.</p>
-        <label for="passcode">
-          Shared lab passcode
-          <span class="gate-field">
-            <input id="passcode" name="passcode" type="password" autocomplete="current-password" autofocus required>
-            <button type="button" data-show-passcode aria-label="Show passcode" aria-pressed="false">Show</button>
-          </span>
-        </label>
-        <div class="gate-error" role="alert">${safeError}</div>
-        <button class="gate-submit" type="submit">Unlock member area</button>
-        <div class="gate-note">Need access or lost the passcode? Email the lab through the <a href="/contact/">contact page</a>.</div>
-      </form>
+        <p class="card-sub">Enter the current lab member passcode.</p>
+        <form class="auth-panel active" method="post" action="${escapeAttribute(action)}" autocomplete="off">
+          <div class="field">
+            <label for="passcode">Shared lab passcode</label>
+            <div class="password-field">
+              <input id="passcode" name="passcode" type="password" placeholder="Enter member passcode" autocomplete="current-password" autofocus required>
+              <button type="button" class="password-toggle" data-password-toggle aria-controls="passcode" aria-pressed="false" aria-label="Show passcode">Show</button>
+            </div>
+          </div>
+          <p class="auth-error" role="alert" aria-live="polite">${safeError}</p>
+          <button class="submit-btn" type="submit">Unlock member area</button>
+          <p class="auth-note">Rotate the passcode regularly and share only with current members.</p>
+        </form>
+        <p class="login-foot">Need access or lost the passcode? Email the lab at <a href="/contact/">our contact page</a>.</p>
+      </div>
     </div>
+  </section>
   </main>
   <script>
-    document.querySelector("[data-show-passcode]").addEventListener("click", function () {
+    document.querySelector("[data-password-toggle]").addEventListener("click", function () {
       var input = document.querySelector("#passcode");
       var show = input.type === "password";
       input.type = show ? "text" : "password";
