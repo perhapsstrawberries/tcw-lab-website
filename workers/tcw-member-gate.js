@@ -155,14 +155,24 @@ function loginPage(url, error = "") {
     body.page-member-gate {
       min-height: 100vh;
       overflow-x: hidden;
+      background: var(--bg);
+    }
+    .page-member-gate .site-header {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      z-index: 80;
+      width: min(calc(100% - 28px), 1320px);
+      margin: 0;
+      transform: translateX(-50%);
     }
     .login-hero {
       position: relative;
-      min-height: clamp(560px, 88vh, 920px);
+      min-height: 100vh;
       display: grid;
       place-items: center;
       overflow: hidden;
-      padding: 120px 24px 80px;
+      padding: 132px 24px 80px;
     }
     .login-hero::before {
       content: "";
@@ -341,6 +351,15 @@ function loginPage(url, error = "") {
       }
       .login-intro h1 {
         max-width: 420px;
+      }
+    }
+    @media (max-width: 620px) {
+      .page-member-gate .site-header {
+        top: 9px;
+        width: min(calc(100% - 18px), 1240px);
+      }
+      .login-hero {
+        padding: 116px 18px 64px;
       }
     }
   </style>
