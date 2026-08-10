@@ -268,6 +268,185 @@ if (searchInput && searchResults) {
   searchInput.addEventListener("input", (event) => renderSearch(event.target.value));
 }
 
+function initGlialMotion() {
+  const fields = Array.from(document.querySelectorAll(".glial-field"));
+  if (!fields.length) return;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return;
+
+  const palettes = [
+    { cell: "rgba(43, 248, 242,", core: "#efffff", nucleus: "#00aeb2" },
+    { cell: "rgba(203, 133, 255,", core: "#fff7b1", nucleus: "#9e59e8" },
+    { cell: "rgba(198, 242, 90,", core: "#fff3a1", nucleus: "#7fb934" },
+    { cell: "rgba(127, 220, 255,", core: "#f6ffff", nucleus: "#1499d1" },
+    { cell: "rgba(255, 224, 90,", core: "#fff8c8", nucleus: "#d8a900" },
+    { cell: "rgba(255, 154, 217,", core: "#fff0ad", nucleus: "#df58b2" }
+  ];
+  const TAU = Math.PI * 2;
+  const rand = (min, max) => Math.random() * (max - min) + min;
+  let pointerBias = 0;
+
+  window.addEventListener("pointermove", (event) => {
+    pointerBias = (event.clientX / Math.max(window.innerWidth, 1) - 0.5) * 24;
+  }, { passive: true });
+
+  fields.forEach((field) => {
+    const canvas = document.createElement("canvas");
+    canvas.className = "glial-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+    field.prepend(canvas);
+
+    const context = canvas.getContext("2d", { alpha: true });
+    if (!context) {
+      canvas.remove();
+      return;
+    }
+    field.classList.add("canvas-active");
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let cells = [];
+    let lastTime = performance.now();
+    let raf = 0;
+
+    function resetCell(cell, fromTop = false) {
+      const palette = palettes[Math.floor(rand(0, palettes.length))];
+      cell.palette = palette;
+      cell.size = rand(32, 92);
+      cell.x = rand(-cell.size, width + cell.size);
+      cell.y = fromTop ? rand(-height * 0.35, -cell.size) : rand(-cell.size, height + cell.size);
+      cell.vx = rand(-16, 16);
+      cell.vy = rand(28, 74) * (cell.size / 62);
+      cell.wave = rand(10, 32);
+      cell.phase = rand(0, TAU);
+      cell.phaseSpeed = rand(0.65, 1.7);
+      cell.rotation = rand(0, TAU);
+      cell.spin = rand(-0.42, 0.42);
+      cell.fadeDistance = rand(120, 230);
+      cell.opacity = 0;
+      cell.targetOpacity = rand(0.48, 0.86);
+    }
+
+    function buildCells() {
+      const count = Math.round(Math.min(30, Math.max(18, width * height / 52000)));
+      cells = Array.from({ length: count }, () => {
+        const cell = {};
+        resetCell(cell, false);
+        return cell;
+      });
+    }
+
+    function resize() {
+      const rect = field.getBoundingClientRect();
+      width = Math.max(320, Math.round(rect.width));
+      height = Math.max(360, Math.round(rect.height));
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      buildCells();
+    }
+
+    function drawGlial(cell, alpha) {
+      const { size, palette } = cell;
+      const outer = size * 0.5;
+      const inner = size * 0.19;
+      const core = size * 0.15;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation);
+      context.globalAlpha = alpha;
+
+      context.beginPath();
+      for (let i = 0; i < 24; i += 1) {
+        const angle = (i / 24) * TAU;
+        const radius = i % 2 === 0 ? outer : inner + Math.sin(cell.phase + i) * size * 0.018;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        if (i === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.closePath();
+      context.fillStyle = `${palette.cell}${0.54 * alpha})`;
+      context.fill();
+
+      context.beginPath();
+      context.arc(0, 0, core * 1.9, 0, TAU);
+      context.fillStyle = `${palette.cell}${0.24 * alpha})`;
+      context.fill();
+      context.lineWidth = Math.max(1.5, size * 0.025);
+      context.strokeStyle = `${palette.cell}${0.62 * alpha})`;
+      context.stroke();
+
+      context.beginPath();
+      context.arc(0, 0, core, 0, TAU);
+      context.fillStyle = palette.core;
+      context.fill();
+      context.lineWidth = Math.max(1, size * 0.018);
+      context.strokeStyle = palette.nucleus;
+      context.stroke();
+
+      context.beginPath();
+      context.arc(core * 0.2, -core * 0.22, core * 0.22, 0, TAU);
+      context.fillStyle = `rgba(255, 255, 255, ${0.82 * alpha})`;
+      context.fill();
+      context.restore();
+    }
+
+    function step(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.04);
+      lastTime = now;
+      context.clearRect(0, 0, width, height);
+
+      cells.forEach((cell) => {
+        cell.phase += cell.phaseSpeed * dt;
+        cell.rotation += cell.spin * dt;
+        cell.x += (cell.vx + Math.sin(cell.phase) * cell.wave + pointerBias * 0.18) * dt;
+        cell.y += (cell.vy + Math.cos(cell.phase * 0.7) * 10) * dt;
+
+        if (cell.x < -cell.size) cell.x = width + cell.size;
+        if (cell.x > width + cell.size) cell.x = -cell.size;
+
+        const fadeIn = Math.min(1, (cell.y + cell.size) / cell.fadeDistance);
+        const fadeOut = Math.min(1, (height + cell.size - cell.y) / cell.fadeDistance);
+        const alpha = Math.max(0, Math.min(fadeIn, fadeOut, 1)) * cell.targetOpacity;
+        cell.opacity += (alpha - cell.opacity) * Math.min(1, dt * 8);
+
+        if (cell.y > height + cell.size || (cell.opacity < 0.01 && cell.y > height * 0.72)) {
+          resetCell(cell, true);
+          return;
+        }
+
+        drawGlial(cell, cell.opacity);
+      });
+
+      raf = window.requestAnimationFrame(step);
+    }
+
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(resize);
+      observer.observe(field);
+    } else {
+      window.addEventListener("resize", resize, { passive: true });
+    }
+    resize();
+    raf = window.requestAnimationFrame(step);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(raf);
+      } else {
+        lastTime = performance.now();
+        raf = window.requestAnimationFrame(step);
+      }
+    });
+  });
+}
+
+initGlialMotion();
 
 function initImageLightbox() {
   const explicitTriggers = Array.from(document.querySelectorAll("[data-lightbox-src]"));

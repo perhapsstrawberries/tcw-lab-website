@@ -531,6 +531,16 @@ img {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 72%, rgba(0, 0, 0, 0.58) 86%, transparent 100%);
 }
 
+.glial-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 .glial-cell {
   position: absolute;
   left: var(--x);
@@ -539,8 +549,14 @@ img {
   --dy: 14px;
   --tx: -10px;
   --ty: 12px;
+  --mx: 24px;
+  --my: -18px;
+  --nx: -22px;
+  --ny: 20px;
   --turn: 5deg;
-  --dur: 20s;
+  --spin: 18deg;
+  --pulse: 7s;
+  --dur: 14s;
   --delay: 0s;
   --cell: #49f1ec;
   --core: #fff3a1;
@@ -551,10 +567,15 @@ img {
   background: transparent;
   transform: translate3d(-50%, -50%, 0) rotate(var(--r)) scaleX(var(--sx, 1));
   transform-origin: 50% 50%;
-  animation: glial-drift-loop var(--dur) ease-in-out var(--delay) infinite;
+  animation: glial-drift-loop var(--dur) cubic-bezier(0.45, 0, 0.25, 1) var(--delay) infinite;
   backface-visibility: hidden;
   contain: layout paint style;
   will-change: transform;
+}
+
+.glial-field.canvas-active .glial-cell {
+  animation: none;
+  opacity: 0;
 }
 
 .glial-cell::before,
@@ -570,6 +591,9 @@ img {
     radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--cell) 72%, white) 0 14%, transparent 15%),
     conic-gradient(from 14deg, transparent 0 7%, var(--cell) 8% 11%, transparent 12% 19%, color-mix(in srgb, var(--cell) 78%, white) 20% 24%, transparent 25% 32%, var(--cell) 33% 36%, transparent 37% 44%, color-mix(in srgb, var(--cell) 78%, white) 45% 49%, transparent 50% 57%, var(--cell) 58% 61%, transparent 62% 69%, color-mix(in srgb, var(--cell) 78%, white) 70% 74%, transparent 75% 82%, var(--cell) 83% 86%, transparent 87% 94%, color-mix(in srgb, var(--cell) 78%, white) 95% 99%, transparent);
   clip-path: polygon(50% 0, 59% 31%, 90% 15%, 69% 44%, 100% 50%, 69% 56%, 90% 85%, 59% 69%, 50% 100%, 41% 69%, 10% 85%, 31% 56%, 0 50%, 31% 44%, 10% 15%, 41% 31%);
+  transform-origin: 50% 50%;
+  animation: glial-shape-pulse var(--pulse) ease-in-out var(--delay) infinite;
+  will-change: transform, opacity;
 }
 
 .glial-cell::after {
@@ -579,6 +603,9 @@ img {
   background:
     radial-gradient(circle at 54% 46%, white 0 13%, transparent 14%),
     radial-gradient(circle, var(--core) 0 52%, var(--nucleus) 53% 100%);
+  transform-origin: 50% 50%;
+  animation: glial-core-pulse calc(var(--pulse) * 0.72) ease-in-out var(--delay) infinite;
+  will-change: transform;
 }
 
 .glial-cell-1,
@@ -607,26 +634,26 @@ img {
 .glial-cell-12,
 .glial-cell-18 { --cell: #ff9ad9; --core: #fff0ad; --nucleus: #df58b2; }
 
-.glial-cell-1 { --x: 4%; --y: 17%; --s: 96px; --o: 0.82; --r: -18deg; --sx: 1.08; --dx: 20px; --dy: -14px; --tx: -12px; --ty: 9px; --turn: 5deg; --dur: 24s; --delay: -1.2s; }
-.glial-cell-2 { --x: 17%; --y: 11%; --s: 52px; --o: 0.72; --r: 22deg; --dx: -14px; --dy: 16px; --tx: 10px; --ty: -8px; --turn: 4deg; --dur: 20s; --delay: -3.8s; }
-.glial-cell-3 { --x: 30%; --y: 21%; --s: 74px; --o: 0.64; --r: -9deg; --dx: 18px; --dy: 13px; --tx: -9px; --ty: -12px; --turn: 5deg; --dur: 26s; --delay: -2.4s; }
-.glial-cell-4 { --x: 45%; --y: 13%; --s: 58px; --o: 0.68; --r: 15deg; --sx: 0.92; --dx: -16px; --dy: -11px; --tx: 13px; --ty: 8px; --turn: 4deg; --dur: 21s; --delay: -0.7s; }
-.glial-cell-5 { --x: 62%; --y: 19%; --s: 68px; --o: 0.72; --r: -24deg; --dx: 22px; --dy: -12px; --tx: -11px; --ty: 10px; --turn: 5deg; --dur: 25s; --delay: -4.1s; }
-.glial-cell-6 { --x: 86%; --y: 16%; --s: 88px; --o: 0.78; --r: 28deg; --dx: -24px; --dy: 14px; --tx: 12px; --ty: -10px; --turn: 5deg; --dur: 27s; --delay: -2s; }
-.glial-cell-7 { --x: 97%; --y: 38%; --s: 118px; --o: 0.64; --r: -12deg; --dx: -28px; --dy: -18px; --tx: 15px; --ty: 12px; --turn: 4deg; --dur: 29s; --delay: -5.4s; }
-.glial-cell-8 { --x: 7%; --y: 73%; --s: 82px; --o: 0.7; --r: 8deg; --dx: 18px; --dy: 18px; --tx: -12px; --ty: -8px; --turn: 5deg; --dur: 23s; --delay: -3.1s; }
-.glial-cell-9 { --x: 22%; --y: 76%; --s: 48px; --o: 0.82; --r: -33deg; --dx: -13px; --dy: 15px; --tx: 9px; --ty: -12px; --turn: 4deg; --dur: 19s; --delay: -1.8s; }
-.glial-cell-10 { --x: 43%; --y: 75%; --s: 58px; --o: 0.58; --r: 19deg; --sx: 1.12; --dx: 17px; --dy: -16px; --tx: -10px; --ty: 10px; --turn: 4deg; --dur: 24s; --delay: -4.7s; }
-.glial-cell-11 { --x: 62%; --y: 55%; --s: 92px; --o: 0.64; --r: -7deg; --dx: -20px; --dy: 14px; --tx: 11px; --ty: -9px; --turn: 5deg; --dur: 28s; --delay: -2.8s; }
-.glial-cell-12 { --x: 78%; --y: 48%; --s: 64px; --o: 0.82; --r: 31deg; --dx: 16px; --dy: -15px; --tx: -13px; --ty: 8px; --turn: 4deg; --dur: 21s; --delay: -1s; }
-.glial-cell-13 { --x: 92%; --y: 70%; --s: 84px; --o: 0.72; --r: 4deg; --dx: -22px; --dy: 18px; --tx: 12px; --ty: -11px; --turn: 5deg; --dur: 26s; --delay: -5.9s; }
-.glial-cell-14 { --x: 5%; --y: 88%; --s: 78px; --o: 0.78; --r: -27deg; --sx: 0.96; --dx: 19px; --dy: -13px; --tx: -9px; --ty: 12px; --turn: 4deg; --dur: 23s; --delay: -3.7s; }
-.glial-cell-15 { --x: 18%; --y: 86%; --s: 52px; --o: 0.68; --r: 18deg; --dx: -15px; --dy: -12px; --tx: 10px; --ty: 9px; --turn: 4deg; --dur: 20s; --delay: -0.4s; }
-.glial-cell-16 { --x: 35%; --y: 78%; --s: 96px; --o: 0.56; --r: 37deg; --dx: 21px; --dy: 16px; --tx: -12px; --ty: -10px; --turn: 5deg; --dur: 30s; --delay: -6.2s; }
-.glial-cell-17 { --x: 52%; --y: 83%; --s: 46px; --o: 0.8; --r: -14deg; --dx: -12px; --dy: 16px; --tx: 8px; --ty: -11px; --turn: 4deg; --dur: 18s; --delay: -2.6s; }
-.glial-cell-18 { --x: 68%; --y: 76%; --s: 104px; --o: 0.58; --r: 10deg; --dx: 22px; --dy: -18px; --tx: -13px; --ty: 11px; --turn: 5deg; --dur: 31s; --delay: -6.8s; }
-.glial-cell-19 { --x: 82%; --y: 88%; --s: 58px; --o: 0.72; --r: -35deg; --dx: -17px; --dy: -14px; --tx: 11px; --ty: 9px; --turn: 4deg; --dur: 22s; --delay: -4.8s; }
-.glial-cell-20 { --x: 70%; --y: 33%; --s: 42px; --o: 0.72; --r: 25deg; --dx: 13px; --dy: 17px; --tx: -8px; --ty: -10px; --turn: 4deg; --dur: 19s; --delay: -1.9s; }
+.glial-cell-1 { --x: 4%; --y: 17%; --s: 96px; --o: 0.86; --r: -18deg; --sx: 1.08; --dx: 52px; --dy: -38px; --tx: -34px; --ty: 31px; --mx: 76px; --my: 21px; --nx: -48px; --ny: -28px; --turn: 18deg; --spin: 42deg; --pulse: 6.2s; --dur: 14s; --delay: -1.2s; }
+.glial-cell-2 { --x: 17%; --y: 11%; --s: 52px; --o: 0.76; --r: 22deg; --dx: -38px; --dy: 44px; --tx: 31px; --ty: -26px; --mx: -58px; --my: -19px; --nx: 43px; --ny: 35px; --turn: 16deg; --spin: -36deg; --pulse: 5.4s; --dur: 11.5s; --delay: -3.8s; }
+.glial-cell-3 { --x: 30%; --y: 21%; --s: 74px; --o: 0.7; --r: -9deg; --dx: 54px; --dy: 39px; --tx: -36px; --ty: -42px; --mx: 24px; --my: 55px; --nx: -58px; --ny: 8px; --turn: 17deg; --spin: 40deg; --pulse: 6.8s; --dur: 15.5s; --delay: -2.4s; }
+.glial-cell-4 { --x: 45%; --y: 13%; --s: 58px; --o: 0.72; --r: 15deg; --sx: 0.92; --dx: -48px; --dy: -33px; --tx: 41px; --ty: 28px; --mx: -19px; --my: 52px; --nx: 55px; --ny: -18px; --turn: 15deg; --spin: -38deg; --pulse: 5.9s; --dur: 12.8s; --delay: -0.7s; }
+.glial-cell-5 { --x: 62%; --y: 19%; --s: 68px; --o: 0.78; --r: -24deg; --dx: 62px; --dy: -35px; --tx: -39px; --ty: 36px; --mx: 50px; --my: 48px; --nx: -66px; --ny: -12px; --turn: 18deg; --spin: 46deg; --pulse: 6.4s; --dur: 14.5s; --delay: -4.1s; }
+.glial-cell-6 { --x: 86%; --y: 16%; --s: 88px; --o: 0.82; --r: 28deg; --dx: -66px; --dy: 42px; --tx: 44px; --ty: -34px; --mx: -28px; --my: -57px; --nx: 62px; --ny: 24px; --turn: 17deg; --spin: -44deg; --pulse: 6.7s; --dur: 15s; --delay: -2s; }
+.glial-cell-7 { --x: 97%; --y: 38%; --s: 118px; --o: 0.68; --r: -12deg; --dx: -82px; --dy: -54px; --tx: 48px; --ty: 38px; --mx: -64px; --my: 52px; --nx: 22px; --ny: -66px; --turn: 14deg; --spin: 34deg; --pulse: 7.3s; --dur: 17s; --delay: -5.4s; }
+.glial-cell-8 { --x: 7%; --y: 73%; --s: 82px; --o: 0.76; --r: 8deg; --dx: 54px; --dy: 56px; --tx: -42px; --ty: -31px; --mx: 67px; --my: -24px; --nx: -28px; --ny: 46px; --turn: 17deg; --spin: -42deg; --pulse: 6.1s; --dur: 13.8s; --delay: -3.1s; }
+.glial-cell-9 { --x: 22%; --y: 76%; --s: 48px; --o: 0.86; --r: -33deg; --dx: -39px; --dy: 48px; --tx: 35px; --ty: -39px; --mx: -54px; --my: -25px; --nx: 46px; --ny: 30px; --turn: 16deg; --spin: 38deg; --pulse: 5.2s; --dur: 11s; --delay: -1.8s; }
+.glial-cell-10 { --x: 43%; --y: 75%; --s: 58px; --o: 0.64; --r: 19deg; --sx: 1.12; --dx: 49px; --dy: -52px; --tx: -38px; --ty: 35px; --mx: 16px; --my: 57px; --nx: -55px; --ny: -21px; --turn: 15deg; --spin: -36deg; --pulse: 5.8s; --dur: 12.5s; --delay: -4.7s; }
+.glial-cell-11 { --x: 62%; --y: 55%; --s: 92px; --o: 0.7; --r: -7deg; --dx: -58px; --dy: 43px; --tx: 41px; --ty: -33px; --mx: -62px; --my: -34px; --nx: 55px; --ny: 30px; --turn: 18deg; --spin: 44deg; --pulse: 7s; --dur: 16s; --delay: -2.8s; }
+.glial-cell-12 { --x: 78%; --y: 48%; --s: 64px; --o: 0.86; --r: 31deg; --dx: 44px; --dy: -46px; --tx: -41px; --ty: 28px; --mx: 58px; --my: 22px; --nx: -24px; --ny: -50px; --turn: 15deg; --spin: -40deg; --pulse: 5.5s; --dur: 12s; --delay: -1s; }
+.glial-cell-13 { --x: 92%; --y: 70%; --s: 84px; --o: 0.78; --r: 4deg; --dx: -64px; --dy: 52px; --tx: 46px; --ty: -36px; --mx: -31px; --my: -62px; --nx: 61px; --ny: 21px; --turn: 18deg; --spin: 42deg; --pulse: 6.5s; --dur: 15.2s; --delay: -5.9s; }
+.glial-cell-14 { --x: 5%; --y: 88%; --s: 78px; --o: 0.82; --r: -27deg; --sx: 0.96; --dx: 58px; --dy: -39px; --tx: -34px; --ty: 44px; --mx: 72px; --my: 18px; --nx: -46px; --ny: -36px; --turn: 14deg; --spin: -34deg; --pulse: 6.3s; --dur: 13.6s; --delay: -3.7s; }
+.glial-cell-15 { --x: 18%; --y: 86%; --s: 52px; --o: 0.74; --r: 18deg; --dx: -43px; --dy: -37px; --tx: 38px; --ty: 31px; --mx: -18px; --my: 50px; --nx: 51px; --ny: -22px; --turn: 15deg; --spin: 38deg; --pulse: 5.4s; --dur: 11.8s; --delay: -0.4s; }
+.glial-cell-16 { --x: 35%; --y: 78%; --s: 96px; --o: 0.62; --r: 37deg; --dx: 62px; --dy: 49px; --tx: -45px; --ty: -38px; --mx: 28px; --my: -64px; --nx: -66px; --ny: 26px; --turn: 17deg; --spin: -46deg; --pulse: 7.4s; --dur: 17.5s; --delay: -6.2s; }
+.glial-cell-17 { --x: 52%; --y: 83%; --s: 46px; --o: 0.84; --r: -14deg; --dx: -36px; --dy: 45px; --tx: 33px; --ty: -41px; --mx: -55px; --my: -14px; --nx: 42px; --ny: 32px; --turn: 14deg; --spin: 34deg; --pulse: 5.1s; --dur: 10.8s; --delay: -2.6s; }
+.glial-cell-18 { --x: 68%; --y: 76%; --s: 104px; --o: 0.64; --r: 10deg; --dx: 70px; --dy: -58px; --tx: -50px; --ty: 43px; --mx: 24px; --my: 69px; --nx: -68px; --ny: -24px; --turn: 18deg; --spin: 48deg; --pulse: 7.6s; --dur: 18s; --delay: -6.8s; }
+.glial-cell-19 { --x: 82%; --y: 88%; --s: 58px; --o: 0.78; --r: -35deg; --dx: -47px; --dy: -42px; --tx: 39px; --ty: 33px; --mx: -62px; --my: 19px; --nx: 44px; --ny: -47px; --turn: 15deg; --spin: -36deg; --pulse: 5.7s; --dur: 12.8s; --delay: -4.8s; }
+.glial-cell-20 { --x: 70%; --y: 33%; --s: 42px; --o: 0.78; --r: 25deg; --dx: 39px; --dy: 49px; --tx: -34px; --ty: -36px; --mx: 53px; --my: -16px; --nx: -45px; --ny: 29px; --turn: 14deg; --spin: 34deg; --pulse: 5s; --dur: 10.5s; --delay: -1.9s; }
 
 @keyframes glial-drift-loop {
   0%,
@@ -634,16 +661,53 @@ img {
     transform: translate3d(-50%, -50%, 0) rotate(var(--r)) scaleX(var(--sx, 1));
   }
 
-  28% {
+  17% {
     transform: translate3d(calc(-50% + var(--dx)), calc(-50% + var(--dy)), 0) rotate(calc(var(--r) + var(--turn))) scaleX(var(--sx, 1));
   }
 
-  58% {
+  36% {
+    transform: translate3d(calc(-50% + var(--mx)), calc(-50% + var(--my)), 0) rotate(calc(var(--r) + var(--spin))) scaleX(var(--sx, 1));
+  }
+
+  57% {
     transform: translate3d(calc(-50% + var(--tx)), calc(-50% + var(--ty)), 0) rotate(calc(var(--r) - var(--turn))) scaleX(var(--sx, 1));
   }
 
-  82% {
-    transform: translate3d(calc(-50% - var(--dy)), calc(-50% + var(--dx)), 0) rotate(calc(var(--r) + 2deg)) scaleX(var(--sx, 1));
+  74% {
+    transform: translate3d(calc(-50% + var(--nx)), calc(-50% + var(--ny)), 0) rotate(calc(var(--r) - var(--spin))) scaleX(var(--sx, 1));
+  }
+
+  88% {
+    transform: translate3d(calc(-50% - var(--dy)), calc(-50% + var(--dx)), 0) rotate(calc(var(--r) + 8deg)) scaleX(var(--sx, 1));
+  }
+}
+
+@keyframes glial-shape-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: rotate(0deg) scale(0.96);
+  }
+
+  32% {
+    opacity: 0.96;
+    transform: rotate(11deg) scale(1.08);
+  }
+
+  67% {
+    opacity: 0.82;
+    transform: rotate(-7deg) scale(1.02);
+  }
+}
+
+@keyframes glial-core-pulse {
+  0%,
+  100% {
+    transform: scale(0.9);
+  }
+
+  45% {
+    transform: scale(1.18);
   }
 }
 
@@ -1414,39 +1478,47 @@ html[data-theme="dark"] .research-project-card img {
 
 .alumni-intro p:last-child {
   margin-bottom: 0;
-  font-size: clamp(18px, 2vw, 22px);
-  line-height: 1.55;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .alumni-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
   gap: 16px;
 }
 
 .alumni-card {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--surface) 92%, white);
+  border-radius: 24px;
+  background: var(--surface);
   box-shadow: 0 14px 42px rgba(15, 76, 80, 0.08);
+  padding: 18px;
 }
 
 .alumni-photo,
 .alumni-placeholder {
   display: block;
-  width: 100%;
-  aspect-ratio: 3 / 4;
+  width: 118px;
+  height: 150px;
 }
 
 .alumni-photo {
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 18px;
   background: color-mix(in srgb, var(--bg-soft) 74%, white);
+  box-shadow: 0 10px 26px rgba(15, 76, 80, 0.14);
 }
 
 .alumni-placeholder {
   display: grid;
   place-items: center;
+  border-radius: 18px;
   background:
     radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.78) 0 16%, transparent 17%),
     radial-gradient(circle at 24% 24%, rgba(216, 144, 255, 0.24), transparent 28%),
@@ -1458,15 +1530,23 @@ html[data-theme="dark"] .research-project-card img {
   font-size: clamp(28px, 5vw, 44px);
   font-weight: 700;
   letter-spacing: 0.08em;
+  box-shadow: 0 10px 26px rgba(15, 76, 80, 0.14);
 }
 
 .alumni-card-body {
-  padding: 16px;
+  padding: 0;
 }
 
 .alumni-card h3 {
   margin: 0 0 6px;
-  font-size: clamp(23px, 2.6vw, 30px);
+  font-size: 22px;
+  line-height: 1.08;
+}
+
+.alumni-card h3 a {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, var(--teal-deep) 54%, transparent);
+  text-underline-offset: 0.16em;
 }
 
 .alumni-card p {
@@ -1691,6 +1771,11 @@ html[data-theme="dark"] .research-project-card img {
     animation: none;
   }
 
+  .glial-cell::before,
+  .glial-cell::after {
+    animation: none;
+  }
+
   .brand-mark {
     animation: none;
   }
@@ -1776,6 +1861,23 @@ html[data-theme="dark"] .research-project-card img {
 
   .wrapper {
     width: min(calc(100% - 24px), var(--max));
+  }
+
+  .alumni-card {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .alumni-photo,
+  .alumni-placeholder {
+    width: 96px;
+    height: 122px;
+    border-radius: 16px;
+  }
+
+  .alumni-card h3 {
+    font-size: 20px;
   }
 
   .page-home .site-header {
