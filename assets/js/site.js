@@ -275,22 +275,34 @@ function initGlialMotion() {
   if (reduceMotion) return;
 
   const palettes = [
-    { cell: "rgba(43, 248, 242,", core: "#efffff", nucleus: "#00aeb2" },
-    { cell: "rgba(203, 133, 255,", core: "#fff7b1", nucleus: "#9e59e8" },
-    { cell: "rgba(198, 242, 90,", core: "#fff3a1", nucleus: "#7fb934" },
-    { cell: "rgba(127, 220, 255,", core: "#f6ffff", nucleus: "#1499d1" },
-    { cell: "rgba(255, 224, 90,", core: "#fff8c8", nucleus: "#d8a900" },
-    { cell: "rgba(255, 154, 217,", core: "#fff0ad", nucleus: "#df58b2" }
+    { cell: "rgba(22, 248, 242,", core: "#efffff", nucleus: "#00aeb2" },
+    { cell: "rgba(194, 104, 255,", core: "#fff4a8", nucleus: "#9e48ec" },
+    { cell: "rgba(190, 255, 70,", core: "#fff29a", nucleus: "#78b92b" },
+    { cell: "rgba(96, 214, 255,", core: "#f4ffff", nucleus: "#1197d3" },
+    { cell: "rgba(255, 218, 56,", core: "#fff6bc", nucleus: "#d8a000" },
+    { cell: "rgba(255, 126, 210,", core: "#ffefa6", nucleus: "#df46ad" }
   ];
   const TAU = Math.PI * 2;
   const rand = (min, max) => Math.random() * (max - min) + min;
+  const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
+  const fill = (base, alpha) => `${base}${clamp(alpha)})`;
   let pointerBias = 0;
+
+  function motifForPage() {
+    const page = document.body.classList;
+    const hasPage = (name) => page.contains(name) || Array.from(page).some((className) => className.startsWith(`${name}-`));
+    if (hasPage("page-research-programs") || hasPage("page-publications")) return "dna";
+    if (hasPage("page-ourteam") || hasPage("page-careers")) return "neuron";
+    if (hasPage("page-resources") || hasPage("page-contact")) return "molecule";
+    return "glial";
+  }
 
   window.addEventListener("pointermove", (event) => {
     pointerBias = (event.clientX / Math.max(window.innerWidth, 1) - 0.5) * 24;
   }, { passive: true });
 
   fields.forEach((field) => {
+    const motif = field.dataset.motif || motifForPage();
     const canvas = document.createElement("canvas");
     canvas.className = "glial-canvas";
     canvas.setAttribute("aria-hidden", "true");
@@ -312,8 +324,12 @@ function initGlialMotion() {
 
     function resetCell(cell, fromTop = false) {
       const palette = palettes[Math.floor(rand(0, palettes.length))];
+      const layer = Math.random();
+      cell.motif = motif;
       cell.palette = palette;
-      cell.size = rand(32, 92);
+      cell.size = layer < 0.28 ? rand(28, 52) : layer < 0.78 ? rand(52, 88) : rand(88, 132);
+      if (motif === "dna") cell.size *= rand(1.08, 1.38);
+      if (motif === "molecule") cell.size *= rand(0.88, 1.12);
       cell.x = rand(-cell.size, width + cell.size);
       cell.y = fromTop ? rand(-height * 0.35, -cell.size) : rand(-cell.size, height + cell.size);
       cell.vx = rand(-16, 16);
@@ -325,11 +341,31 @@ function initGlialMotion() {
       cell.spin = rand(-0.42, 0.42);
       cell.fadeDistance = rand(120, 230);
       cell.opacity = 0;
-      cell.targetOpacity = rand(0.48, 0.86);
+      cell.targetOpacity = layer < 0.28 ? rand(0.28, 0.54) : layer < 0.78 ? rand(0.58, 0.82) : rand(0.82, 0.98);
+      cell.innerRatio = rand(0.13, 0.2);
+      cell.coreRatio = rand(0.12, 0.16);
+      cell.starAlpha = rand(0.84, 1.12);
+      cell.coreAlpha = rand(0.78, 1.08);
+      cell.pointWobble = rand(0.012, 0.034);
+      cell.branchCount = Math.floor(rand(5, 8));
+      cell.branches = Array.from({ length: cell.branchCount }, (_, index) => ({
+        angle: (index / cell.branchCount) * TAU + rand(-0.24, 0.24),
+        reach: rand(0.48, 1),
+        bend: rand(-0.55, 0.55),
+        fork: Math.random() > 0.45
+      }));
+      cell.nodes = Array.from({ length: Math.floor(rand(4, 7)) }, () => ({
+        angle: rand(0, TAU),
+        distance: rand(0.2, 0.48),
+        radius: rand(0.045, 0.085)
+      }));
     }
 
     function buildCells() {
-      const count = Math.round(Math.min(30, Math.max(18, width * height / 52000)));
+      const density = motif === "dna" ? 43000 : motif === "molecule" ? 39000 : motif === "neuron" ? 36000 : 32000;
+      const maxCount = motif === "dna" ? 34 : motif === "molecule" ? 42 : motif === "neuron" ? 44 : 52;
+      const minCount = motif === "dna" ? 18 : motif === "molecule" ? 24 : motif === "neuron" ? 24 : 32;
+      const count = Math.round(Math.min(maxCount, Math.max(minCount, width * height / density)));
       cells = Array.from({ length: count }, () => {
         const cell = {};
         resetCell(cell, false);
@@ -353,32 +389,32 @@ function initGlialMotion() {
     function drawGlial(cell, alpha) {
       const { size, palette } = cell;
       const outer = size * 0.5;
-      const inner = size * 0.19;
-      const core = size * 0.15;
+      const inner = size * cell.innerRatio;
+      const core = size * cell.coreRatio;
       context.save();
       context.translate(cell.x, cell.y);
       context.rotate(cell.rotation);
-      context.globalAlpha = alpha;
+      context.globalAlpha = 1;
 
       context.beginPath();
       for (let i = 0; i < 24; i += 1) {
         const angle = (i / 24) * TAU;
-        const radius = i % 2 === 0 ? outer : inner + Math.sin(cell.phase + i) * size * 0.018;
+        const radius = i % 2 === 0 ? outer : inner + Math.sin(cell.phase + i) * size * cell.pointWobble;
         const x = Math.cos(angle) * radius;
         const y = Math.sin(angle) * radius;
         if (i === 0) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
       context.closePath();
-      context.fillStyle = `${palette.cell}${0.54 * alpha})`;
+      context.fillStyle = fill(palette.cell, Math.min(0.78, 0.66 * alpha * cell.starAlpha));
       context.fill();
 
       context.beginPath();
       context.arc(0, 0, core * 1.9, 0, TAU);
-      context.fillStyle = `${palette.cell}${0.24 * alpha})`;
+      context.fillStyle = fill(palette.cell, Math.min(0.44, 0.34 * alpha * cell.coreAlpha));
       context.fill();
       context.lineWidth = Math.max(1.5, size * 0.025);
-      context.strokeStyle = `${palette.cell}${0.62 * alpha})`;
+      context.strokeStyle = fill(palette.cell, Math.min(0.88, 0.78 * alpha * cell.starAlpha));
       context.stroke();
 
       context.beginPath();
@@ -391,9 +427,153 @@ function initGlialMotion() {
 
       context.beginPath();
       context.arc(core * 0.2, -core * 0.22, core * 0.22, 0, TAU);
-      context.fillStyle = `rgba(255, 255, 255, ${0.82 * alpha})`;
+      context.fillStyle = `rgba(255, 255, 255, ${0.92 * alpha})`;
       context.fill();
       context.restore();
+    }
+
+    function drawNeuron(cell, alpha) {
+      const { size, palette } = cell;
+      const soma = size * cell.coreRatio * 1.5;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation);
+      context.lineCap = "round";
+      context.lineJoin = "round";
+
+      cell.branches.forEach((branch, index) => {
+        const angle = branch.angle + Math.sin(cell.phase * 0.7 + index) * 0.08;
+        const reach = size * branch.reach * 0.5;
+        const control = reach * 0.55;
+        const startX = Math.cos(angle) * soma * 0.6;
+        const startY = Math.sin(angle) * soma * 0.6;
+        const controlX = Math.cos(angle + branch.bend) * control;
+        const controlY = Math.sin(angle + branch.bend) * control;
+        const endX = Math.cos(angle + branch.bend * 0.42) * reach;
+        const endY = Math.sin(angle + branch.bend * 0.42) * reach;
+        context.beginPath();
+        context.moveTo(startX, startY);
+        context.quadraticCurveTo(controlX, controlY, endX, endY);
+        context.lineWidth = Math.max(1.2, size * 0.025 * cell.starAlpha);
+        context.strokeStyle = fill(palette.cell, 0.5 * alpha);
+        context.stroke();
+
+        if (branch.fork) {
+          context.beginPath();
+          context.moveTo(endX * 0.76, endY * 0.76);
+          context.lineTo(endX + Math.cos(angle + 0.58) * soma * 0.8, endY + Math.sin(angle + 0.58) * soma * 0.8);
+          context.moveTo(endX * 0.76, endY * 0.76);
+          context.lineTo(endX + Math.cos(angle - 0.58) * soma * 0.62, endY + Math.sin(angle - 0.58) * soma * 0.62);
+          context.lineWidth = Math.max(0.9, size * 0.014);
+          context.strokeStyle = fill(palette.cell, 0.36 * alpha);
+          context.stroke();
+        }
+      });
+
+      context.beginPath();
+      context.arc(0, 0, soma, 0, TAU);
+      context.fillStyle = fill(palette.cell, 0.36 * alpha * cell.coreAlpha);
+      context.fill();
+      context.lineWidth = Math.max(1.3, size * 0.022);
+      context.strokeStyle = fill(palette.cell, 0.68 * alpha * cell.starAlpha);
+      context.stroke();
+
+      context.beginPath();
+      context.arc(0, 0, soma * 0.54, 0, TAU);
+      context.fillStyle = palette.core;
+      context.fill();
+      context.lineWidth = Math.max(0.9, size * 0.013);
+      context.strokeStyle = palette.nucleus;
+      context.stroke();
+      context.restore();
+    }
+
+    function drawDna(cell, alpha) {
+      const { size, palette } = cell;
+      const length = size * 1.12;
+      const amplitude = size * 0.16;
+      const steps = 14;
+      const rungEvery = 2;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation);
+      context.lineCap = "round";
+      context.lineJoin = "round";
+
+      for (let strand = 0; strand < 2; strand += 1) {
+        context.beginPath();
+        for (let step = 0; step <= steps; step += 1) {
+          const progress = step / steps;
+          const y = -length / 2 + progress * length;
+          const wave = Math.sin(progress * TAU * 1.25 + cell.phase + strand * Math.PI);
+          const x = wave * amplitude;
+          if (step === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
+        context.lineWidth = Math.max(1.2, size * 0.02);
+        context.strokeStyle = fill(palette.cell, strand ? 0.42 * alpha : 0.62 * alpha * cell.starAlpha);
+        context.stroke();
+      }
+
+      for (let step = 1; step < steps; step += rungEvery) {
+        const progress = step / steps;
+        const y = -length / 2 + progress * length;
+        const wave = Math.sin(progress * TAU * 1.25 + cell.phase);
+        context.beginPath();
+        context.moveTo(wave * amplitude, y);
+        context.lineTo(-wave * amplitude, y);
+        context.lineWidth = Math.max(0.8, size * 0.011);
+        context.strokeStyle = fill(palette.cell, 0.28 * alpha);
+        context.stroke();
+      }
+      context.restore();
+    }
+
+    function drawMolecule(cell, alpha) {
+      const { size, palette } = cell;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation);
+      context.lineCap = "round";
+
+      const points = cell.nodes.map((node) => ({
+        x: Math.cos(node.angle + Math.sin(cell.phase) * 0.08) * size * node.distance,
+        y: Math.sin(node.angle + Math.cos(cell.phase) * 0.08) * size * node.distance,
+        radius: size * node.radius
+      }));
+
+      context.lineWidth = Math.max(1, size * 0.012);
+      context.strokeStyle = fill(palette.cell, 0.34 * alpha);
+      points.forEach((point, index) => {
+        const next = points[(index + 1) % points.length];
+        context.beginPath();
+        context.moveTo(point.x, point.y);
+        context.lineTo(next.x, next.y);
+        context.stroke();
+      });
+
+      points.forEach((point, index) => {
+        context.beginPath();
+        context.arc(point.x, point.y, point.radius, 0, TAU);
+        if (index % 2) {
+          context.fillStyle = fill(palette.cell, 0.48 * alpha);
+          context.fill();
+        } else {
+          context.fillStyle = palette.core;
+          context.fill();
+        }
+        context.lineWidth = Math.max(0.8, size * 0.011);
+        context.strokeStyle = fill(palette.cell, 0.58 * alpha);
+        context.stroke();
+      });
+      context.restore();
+    }
+
+    function drawMotif(cell, alpha) {
+      if (cell.motif === "dna") drawDna(cell, alpha);
+      else if (cell.motif === "neuron") drawNeuron(cell, alpha);
+      else if (cell.motif === "molecule") drawMolecule(cell, alpha);
+      else drawGlial(cell, alpha);
     }
 
     function step(now) {
@@ -420,7 +600,7 @@ function initGlialMotion() {
           return;
         }
 
-        drawGlial(cell, cell.opacity);
+        drawMotif(cell, cell.opacity);
       });
 
       raf = window.requestAnimationFrame(step);
