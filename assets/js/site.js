@@ -395,6 +395,26 @@ function initGlialMotion() {
       context.translate(cell.x, cell.y);
       context.rotate(cell.rotation);
       context.globalAlpha = 1;
+      context.lineCap = "round";
+      context.lineJoin = "round";
+
+      cell.branches.forEach((branch, index) => {
+        const angle = branch.angle + Math.sin(cell.phase * 0.55 + index) * 0.1;
+        const reach = size * (0.52 + branch.reach * 0.72);
+        const bend = branch.bend * 0.52;
+        const startX = Math.cos(angle) * core * 1.3;
+        const startY = Math.sin(angle) * core * 1.3;
+        const controlX = Math.cos(angle + bend) * reach * 0.55;
+        const controlY = Math.sin(angle + bend) * reach * 0.55;
+        const endX = Math.cos(angle + bend * 0.5) * reach;
+        const endY = Math.sin(angle + bend * 0.5) * reach;
+        context.beginPath();
+        context.moveTo(startX, startY);
+        context.quadraticCurveTo(controlX, controlY, endX, endY);
+        context.lineWidth = Math.max(1.2, size * 0.018);
+        context.strokeStyle = fill(palette.cell, 0.18 * alpha * cell.starAlpha);
+        context.stroke();
+      });
 
       context.beginPath();
       for (let i = 0; i < 24; i += 1) {
@@ -406,15 +426,15 @@ function initGlialMotion() {
         else context.lineTo(x, y);
       }
       context.closePath();
-      context.fillStyle = fill(palette.cell, Math.min(0.78, 0.66 * alpha * cell.starAlpha));
+      context.fillStyle = fill(palette.cell, Math.min(0.58, 0.48 * alpha * cell.starAlpha));
       context.fill();
 
       context.beginPath();
-      context.arc(0, 0, core * 1.9, 0, TAU);
-      context.fillStyle = fill(palette.cell, Math.min(0.44, 0.34 * alpha * cell.coreAlpha));
+      context.arc(0, 0, core * 2.25, 0, TAU);
+      context.fillStyle = fill(palette.cell, Math.min(0.32, 0.25 * alpha * cell.coreAlpha));
       context.fill();
-      context.lineWidth = Math.max(1.5, size * 0.025);
-      context.strokeStyle = fill(palette.cell, Math.min(0.88, 0.78 * alpha * cell.starAlpha));
+      context.lineWidth = Math.max(1.2, size * 0.018);
+      context.strokeStyle = fill(palette.cell, Math.min(0.46, 0.4 * alpha * cell.starAlpha));
       context.stroke();
 
       context.beginPath();
@@ -434,7 +454,7 @@ function initGlialMotion() {
 
     function drawNeuron(cell, alpha) {
       const { size, palette } = cell;
-      const soma = size * cell.coreRatio * 1.5;
+      const soma = size * cell.coreRatio * 1.75;
       context.save();
       context.translate(cell.x, cell.y);
       context.rotate(cell.rotation);
@@ -443,7 +463,7 @@ function initGlialMotion() {
 
       cell.branches.forEach((branch, index) => {
         const angle = branch.angle + Math.sin(cell.phase * 0.7 + index) * 0.08;
-        const reach = size * branch.reach * 0.5;
+        const reach = size * (0.42 + branch.reach * 0.48);
         const control = reach * 0.55;
         const startX = Math.cos(angle) * soma * 0.6;
         const startY = Math.sin(angle) * soma * 0.6;
@@ -454,8 +474,8 @@ function initGlialMotion() {
         context.beginPath();
         context.moveTo(startX, startY);
         context.quadraticCurveTo(controlX, controlY, endX, endY);
-        context.lineWidth = Math.max(1.2, size * 0.025 * cell.starAlpha);
-        context.strokeStyle = fill(palette.cell, 0.5 * alpha);
+        context.lineWidth = Math.max(1.4, size * 0.02 * cell.starAlpha);
+        context.strokeStyle = fill(palette.cell, 0.26 * alpha);
         context.stroke();
 
         if (branch.fork) {
@@ -465,24 +485,24 @@ function initGlialMotion() {
           context.moveTo(endX * 0.76, endY * 0.76);
           context.lineTo(endX + Math.cos(angle - 0.58) * soma * 0.62, endY + Math.sin(angle - 0.58) * soma * 0.62);
           context.lineWidth = Math.max(0.9, size * 0.014);
-          context.strokeStyle = fill(palette.cell, 0.36 * alpha);
+          context.strokeStyle = fill(palette.cell, 0.2 * alpha);
           context.stroke();
         }
       });
 
       context.beginPath();
       context.arc(0, 0, soma, 0, TAU);
-      context.fillStyle = fill(palette.cell, 0.36 * alpha * cell.coreAlpha);
+      context.fillStyle = fill(palette.cell, 0.24 * alpha * cell.coreAlpha);
       context.fill();
-      context.lineWidth = Math.max(1.3, size * 0.022);
-      context.strokeStyle = fill(palette.cell, 0.68 * alpha * cell.starAlpha);
+      context.lineWidth = Math.max(1.1, size * 0.016);
+      context.strokeStyle = fill(palette.cell, 0.36 * alpha * cell.starAlpha);
       context.stroke();
 
       context.beginPath();
       context.arc(0, 0, soma * 0.54, 0, TAU);
       context.fillStyle = palette.core;
       context.fill();
-      context.lineWidth = Math.max(0.9, size * 0.013);
+      context.lineWidth = Math.max(0.8, size * 0.011);
       context.strokeStyle = palette.nucleus;
       context.stroke();
       context.restore();
@@ -510,8 +530,8 @@ function initGlialMotion() {
           if (step === 0) context.moveTo(x, y);
           else context.lineTo(x, y);
         }
-        context.lineWidth = Math.max(1.2, size * 0.02);
-        context.strokeStyle = fill(palette.cell, strand ? 0.42 * alpha : 0.62 * alpha * cell.starAlpha);
+        context.lineWidth = Math.max(1.1, size * 0.016);
+        context.strokeStyle = fill(palette.cell, strand ? 0.26 * alpha : 0.36 * alpha * cell.starAlpha);
         context.stroke();
       }
 
@@ -522,8 +542,8 @@ function initGlialMotion() {
         context.beginPath();
         context.moveTo(wave * amplitude, y);
         context.lineTo(-wave * amplitude, y);
-        context.lineWidth = Math.max(0.8, size * 0.011);
-        context.strokeStyle = fill(palette.cell, 0.28 * alpha);
+        context.lineWidth = Math.max(0.7, size * 0.009);
+        context.strokeStyle = fill(palette.cell, 0.18 * alpha);
         context.stroke();
       }
       context.restore();
@@ -542,8 +562,8 @@ function initGlialMotion() {
         radius: size * node.radius
       }));
 
-      context.lineWidth = Math.max(1, size * 0.012);
-      context.strokeStyle = fill(palette.cell, 0.34 * alpha);
+      context.lineWidth = Math.max(1, size * 0.01);
+      context.strokeStyle = fill(palette.cell, 0.2 * alpha);
       points.forEach((point, index) => {
         const next = points[(index + 1) % points.length];
         context.beginPath();
@@ -556,14 +576,14 @@ function initGlialMotion() {
         context.beginPath();
         context.arc(point.x, point.y, point.radius, 0, TAU);
         if (index % 2) {
-          context.fillStyle = fill(palette.cell, 0.48 * alpha);
+          context.fillStyle = fill(palette.cell, 0.28 * alpha);
           context.fill();
         } else {
           context.fillStyle = palette.core;
           context.fill();
         }
-        context.lineWidth = Math.max(0.8, size * 0.011);
-        context.strokeStyle = fill(palette.cell, 0.58 * alpha);
+        context.lineWidth = Math.max(0.7, size * 0.009);
+        context.strokeStyle = fill(palette.cell, 0.34 * alpha);
         context.stroke();
       });
       context.restore();
