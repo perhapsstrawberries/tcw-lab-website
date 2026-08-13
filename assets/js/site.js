@@ -275,12 +275,13 @@ function initGlialMotion() {
   if (reduceMotion) return;
 
   const palettes = [
-    { cell: "rgba(22, 248, 242,", core: "#efffff", nucleus: "#00aeb2" },
-    { cell: "rgba(194, 104, 255,", core: "#fff4a8", nucleus: "#9e48ec" },
-    { cell: "rgba(190, 255, 70,", core: "#fff29a", nucleus: "#78b92b" },
-    { cell: "rgba(96, 214, 255,", core: "#f4ffff", nucleus: "#1197d3" },
-    { cell: "rgba(255, 218, 56,", core: "#fff6bc", nucleus: "#d8a000" },
-    { cell: "rgba(255, 126, 210,", core: "#ffefa6", nucleus: "#df46ad" }
+    { cell: "rgba(0, 236, 228,", core: "#efffff", nucleus: "#009fa4" },
+    { cell: "rgba(190, 86, 255,", core: "#fff4a8", nucleus: "#9740e8" },
+    { cell: "rgba(176, 248, 46,", core: "#fff29a", nucleus: "#74af24" },
+    { cell: "rgba(72, 206, 255,", core: "#f4ffff", nucleus: "#0e94d0" },
+    { cell: "rgba(255, 207, 32,", core: "#fff6bc", nucleus: "#d29a00" },
+    { cell: "rgba(255, 104, 198,", core: "#ffefa6", nucleus: "#da3aa5" },
+    { cell: "rgba(255, 128, 78,", core: "#fff0c2", nucleus: "#dc6430" }
   ];
   const TAU = Math.PI * 2;
   const rand = (min, max) => Math.random() * (max - min) + min;
@@ -291,9 +292,14 @@ function initGlialMotion() {
   function motifForPage() {
     const page = document.body.classList;
     const hasPage = (name) => page.contains(name) || Array.from(page).some((className) => className.startsWith(`${name}-`));
-    if (hasPage("page-research-programs") || hasPage("page-publications")) return "dna";
-    if (hasPage("page-ourteam") || hasPage("page-careers")) return "neuron";
-    if (hasPage("page-resources") || hasPage("page-contact")) return "molecule";
+    if (hasPage("page-research-programs")) return "dna";
+    if (hasPage("page-publications")) return "chromatin";
+    if (hasPage("page-ourteam-activity")) return "synapse";
+    if (hasPage("page-ourteam")) return "neuron";
+    if (hasPage("page-careers")) return "stem";
+    if (hasPage("page-resources")) return "molecule";
+    if (hasPage("page-contact")) return "signal";
+    if (hasPage("page-member")) return "mixed";
     return "glial";
   }
 
@@ -329,11 +335,19 @@ function initGlialMotion() {
       cell.palette = palette;
       cell.size = layer < 0.28 ? rand(28, 52) : layer < 0.78 ? rand(52, 88) : rand(88, 132);
       if (motif === "dna") cell.size *= rand(1.08, 1.38);
-      if (motif === "molecule") cell.size *= rand(0.88, 1.12);
+      if (motif === "chromatin") cell.size *= rand(1.15, 1.48);
+      if (motif === "molecule") cell.size *= rand(0.86, 1.08);
+      if (motif === "synapse") cell.size *= rand(0.92, 1.22);
+      if (motif === "stem") cell.size *= rand(0.86, 1.18);
+      if (motif === "signal") cell.size *= rand(1.05, 1.46);
+      if (motif === "organoid" || motif === "mixed") cell.size *= rand(1.08, 1.52);
       cell.x = rand(-cell.size, width + cell.size);
       cell.y = fromTop ? rand(-height * 0.35, -cell.size) : rand(-cell.size, height + cell.size);
-      cell.vx = rand(-16, 16);
-      cell.vy = rand(28, 74) * (cell.size / 62);
+      cell.vx = rand(-17, 17);
+      cell.vy = rand(30, 78) * (cell.size / 62);
+      if (motif === "signal" || motif === "synapse") cell.vy *= 0.78;
+      if (motif === "dna" || motif === "chromatin") cell.vy *= 0.9;
+      cell.variant = Math.floor(rand(0, 5));
       cell.wave = rand(10, 32);
       cell.phase = rand(0, TAU);
       cell.phaseSpeed = rand(0.65, 1.7);
@@ -341,7 +355,7 @@ function initGlialMotion() {
       cell.spin = rand(-0.42, 0.42);
       cell.fadeDistance = rand(120, 230);
       cell.opacity = 0;
-      cell.targetOpacity = layer < 0.28 ? rand(0.28, 0.54) : layer < 0.78 ? rand(0.58, 0.82) : rand(0.82, 0.98);
+      cell.targetOpacity = layer < 0.28 ? rand(0.34, 0.58) : layer < 0.78 ? rand(0.64, 0.86) : rand(0.84, 1);
       cell.innerRatio = rand(0.13, 0.2);
       cell.coreRatio = rand(0.12, 0.16);
       cell.starAlpha = rand(0.84, 1.12);
@@ -359,12 +373,35 @@ function initGlialMotion() {
         distance: rand(0.2, 0.48),
         radius: rand(0.045, 0.085)
       }));
+      cell.beads = Array.from({ length: Math.floor(rand(5, 9)) }, () => ({
+        offset: rand(-0.48, 0.48),
+        radius: rand(0.032, 0.06),
+        phase: rand(0, TAU)
+      }));
+      cell.colony = Array.from({ length: Math.floor(rand(5, 10)) }, () => ({
+        angle: rand(0, TAU),
+        distance: rand(0.02, 0.34),
+        radius: rand(0.12, 0.23),
+        phase: rand(0, TAU)
+      }));
     }
 
     function buildCells() {
-      const density = motif === "dna" ? 43000 : motif === "molecule" ? 39000 : motif === "neuron" ? 36000 : 32000;
-      const maxCount = motif === "dna" ? 34 : motif === "molecule" ? 42 : motif === "neuron" ? 44 : 52;
-      const minCount = motif === "dna" ? 18 : motif === "molecule" ? 24 : motif === "neuron" ? 24 : 32;
+      const settings = {
+        dna: { density: 43000, min: 18, max: 34 },
+        chromatin: { density: 46000, min: 16, max: 32 },
+        neuron: { density: 36000, min: 24, max: 44 },
+        synapse: { density: 33000, min: 26, max: 48 },
+        stem: { density: 40000, min: 20, max: 38 },
+        molecule: { density: 39000, min: 24, max: 42 },
+        signal: { density: 47000, min: 16, max: 30 },
+        organoid: { density: 52000, min: 14, max: 26 },
+        mixed: { density: 38000, min: 22, max: 40 },
+        glial: { density: 32000, min: 32, max: 52 }
+      }[motif] || { density: 32000, min: 32, max: 52 };
+      const density = settings.density;
+      const maxCount = settings.max;
+      const minCount = settings.min;
       const count = Math.round(Math.min(maxCount, Math.max(minCount, width * height / density)));
       cells = Array.from({ length: count }, () => {
         const cell = {};
@@ -388,8 +425,7 @@ function initGlialMotion() {
 
     function drawGlial(cell, alpha) {
       const { size, palette } = cell;
-      const outer = size * 0.5;
-      const inner = size * cell.innerRatio;
+      const outer = size * (0.3 + (cell.variant % 4) * 0.014);
       const core = size * cell.coreRatio;
       context.save();
       context.translate(cell.x, cell.y);
@@ -417,17 +453,31 @@ function initGlialMotion() {
       });
 
       context.beginPath();
-      for (let i = 0; i < 24; i += 1) {
-        const angle = (i / 24) * TAU;
-        const radius = i % 2 === 0 ? outer : inner + Math.sin(cell.phase + i) * size * cell.pointWobble;
-        const x = Math.cos(angle) * radius;
-        const y = Math.sin(angle) * radius;
+      for (let i = 0; i < 30; i += 1) {
+        const angle = (i / 30) * TAU;
+        const membrane = outer * (1 + Math.sin(cell.phase * 0.8 + i * 1.7) * 0.08 + Math.cos(cell.phase * 0.5 + i * 0.9) * 0.045);
+        const x = Math.cos(angle) * membrane;
+        const y = Math.sin(angle) * membrane;
         if (i === 0) context.moveTo(x, y);
-        else context.lineTo(x, y);
+        else context.quadraticCurveTo(Math.cos(angle - 0.1) * membrane, Math.sin(angle - 0.1) * membrane, x, y);
       }
       context.closePath();
-      context.fillStyle = fill(palette.cell, Math.min(0.58, 0.48 * alpha * cell.starAlpha));
+      context.fillStyle = fill(palette.cell, Math.min(0.42, 0.34 * alpha * cell.starAlpha));
       context.fill();
+      context.lineWidth = Math.max(1, size * 0.014);
+      context.strokeStyle = fill(palette.cell, Math.min(0.5, 0.42 * alpha * cell.starAlpha));
+      context.stroke();
+
+      for (let i = 0; i < 3; i += 1) {
+        const angle = cell.phase * 0.18 + i * (TAU / 3);
+        const radius = outer * 0.58;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        context.beginPath();
+        context.arc(x, y, Math.max(1.2, size * 0.026), 0, TAU);
+        context.fillStyle = fill(palette.cell, 0.18 * alpha);
+        context.fill();
+      }
 
       context.beginPath();
       context.arc(0, 0, core * 2.25, 0, TAU);
@@ -449,6 +499,71 @@ function initGlialMotion() {
       context.arc(core * 0.2, -core * 0.22, core * 0.22, 0, TAU);
       context.fillStyle = `rgba(255, 255, 255, ${0.92 * alpha})`;
       context.fill();
+      context.restore();
+    }
+
+    function drawChromatin(cell, alpha) {
+      const { size, palette } = cell;
+      const beads = cell.beads;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation);
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      context.beginPath();
+      for (let step = 0; step <= 26; step += 1) {
+        const t = step / 26;
+        const angle = t * TAU * 1.45 + cell.phase * 0.28;
+        const radius = size * (0.18 + 0.22 * Math.sin(t * Math.PI));
+        const x = (t - 0.5) * size * 1.15 + Math.cos(angle) * radius * 0.42;
+        const y = Math.sin(angle) * radius;
+        if (step === 0) context.moveTo(x, y);
+        else context.bezierCurveTo(x - size * 0.05, y - size * 0.08, x + size * 0.04, y + size * 0.08, x, y);
+      }
+      context.lineWidth = Math.max(1.2, size * 0.018);
+      context.strokeStyle = fill(palette.cell, 0.34 * alpha);
+      context.stroke();
+      beads.forEach((bead, index) => {
+        const x = bead.offset * size;
+        const y = Math.sin(cell.phase + bead.phase) * size * 0.18;
+        context.beginPath();
+        context.arc(x, y, Math.max(2, size * bead.radius), 0, TAU);
+        context.fillStyle = index % 2 ? fill(palette.cell, 0.36 * alpha) : palette.core;
+        context.fill();
+        context.lineWidth = Math.max(0.8, size * 0.008);
+        context.strokeStyle = fill(palette.cell, 0.34 * alpha);
+        context.stroke();
+      });
+      context.restore();
+    }
+
+    function drawSynapse(cell, alpha) {
+      const { size, palette } = cell;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation);
+      context.lineCap = "round";
+      const gap = size * 0.2;
+      context.beginPath();
+      context.arc(-gap, 0, size * 0.26, -1.1, 1.1);
+      context.arc(gap, 0, size * 0.26, Math.PI - 1.1, Math.PI + 1.1);
+      context.lineWidth = Math.max(1.3, size * 0.02);
+      context.strokeStyle = fill(palette.cell, 0.36 * alpha);
+      context.stroke();
+      for (let i = 0; i < 7; i += 1) {
+        const x = -gap + Math.cos(i * 1.7 + cell.phase) * size * 0.16;
+        const y = Math.sin(i * 1.35 + cell.phase) * size * 0.18;
+        context.beginPath();
+        context.arc(x, y, size * (0.028 + (i % 3) * 0.005), 0, TAU);
+        context.fillStyle = fill(palette.cell, 0.42 * alpha);
+        context.fill();
+      }
+      context.beginPath();
+      context.moveTo(-size * 0.04, -size * 0.24);
+      context.quadraticCurveTo(size * 0.08, 0, -size * 0.04, size * 0.24);
+      context.lineWidth = Math.max(0.9, size * 0.01);
+      context.strokeStyle = fill(palette.cell, 0.2 * alpha);
+      context.stroke();
       context.restore();
     }
 
@@ -589,10 +704,110 @@ function initGlialMotion() {
       context.restore();
     }
 
+    function drawStemColony(cell, alpha) {
+      const { size, palette } = cell;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation);
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      cell.colony.forEach((spot, index) => {
+        const wobble = Math.sin(cell.phase + spot.phase) * size * 0.025;
+        const x = Math.cos(spot.angle) * size * spot.distance + wobble;
+        const y = Math.sin(spot.angle) * size * spot.distance - wobble * 0.6;
+        const radius = size * spot.radius;
+        context.beginPath();
+        context.arc(x, y, radius, 0, TAU);
+        context.fillStyle = fill(palette.cell, (index % 2 ? 0.24 : 0.34) * alpha);
+        context.fill();
+        context.lineWidth = Math.max(0.9, size * 0.009);
+        context.strokeStyle = fill(palette.cell, 0.36 * alpha);
+        context.stroke();
+        context.beginPath();
+        context.arc(x + radius * 0.14, y - radius * 0.1, radius * 0.34, 0, TAU);
+        context.fillStyle = index % 3 === 0 ? palette.core : fill(palette.cell, 0.2 * alpha);
+        context.fill();
+      });
+      context.restore();
+    }
+
+    function drawSignal(cell, alpha) {
+      const { size, palette } = cell;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation * 0.45);
+      context.lineCap = "round";
+      for (let ring = 0; ring < 3; ring += 1) {
+        const pulse = (Math.sin(cell.phase * 0.9 + ring * 1.35) + 1) * 0.5;
+        const radius = size * (0.12 + ring * 0.13 + pulse * 0.055);
+        context.beginPath();
+        context.arc(0, 0, radius, 0, TAU);
+        context.lineWidth = Math.max(0.8, size * (0.01 - ring * 0.001));
+        context.strokeStyle = fill(palette.cell, (0.38 - ring * 0.08) * alpha);
+        context.stroke();
+      }
+      context.beginPath();
+      context.arc(0, 0, size * 0.08, 0, TAU);
+      context.fillStyle = palette.core;
+      context.fill();
+      context.lineWidth = Math.max(0.8, size * 0.01);
+      context.strokeStyle = palette.nucleus;
+      context.stroke();
+      context.restore();
+    }
+
+    function drawOrganoid(cell, alpha) {
+      const { size, palette } = cell;
+      context.save();
+      context.translate(cell.x, cell.y);
+      context.rotate(cell.rotation * 0.35);
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      const radius = size * 0.34;
+      context.beginPath();
+      for (let i = 0; i < 36; i += 1) {
+        const angle = (i / 36) * TAU;
+        const membrane = radius * (1 + Math.sin(cell.phase * 0.55 + i * 0.74) * 0.11);
+        const x = Math.cos(angle) * membrane;
+        const y = Math.sin(angle) * membrane;
+        if (i === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.closePath();
+      context.fillStyle = fill(palette.cell, 0.26 * alpha);
+      context.fill();
+      context.lineWidth = Math.max(1, size * 0.012);
+      context.strokeStyle = fill(palette.cell, 0.4 * alpha);
+      context.stroke();
+      cell.colony.slice(0, 7).forEach((spot, index) => {
+        const x = Math.cos(spot.angle + cell.phase * 0.06) * radius * spot.distance * 1.7;
+        const y = Math.sin(spot.angle + cell.phase * 0.06) * radius * spot.distance * 1.7;
+        context.beginPath();
+        context.arc(x, y, Math.max(2, size * spot.radius * 0.28), 0, TAU);
+        context.fillStyle = index % 2 ? fill(palette.cell, 0.32 * alpha) : palette.core;
+        context.fill();
+      });
+      context.restore();
+    }
+
+    function drawMixed(cell, alpha) {
+      const choice = cell.variant % 5;
+      if (choice === 0) drawOrganoid(cell, alpha);
+      else if (choice === 1) drawNeuron(cell, alpha * 0.92);
+      else if (choice === 2) drawDna(cell, alpha * 0.92);
+      else if (choice === 3) drawStemColony(cell, alpha);
+      else drawMolecule(cell, alpha);
+    }
+
     function drawMotif(cell, alpha) {
       if (cell.motif === "dna") drawDna(cell, alpha);
+      else if (cell.motif === "chromatin") drawChromatin(cell, alpha);
       else if (cell.motif === "neuron") drawNeuron(cell, alpha);
+      else if (cell.motif === "synapse") drawSynapse(cell, alpha);
+      else if (cell.motif === "stem") drawStemColony(cell, alpha);
       else if (cell.motif === "molecule") drawMolecule(cell, alpha);
+      else if (cell.motif === "signal") drawSignal(cell, alpha);
+      else if (cell.motif === "mixed") drawMixed(cell, alpha);
       else drawGlial(cell, alpha);
     }
 
