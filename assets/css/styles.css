@@ -1469,7 +1469,7 @@ html[data-theme="dark"] .research-project-card img {
 }
 
 .alumni-intro {
-  max-width: 720px;
+  max-width: 1080px;
   margin: 0 0 28px;
   text-align: left;
 }
@@ -1479,10 +1479,11 @@ html[data-theme="dark"] .research-project-card img {
 }
 
 .alumni-intro p:last-child {
-  max-width: 720px;
+  max-width: none;
   margin-bottom: 0;
   font-size: 15px;
   line-height: 1.6;
+  white-space: nowrap;
 }
 
 .alumni-grid {
@@ -1542,7 +1543,7 @@ html[data-theme="dark"] .research-project-card img {
 
 .alumni-card h3 {
   margin: 0 0 6px;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1.08;
 }
 
@@ -1576,7 +1577,14 @@ html[data-theme="dark"] .research-project-card img {
 }
 
 .short-term-trainees h2 {
+  color: var(--teal-deep);
+  font-family: "Space Mono", monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
   margin: 0 0 16px;
+  text-transform: uppercase;
 }
 
 .short-term-list {
@@ -1597,6 +1605,12 @@ html[data-theme="dark"] .research-project-card img {
   font-weight: 750;
   line-height: 1.2;
   padding: 10px 14px;
+}
+
+@media (max-width: 900px) {
+  .alumni-intro p:last-child {
+    white-space: normal;
+  }
 }
 
 .activity-feed {
