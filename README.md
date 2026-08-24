@@ -42,7 +42,7 @@ tcw-lab-website/
 |-- resources/news/index.html          # News archive
 |-- resources/research-comments/       # Research comments pages
 |-- contact/index.html                 # Contact tab
-|-- member/index.html                  # Static member page source
+|-- member/index.html                  # Static member page source; live /member is Cloudflare-gated
 |-- data/index.html                    # Redirects old Data Portal URL to member/
 |-- talent-aquisition/index.html       # Legacy typo URL, redirects to careers/
 |-- assets/
@@ -66,12 +66,16 @@ Page text:
 
 - Edit the matching `index.html` file.
 - Example: alumni and current member cards are in `ourteam/index.html`.
+- Exception: the live member portal is served through the Cloudflare Worker, so changes to member access/login may also require `workers/tcw-member-gate.js`.
 
 Images:
 
 - Add or replace files inside `assets/images/...`.
 - Keep filenames simple, lowercase if possible, and avoid spaces.
 - Update the image path in the relevant HTML file.
+- Original lab/member photos are stored in the private TCW Lab Google Drive: <https://drive.google.com/drive/u/0/folders/1RbAko10aUIMmYuzUG53qsDXk3gZv5897>
+- Only lab members with Drive access can view or download those originals.
+- The public website should use exported/cropped copies saved in this repo under `assets/images/...`, not direct private Drive links.
 
 Styling:
 
@@ -161,7 +165,7 @@ Use a new value each time, for example `20260824b`, then commit and push the HTM
 
 ## Member Portal And Cloudflare Worker
 
-The public website is deployed by GitHub Pages, but the live member portal route is handled by Cloudflare:
+The public website is deployed by GitHub Pages, but the live member portal is not only GitHub Pages. The live member route is handled by Cloudflare:
 
 ```text
 tcwlab.org/member*
