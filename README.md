@@ -6,26 +6,6 @@ Repository: <https://github.com/perhapsstrawberries/tcw-lab-website>
 
 This site is hosted from the `main` branch with GitHub Pages. Most edits are plain HTML, CSS, JavaScript, and image files.
 
-## Quick Start
-
-Work from the repository root:
-
-```bash
-cd /Users/wendybui/Documents/Claude/Projects/Lab/tcw-lab-website
-```
-
-Preview locally:
-
-```bash
-python3 -m http.server 8080
-```
-
-Then open:
-
-```text
-http://localhost:8080
-```
-
 ## Where To Edit
 
 Each public tab is a folder with its own `index.html`.
