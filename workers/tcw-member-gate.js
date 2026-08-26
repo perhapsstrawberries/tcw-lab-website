@@ -1,6 +1,6 @@
 const COOKIE_NAME = "tcw_member_auth";
 const SESSION_SECONDS = 60 * 60 * 24 * 14;
-const RAW_MEMBER_PAGE = "https://raw.githubusercontent.com/perhapsstrawberries/tcw-lab-website/main/member/index.html";
+const RAW_MEMBER_PAGE = "https://raw.githubusercontent.com/doctortcw/tcw-lab-website/main/member/index.html";
 
 export default {
   async fetch(request, env) {

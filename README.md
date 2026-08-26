@@ -2,7 +2,7 @@
 
 Static website for TCW Lab: <https://tcwlab.org/>
 
-Repository: <https://github.com/perhapsstrawberries/tcw-lab-website>
+Repository: <https://github.com/doctortcw/tcw-lab-website>
 
 This site is hosted from the `main` branch with GitHub Pages. Most edits are plain HTML, CSS, JavaScript, and image files.
 
